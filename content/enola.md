@@ -1,4 +1,7 @@
-<link rel="stylesheet" href="/style.css">
+---
+layout: poem
+title: Энола — Алоун
+---
 
 <pre class="poem">
 

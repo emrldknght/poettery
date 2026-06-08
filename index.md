@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="style.css">
 
 # poettery
 
@@ -10,4 +10,4 @@
 - [Деготь](/content/tar_i.md)
 - [Энола](/content/enola.md)
 - [Циолковский](/content/ciolkovski.md)
-- [Метерлинк](/content/meterlink.md)[]
+- [Метерлинк](/content/meterlink.md)

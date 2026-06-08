@@ -1,4 +1,8 @@
-<link rel="stylesheet" href="/style.css">
+---
+layout: poem
+title: Циолковский
+---
+
 
 <pre class="poem">
 Чеширской улыбкой  
