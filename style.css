@@ -1,0 +1,88 @@
+/*
+body {
+    font-family: monospace;
+    background-color: black;
+    color: white;
+}
+ */
+
+/* style.css */
+body {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 18px;
+    line-height: 1.6;
+    background: black;
+    color: yellow;
+}
+
+h1 {
+    font-size: 42px;
+    text-align: center;
+    font-weight: normal;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+    color: #2c1810;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: normal;
+    text-align: center;
+    color: #6b4c3a;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    border-bottom: none;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 12px 0;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #8b5e3c;
+    font-size: 18px;
+    transition: all 0.2s;
+}
+
+a:hover {
+    color: #3d2b1f;
+    border-bottom: 1px solid #8b5e3c;
+}
+
+/* Для страниц со стихами */
+pre, code {
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.poem {
+    font-family: 'Georgia', serif;
+    font-size: 19px;
+    line-height: 1.8;
+    text-align: center;
+    margin: 50px auto;
+    max-width: 550px;
+}
+
+.poem p {
+    margin: 0 0 20px 0;
+}
+
+.date {
+    text-align: right;
+    font-style: italic;
+    color: #999;
+    margin-top: 60px;
+    font-size: 14px;
+}
