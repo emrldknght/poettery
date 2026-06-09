@@ -65,7 +65,15 @@ pre, code {
     font-size: inherit;
 }
 
-.poem {}
+.poem {
+    white-space: pre-wrap;
+}
+
+.poem pre,
+.poem code {
+    all: inherit;              /* наследует всё от .poem */
+    display: block;
+}
 
 .poem p {
     margin: 0 0 20px 0;
