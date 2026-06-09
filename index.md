@@ -25,3 +25,4 @@
 - [Гекзаметр](/content/hexameter.md)
 - [Я сжёг уголок](/content/old_ignited.md)
 - [Седая Лунь](/content/grey_moon.md)
+- [Двоичный счет](/content/binary.md)
