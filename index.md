@@ -13,7 +13,7 @@
 - [Циолковский](/content/ciolkovski.md)
 - [Метерлинк](/content/meterlink.md)
 - [Подделка](/content/fake.md)
-- [Фильм](/content/film.md)  
+- [Фильм](/content/film.md)
  
 - [Красно-Черная Берёза](/content/red_black.md)
 - [Вы так бледны](/content/pale.md)
@@ -27,3 +27,4 @@
 - [Я сжёг уголок](/content/old_ignited.md)
 - [Седая Лунь](/content/grey_moon.md)
 - [Двоичный счет](/content/binary.md)
+- [Фибоначчи](/content/fibonacci.md)
