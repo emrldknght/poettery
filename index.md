@@ -5,6 +5,8 @@
 
 ## lyrics
 
+- [Билет](/content/ticket.md)
+
 - [Атлас](/content/atlas.md)
 - [Башни](/content/towers.md)
 - [Рыба](/content/fish.md)
@@ -28,3 +30,4 @@
 - [Седая Лунь](/content/grey_moon.md)
 - [Двоичный счет](/content/binary.md)
 - [Фибоначчи](/content/fibonacci.md)
+- [Цирцея](/content/circea.md)
