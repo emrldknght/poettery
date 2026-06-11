@@ -31,3 +31,9 @@
 - [Двоичный счет](/content/binary.md)
 - [Фибоначчи](/content/fibonacci.md)
 - [Цирцея](/content/circea.md)
+
+## archive
+- [Викторианские чернила](/content/arh/victorian_ink.md)
+- [Имени Бродского](/content/arh/crem_brod.md)
+- [Мельхиор](/content/arh/melchior.md)
+- [Нарцисс](/content/arh/narcizz.md)
