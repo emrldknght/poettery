@@ -1,14 +1,12 @@
-/* style_tabs.css — только для страниц с музыкой */
+/* tabs.css — стили только для страниц с табами */
 
-/* Базовый сброс */
 body {
     margin: 0;
     padding: 20px;
-    background: white !important;
-    font-family: monospace;
+    background: white;
+    font-family: Georgia, 'Times New Roman', serif;
 }
 
-/* Навигация */
 .nav {
     margin-bottom: 30px;
 }
@@ -23,7 +21,6 @@ body {
     color: #000;
 }
 
-/* Текст стиха/описания */
 .poem {
     max-width: 650px;
     margin: 0 auto 40px auto;
@@ -31,10 +28,34 @@ body {
     font-size: 18px;
     line-height: 1.8;
     color: #222;
-    font-family: monospace;
 }
 
-/* Контейнер для нот */
+.player-controls {
+    text-align: center;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+.player-controls button {
+    background: #2c5f2d;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    margin: 0 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.player-controls button:hover {
+    background: #1e3a1e;
+}
+
+.player-controls button:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
 #alphaTabContainer {
     width: 100%;
     max-width: 1000px;
@@ -44,9 +65,17 @@ body {
     box-sizing: border-box;
 }
 
-/* Всё внутри alphaTab — белый фон и чёрный текст */
-#alphaTabContainer * {
-    background-color: white !important;
-    color: black !important;
-    border-color: #ccc !important;
+/* Курсор и подсветка */
+.at-cursor-bar {
+    background: rgba(255, 242, 0, 0.35) !important;
+}
+
+.at-cursor-beat {
+    background: rgba(64, 64, 255, 0.75) !important;
+    width: 3px;
+}
+
+.at-highlight * {
+    fill: #0078ff !important;
+    stroke: #0078ff !important;
 }

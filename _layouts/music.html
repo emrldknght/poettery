@@ -4,61 +4,7 @@
   <meta charset="UTF-8">
   <title>{{ page.title }} | poettery</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.min.css" />
-  <style>
-      body {
-          margin: 0;
-          padding: 20px;
-          background: white;
-          font-family: Georgia, 'Times New Roman', serif;
-      }
-      .nav { margin-bottom: 30px; }
-      .nav a { color: #555; text-decoration: none; font-size: 14px; }
-      .nav a:hover { color: #000; }
-      .poem { max-width: 650px; margin: 0 auto 40px auto; padding: 0 20px; font-size: 18px; line-height: 1.8; color: #222; }
-
-      .player-controls {
-          text-align: center;
-          margin: 20px auto;
-          padding: 10px;
-      }
-      .player-controls button {
-          background: #2c5f2d;
-          color: white;
-          border: none;
-          padding: 10px 25px;
-          margin: 0 10px;
-          font-size: 16px;
-          border-radius: 5px;
-          cursor: pointer;
-      }
-      .player-controls button:hover { background: #1e3a1e; }
-      .player-controls button:disabled { background: #999; cursor: not-allowed; }
-
-      #alphaTabContainer {
-          width: 100%;
-          max-width: 1000px;
-          margin: 0 auto;
-          background: white;
-          padding: 20px;
-          box-sizing: border-box;
-      }
-
-      /* КРИТИЧЕСКИ ВАЖНО: Стили для курсора [citation:3] */
-      .at-cursor-bar {
-          background: rgba(255, 242, 0, 0.35) !important;
-      }
-
-      .at-cursor-beat {
-          background: rgba(64, 64, 255, 0.75) !important;
-          width: 3px;
-      }
-
-      /* Подсветка нот во время проигрывания [citation:3][citation:10] */
-      .at-highlight * {
-          fill: #0078ff !important;
-          stroke: #0078ff !important;
-      }
-  </style>
+  <link rel="stylesheet" href="/poettery/tabs.css">
 </head>
 <body>
 <div class="nav">
@@ -76,56 +22,6 @@
 
 <div id="alphaTabContainer" data-file="{{ page.file }}"></div>
 
-<script type="module">
-  import * as alphaTab from 'https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.min.mjs';
-
-  window.addEventListener('DOMContentLoaded', async function() {
-    const container = document.getElementById('alphaTabContainer');
-    const filePath = container.getAttribute('data-file');
-    if (!filePath) return;
-
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const stopBtn = document.getElementById('stopBtn');
-
-    // НАСТРОЙКИ ПО ДОКУМЕНТАЦИИ
-    const settings = new alphaTab.Settings();
-
-    // Основные настройки [citation:6]
-    settings.player.enablePlayer = true;
-    settings.player.soundFont = "https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/soundfont/sonivox.sf2";
-
-    // ВКЛЮЧАЕМ КУРСОР И ПОДСВЕТКУ [citation:1][citation:2][citation:7]
-    settings.player.enableCursor = true;
-    settings.player.enableAnimatedBeatCursor = true;
-    settings.player.enableElementHighlighting = true;
-
-    // ВКЛЮЧАЕМ ВСЕ ТРЕКИ
-    settings.core.tracks = 'all';
-
-    // Отображение: горизонтальный скролл
-    settings.display.layoutMode = alphaTab.LayoutMode.Horizontal;
-    settings.display.scale = 0.9;
-
-    const api = new alphaTab.AlphaTabApi(container, settings);
-
-    // Загружаем файл
-    await api.load(filePath);
-    await api.loadSoundFont(settings.player.soundFont);
-
-    // События
-    api.playerReady.on(() => {
-      console.log('Плеер готов!');
-      playPauseBtn.disabled = false;
-      stopBtn.disabled = false;
-    });
-
-    api.playerStateChanged.on((state) => {
-      playPauseBtn.textContent = state.state === 'playing' ? '⏸ Pause' : '▶ Play';
-    });
-
-    playPauseBtn.addEventListener('click', () => api.playPause());
-    stopBtn.addEventListener('click', () => api.stop());
-  });
-</script>
+<script type="module" src="/poettery/tabs.js"></script>
 </body>
 </html>
