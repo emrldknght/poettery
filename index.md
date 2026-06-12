@@ -58,3 +58,4 @@
 - [Облако](/content/arh/cloud_i.md)
 
 ## songs
+- [Blitzkrieg Keyintro](content/tabs/blitzkrieg.md)

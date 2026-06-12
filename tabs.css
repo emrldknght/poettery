@@ -1,0 +1,52 @@
+/* style_tabs.css — только для страниц с музыкой */
+
+/* Базовый сброс */
+body {
+    margin: 0;
+    padding: 20px;
+    background: white !important;
+    font-family: monospace;
+}
+
+/* Навигация */
+.nav {
+    margin-bottom: 30px;
+}
+
+.nav a {
+    color: #555;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav a:hover {
+    color: #000;
+}
+
+/* Текст стиха/описания */
+.poem {
+    max-width: 650px;
+    margin: 0 auto 40px auto;
+    padding: 0 20px;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #222;
+    font-family: monospace;
+}
+
+/* Контейнер для нот */
+#alphaTabContainer {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Всё внутри alphaTab — белый фон и чёрный текст */
+#alphaTabContainer * {
+    background-color: white !important;
+    color: black !important;
+    border-color: #ccc !important;
+}

@@ -2,3 +2,5 @@
 all_poems.md
 summary.md
 list.md
+_site
+Gemfile.lock
