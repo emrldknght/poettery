@@ -31,9 +31,17 @@ body {
 }
 
 .player-controls {
-    text-align: center;
-    margin: 20px auto;
-    padding: 10px;
+    /* text-align: center; */
+    /* margin: 20px auto; */
+    padding: 1em;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: whitesmoke;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    width: 10em;
 }
 
 .player-controls button {
@@ -78,4 +86,39 @@ body {
 .at-highlight * {
     fill: #0078ff !important;
     stroke: #0078ff !important;
+}
+/* Панель треков */
+.track-panel {
+    margin: 20px auto;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    max-width: 800px;
+}
+
+.track-panel legend {
+    font-weight: bold;
+    padding: 0 10px;
+}
+
+.track-panel label {
+    margin-right: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.track-panel input[type="checkbox"] {
+    cursor: pointer;
+}
+#track-wrapper {
+
+    overflow: scroll;
+    width: 90vw;
+
+    padding: 10px;
+}
+#alphaTabContainer {
+    min-width: min-content;
 }

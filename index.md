@@ -18,7 +18,7 @@
 - [Фильм](/content/film.md)
 
 ### архив 2026
-- [Хищные вещи](/content/arh_2026/strugat.md)[]
+- [Хищные вещи](/content/arh_2026/strugat.md)
 - [Призрак](/content/ghost_twist.md)
 - [Ланселот](/content/arh_2026/lancelot.md)
  
