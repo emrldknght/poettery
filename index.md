@@ -4,6 +4,7 @@
 # poettery
 
 ## lyrics
+- [яблоко а внутри змея (черновик)](/content/apple_snake.md)
 
 - [Билет](/content/ticket.md)
 
@@ -57,5 +58,5 @@
 - [Сочится](/content/arh/so4itsa.md)
 - [Облако](/content/arh/cloud_i.md)
 
-## songs
-- [Blitzkrieg Keyintro](content/tabs/blitzkrieg.md)
+## songs - archive
+- [Blitzkrieg Keyintro 2011](content/tabs/blitzkrieg.md)
