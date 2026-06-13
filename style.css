@@ -16,6 +16,34 @@ body {
     background: black;
     color: wheat;
 }
+@media screen and (max-width: 500px) {
+    body {
+        font-size: 20px;
+        background-color: #1b1f23;
+    }
+}
+
+/* Красные ромбики вместо стандартных маркеров */
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
+    padding-left: 24px;
+    position: relative;
+    margin: 12px 0;
+}
+
+li::before {
+    content: "◆";
+    color: #e74c3c;
+    position: absolute;
+    left: 0;
+    top: .2em;
+    font-size: 14px;
+}
+
 /*
 h1 {
     font-size: 42px;
