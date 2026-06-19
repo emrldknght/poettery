@@ -4,7 +4,9 @@
 # poettery
 
 ## lyrics
-- [яблоко а внутри змея (черновик)](/content/apple_snake.md)
+- [Войд Волопаса (черновик)](/content/180626_void_volopasa.md)
+- [Кинцуги (черновик)](/content/160626_kintsugi.md)
+- [яблоко, а внутри змея (черновик)](/content/apple_snake.md)
 
 - [Билет](/content/ticket.md)
 
