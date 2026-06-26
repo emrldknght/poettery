@@ -14,6 +14,9 @@
 <div class="poem">
   {{ content }}
 </div>
+<div class="poem">
+  {{ site.pages | where: "path", page.lyrics | first | map: "content" | first | markdownify }}
+</div>
 
 <div class="player-controls">
   <button id="playPauseBtn" disabled>▶ Play</button>
