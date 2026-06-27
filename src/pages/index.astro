@@ -1,0 +1,28 @@
+---
+import '../../style.css';
+
+// Просто список стихов
+import fs from 'node:fs';
+import path from 'node:path';
+
+const contentDir = './content';
+const files = fs.readdirSync(contentDir).filter(f => f.endsWith('.md'));
+
+---
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>poettery</title>
+    <link rel="stylesheet" href={Astro.base + 'style.css'}>
+  </head>
+  <body>
+    <h1>poettery</h1>
+    <ul>
+      {files.map(file => {
+        const slug = file.replace('.md', '');
+        return <li><a href={`/poettery/${slug}`}>{slug}</a></li>;
+      })}
+    </ul>
+  </body>
+</html>

@@ -6,3 +6,7 @@ _site
 Gemfile.lock
 node_modules
 package-lock.json
+.astro
+dist
+pnpm-lock.yaml
+entities_frequency.html

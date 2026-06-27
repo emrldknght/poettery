@@ -1,0 +1,33 @@
+---
+import '../../style.css';
+
+import fs from 'node:fs';
+import path from 'node:path';
+
+export async function getStaticPaths() {
+  const files = fs.readdirSync('./content').filter(f => f.endsWith('.md'));
+  return files.map(file => ({
+    params: { slug: file.replace('.md', '') },
+  }));
+}
+
+const { slug } = Astro.params;
+const content = fs.readFileSync(`./content/${slug}.md`, 'utf-8');
+// Здесь нужно распарсить front matter и markdown
+---
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{slug} | poettery</title>
+    <link rel="stylesheet" href={Astro.base + 'style.css'}>
+  </head>
+  <body>
+    <div class="nav">
+      <a href="/poettery/">← Назад</a>
+    </div>
+    <div class="poem">
+      <pre>{content}</pre>
+    </div>
+  </body>
+</html>
