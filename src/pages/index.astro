@@ -1,28 +1,73 @@
 ---
 import '../../style.css';
-
-// Просто список стихов
 import fs from 'node:fs';
 import path from 'node:path';
 
-const contentDir = './content';
-const files = fs.readdirSync(contentDir).filter(f => f.endsWith('.md'));
+// Рекурсивно собираем все .md файлы
+function getAllMdFiles(dir) {
+  const files = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
 
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...getAllMdFiles(fullPath));
+    } else if (entry.name.endsWith('.md')) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+const contentDir = './content';
+const mdFiles = getAllMdFiles(contentDir);
+
+// Группируем
+const rootFiles = [];
+const groups = {};
+
+for (const file of mdFiles) {
+  const relativePath = path.relative(contentDir, file);
+  const parts = relativePath.split(path.sep);
+  const slug = relativePath.replace(/\.md$/, '').replace(/\\/g, '/');
+
+  if (parts.length === 1) {
+    rootFiles.push(slug);
+  } else {
+    const folder = parts[0];
+    if (!groups[folder]) groups[folder] = [];
+    groups[folder].push(slug);
+  }
+}
 ---
 
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>poettery</title>
-    <link rel="stylesheet" href={Astro.base + 'style.css'}>
-  </head>
-  <body>
-    <h1>poettery</h1>
-    <ul>
-      {files.map(file => {
-        const slug = file.replace('.md', '');
-        return <li><a href={`/poettery/${slug}`}>{slug}</a></li>;
-      })}
-    </ul>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>poettery</title>
+  <link rel="stylesheet" href={Astro.base + 'style.css'}>
+</head>
+<body>
+<h1>poettery</h1>
+
+<!-- Корневые стихи -->
+<h2>Стихи</h2>
+<ul>
+  {rootFiles.map(slug => (
+      <li><a href={`/poettery/${slug}`}>{slug}</a></li>
+  ))}
+</ul>
+
+<!-- Папки -->
+{Object.keys(groups).sort().map(folder => (
+    <>
+      <h2>{folder}</h2>
+      <ul>
+        {groups[folder].map(slug => (
+            <li><a href={`/poettery/${slug}`}>{slug.split('/').pop()}</a></li>
+        ))}
+      </ul>
+    </>
+))}
+</body>
 </html>
