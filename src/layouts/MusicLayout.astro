@@ -1,0 +1,72 @@
+---
+import '../../style.css';
+import '../../tabs.css';
+
+export interface Props {
+  title: string;
+  content: string;
+  lyricsContent?: string;
+  gp5File?: string;
+}
+
+const { title, content, lyricsContent, gp5File } = Astro.props;
+---
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>{title} | poettery - tabs layer</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.min.css" />
+  <style>
+      /*
+      @font-face {
+          font-family: 'Bravura';
+          src: url('/fonts/Bravura.woff2') format('woff2'),
+          url('/fonts/Bravura.woff') format('woff'),
+          url('/fonts/Bravura.otf') format('opentype');
+          font-weight: normal;
+          font-style: normal;
+      }
+       */
+  </style>
+</head>
+<body>
+<div class="nav">
+  <a href="/poettery/">← Назад</a>
+</div>
+
+<div class="poem">
+  <h1>{title}</h1>
+  <div set:html={content} />
+</div>
+
+{lyricsContent && (
+    <div class="poem">
+      <h2>Текст</h2>
+      <div set:html={lyricsContent} />
+    </div>
+)}
+
+{gp5File && (
+    <>
+      <div class="player-controls">
+        <button id="playPauseBtn" disabled>▶ Play</button>
+        <button id="stopBtn" disabled>⏹ Stop</button>
+      </div>
+      <div id="track-wrapper">
+        <div id="alphaTabContainer" data-file={'/poettery' + gp5File}></div>
+      </div>
+
+
+      <script type="module" src="/poettery/tabs.js"></script>
+
+
+
+      <!--  <script type="module">
+            import '../scripts/tabs.js';
+      </script>  -->
+
+    </>
+)}
+</body>
+</html>

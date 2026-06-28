@@ -5,7 +5,7 @@
   "main": "tabs.js",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node copy-gp5.mjs && astro build",
     "preview": "astro preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +21,11 @@
   "homepage": "https://github.com/emrldknght/poettery#readme",
   "devDependencies": {
     "@coderline/alphatab": "^1.8.3",
+    "@types/node": "^26.0.1",
     "astro": "^7.0.3"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^18.0.5"
   }
 }

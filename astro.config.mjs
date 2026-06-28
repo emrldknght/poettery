@@ -6,4 +6,12 @@ export default defineConfig({
   outDir: './dist',
   srcDir: './src',              // корень проекта — корень для Astro
   // publicDir: '.',           // все файлы доступны как статика
+  vite: {
+    // Разрешаем импорт этих файлов как ассетов
+    assetsInclude: [
+      '**/*.gp5',
+      // '**/*.sf2',
+      // '**/*.worker.mjs'
+    ],
+  }
 });

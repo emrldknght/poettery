@@ -1,0 +1,29 @@
+---
+export interface Props {
+  title: string;
+  content: string;
+}
+
+const { title, content } = Astro.props;
+---
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>{title} | poettery - poem layer</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="nav">
+  <a href="/poettery/">← Назад</a>
+</div>
+<div class="poem">
+  <div class="poem--header">
+    <h1>{title}</h1>
+    <button id="copyBtn">📋 Копировать</button>
+  </div>
+  <div id="contentRoot" set:html={content} />
+</div>
+<script is:inline src="/poettery/copy-poem.js"></script>
+</body>
+</html>

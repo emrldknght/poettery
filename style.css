@@ -97,6 +97,23 @@ pre, code {
     white-space: pre-wrap;
 }
 
+.poem--header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 2em;
+}
+.poem--header h1 {
+    margin: 0;
+}
+.poem--header button {
+    height: fit-content;
+    padding: 1em;
+}
+
+
+
 .poem pre,
 .poem code {
     all: inherit;              /* наследует всё от .poem */
