@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page.title }} | poettery</title>
+    
+    <!-- Стили alphaTab не обязательны, но рекомендуются для красивого отображения -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.min.css" />
+</head>
+<body>
+    <div class="nav">
+        <a href="/poettery/">← Ко всем стихам</a>
+    </div>
+    
+    <div class="poem">
+        {{ content }}
+    </div>
+    
+    <!-- !!! ВАЖНО: Контейнер должен иметь пустую строку или какой-то контент.
+         В документации внутрь вставляют пример нот в формате alphaTex.
+         Мы оставим его пустым, т.к. будем загружать .gp5 файл. -->
+    <div id="alphaTabContainer" data-file="{{ page.file }}" style="width: 100%; margin: 40px auto; max-width: 900px;">
+         <!-- Сюда alphaTab сам нарисует ноты -->
+    </div>
+
+    <!-- Подключаем alphaTab как ES модуль -->
+    <script type="module">
+        import * as alphaTab from 'https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.min.mjs';
+        
+        // Ждём полной загрузки страницы
+        window.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('alphaTabContainer');
+            if (!container) return;
+            
+            // Получаем путь к файлу из data-атрибута
+            const filePath = container.getAttribute('data-file');
+            if (!filePath) return;
+
+            // Настройки alphaTab. Включаем проигрыватель.
+            const settings = {
+                player: {
+                    enablePlayer: true,
+                    // Указываем путь к звукам. Взято из примеров в документации/сэмплах.
+                    soundFontUrl: "https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/soundfont/sonivox.sf2"
+                },
+                display: {
+                    layoutMode: 'page',
+                    scale: 0.9
+                }
+            };
+            
+            // Инициализируем API
+            const api = new alphaTab.AlphaTabApi(container, settings);
+            
+            // Загружаем файл по указанному пути
+            // Важно! Файл должен быть доступен по этому пути.
+            api.load(filePath);
+            
+            // Небольшое сообщение в консоль для отладки
+            console.log('alphaTab инициализирован, загружаем файл:', filePath);
+        });
+    </script>
+</body>
+</html>

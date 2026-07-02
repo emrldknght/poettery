@@ -93,8 +93,13 @@ pre, code {
     font-size: inherit;
 }
 
+.poem-layout--body {
+    background-color: rgba(68, 77, 86, .3);
+}
+
 .poem {
     white-space: pre-wrap;
+    background-color: rgba(68, 77, 86, .5);
 }
 
 .poem--header {
@@ -110,6 +115,16 @@ pre, code {
 .poem--header button {
     height: fit-content;
     padding: 1em;
+}
+button {
+    background-color: #444D564C;
+    color: white;
+    border: none;
+    outline: 4px double white;
+    outline-offset: -4px;
+}
+button:hover {
+    background-color: rgba(68, 77, 86, 0.4);
 }
 
 

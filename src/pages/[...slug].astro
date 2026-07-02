@@ -30,7 +30,7 @@ const layout = data.layout || 'poem';
 const htmlContent = await marked(content);
 
 // Музыкальные данные
-let lyricsContent = null;
+let lyricsContent = undefined;
 let gp5File = null;
 
 if (layout === 'music') {
@@ -65,4 +65,5 @@ const Layout = layout === 'music' ? MusicLayout : PoemLayout;
     content={htmlContent}
     lyricsContent={lyricsContent}
     gp5File={gp5File}
+    date={data.date}
 />

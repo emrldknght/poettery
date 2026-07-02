@@ -10,3 +10,6 @@ package-lock.json
 dist
 pnpm-lock.yaml
 entities_frequency.html
+
+# temp - ignore public
+public
