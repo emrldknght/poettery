@@ -4,6 +4,8 @@
 # poettery
 
 ## lyrics
+- [Прощание c городом (черновик)](/content/2506_city_mourn.md)
+
 - [Войд Волопаса (черновик)](/content/180626_void_volopasa.md)
 - [Кинцуги (черновик)](/content/160626_kintsugi.md)
 - [яблоко, а внутри змея (черновик)](/content/apple_snake.md)
@@ -62,3 +64,4 @@
 
 ## songs - archive
 - [Blitzkrieg Keyintro 2011](content/tabs/blitzkrieg.md)
+- [Игра в войну](content/arh_songs/playing_war.md)
