@@ -22,6 +22,9 @@ interface PoemsState {
   selectPoem: (slug: string | null) => Promise<void>;
   setView: (view: View) => void;
   clearError: () => void;
+
+  addTag: (slug: string, tagName: string) => Promise<void>;
+  removeTag: (slug: string, tagName: string) => Promise<void>;
 }
 
 export const usePoemsStore = create<PoemsState>()(
@@ -124,6 +127,48 @@ export const usePoemsStore = create<PoemsState>()(
 
       setView: (view) => set({ view }, false, `setView/${view}`),
       clearError: () => set({ error: null }, false, 'clearError'),
+
+      addTag: async (slug: string, tagName: string) => {
+        const poem = get().poems.find(p => p.slug === slug);
+        if (!poem || poem.tags.includes(tagName)) return;
+
+        const newTags = [...poem.tags, tagName];
+        // Оптимистичное обновление
+        set(state => ({
+          poems: state.poems.map(p => p.slug === slug ? { ...p, tags: newTags } : p),
+        }), false, `addTag/${slug}/${tagName}`);
+
+        try {
+          await api.addTag(slug, tagName);
+        } catch (e) {
+          // Откат при ошибке
+          set(state => ({
+            poems: state.poems.map(p => p.slug === slug ? { ...p, tags: poem.tags } : p),
+            error: (e as Error).message,
+          }), false, 'addTag/rollback');
+        }
+      },
+
+      removeTag: async (slug: string, tagName: string) => {
+        const poem = get().poems.find(p => p.slug === slug);
+        if (!poem) return;
+
+        const newTags = poem.tags.filter(t => t !== tagName);
+        // Оптимистичное обновление
+        set(state => ({
+          poems: state.poems.map(p => p.slug === slug ? { ...p, tags: newTags } : p),
+        }), false, `removeTag/${slug}/${tagName}`);
+
+        try {
+          await api.removeTag(slug, tagName);
+        } catch (e) {
+          // Откат при ошибке
+          set(state => ({
+            poems: state.poems.map(p => p.slug === slug ? { ...p, tags: poem.tags } : p),
+            error: (e as Error).message,
+          }), false, 'removeTag/rollback');
+        }
+      },
     }),
     { name: 'PoemsStore', enabled: true }
   )

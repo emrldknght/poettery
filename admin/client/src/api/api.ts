@@ -6,6 +6,7 @@ export interface Poem {
   date: string | null;
   section: string;
   published: boolean;
+  tags: string[];
 }
 
 export interface FileNode {
@@ -58,4 +59,20 @@ export const api = {
     });
     if (!res.ok) throw new Error('Failed to sync single file');
   },
+
+  async addTag(slug: string, tagName: string): Promise<void> {
+      const res = await fetch(`/api/poems/${encodeURIComponent(slug)}/tags`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tagName }),
+      });
+      if (!res.ok) throw new Error('Failed to add tag');
+    },
+
+    async removeTag(slug: string, tagName: string): Promise<void> {
+      const res = await fetch(`/api/poems/${encodeURIComponent(slug)}/tags/${encodeURIComponent(tagName)}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Failed to remove tag');
+    },
 };
