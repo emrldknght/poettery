@@ -1,8 +1,11 @@
-import { usePoemsStore } from '../../store/poemsStore';
-import { Button } from '../ui/Button';
+import { usePoemsStore } from '@/features/poems/store.ts';
+import { useFilesStore } from '@/features/files/store';
+import { Button } from '@/shared/ui';
 
 export function Header() {
-  const { sync, isSyncing, poems, error, clearError } = usePoemsStore();
+  const { poems, error, clearError } = usePoemsStore();
+
+  const { sync, isSyncing } = useFilesStore();
 
   return (
     <header

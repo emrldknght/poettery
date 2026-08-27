@@ -18,7 +18,7 @@ export interface FileNode {
   children?: FileNode[];
 }
 
-export const api = {
+export const _api = {
   async fetchPoems(): Promise<Poem[]> {
     const res = await fetch('/api/poems');
     if (!res.ok) throw new Error('Failed to fetch poems');

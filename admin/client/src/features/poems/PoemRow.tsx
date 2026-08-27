@@ -1,7 +1,7 @@
-import type { Poem } from '@/api/api';
-import { Checkbox } from '@/components/ui/Checkbox';
-import { TagBadge } from './TagBadge';
-import { TagInput } from './TagInput';
+import type { Poem } from '@/shared/api/api.ts';
+import { Checkbox } from '@/shared/ui/Checkbox.tsx';
+import { TagBadge } from '@/features/tags/TagBadge.tsx';
+import { TagInput } from '@/features/tags/TagInput.tsx';
 
 interface PoemRowProps {
   poem: Poem;

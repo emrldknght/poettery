@@ -1,6 +1,6 @@
-import type { Poem } from '@/api/api';
-import { Badge } from '@/components/ui/Badge';
-import { PoemRow } from './PoemRow';
+import type { Poem } from '@/shared/api/api.ts';
+import { Badge } from '@/shared/ui/Badge.tsx';
+import { PoemRow } from './PoemRow.tsx';
 
 type GroupBy = 'section' | 'folder';
 

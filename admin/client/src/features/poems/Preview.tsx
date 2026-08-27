@@ -1,4 +1,4 @@
-import { usePoemsStore } from '../../store/poemsStore';
+import { usePoemsStore } from '@/features/poems/store.ts';
 import MarkdownIt from 'markdown-it';
 
 const md = new MarkdownIt();

@@ -1,6 +1,6 @@
-import { usePoemsStore } from '@/store/poemsStore';
-import { TabButton } from '@/components/ui/TabButton';
-import { PoemsList } from './PoemsList';
+import { usePoemsStore } from '@/features/poems/store.ts';
+import { TabButton } from '@/shared/ui/TabButton.tsx';
+import { PoemsList } from './PoemsList.tsx';
 
 export function PoemsView() {
   const {

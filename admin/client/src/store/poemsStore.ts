@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { api, type Poem, type FileNode } from '@/api/api';
+import { type Poem, type FileNode } from '@/shared/api/api.ts';
+import {poemApi} from "@/features/poems";
+import {fileApi} from "@/features/files";
 
 type View = 'by-sections' | 'by-folders';
 
@@ -27,7 +29,7 @@ interface PoemsState {
   removeTag: (slug: string, tagName: string) => Promise<void>;
 }
 
-export const usePoemsStore = create<PoemsState>()(
+export const _usePoemsStore = create<PoemsState>()(
   devtools(
     (set, get) => ({
       poems: [],
@@ -42,7 +44,7 @@ export const usePoemsStore = create<PoemsState>()(
       loadPoems: async () => {
         set({ isLoading: true, error: null }, false, 'loadPoems/start');
         try {
-          const poems = await api.fetchPoems();
+          const poems = await poemApi.getAll();
           set({ poems, isLoading: false }, false, 'loadPoems/success');
         } catch (e) {
           set({ error: (e as Error).message, isLoading: false }, false, 'loadPoems/error');
@@ -51,7 +53,7 @@ export const usePoemsStore = create<PoemsState>()(
 
       fetchFileTree: async () => {
         try {
-          const fileTree = await api.fetchFileTree();
+          const fileTree = await fileApi.getTree();
           set({ fileTree }, false, 'fetchFileTree/success');
         } catch (e) {
           set({ error: (e as Error).message }, false, 'fetchFileTree/error');
@@ -61,7 +63,7 @@ export const usePoemsStore = create<PoemsState>()(
       sync: async () => {
         set({ isSyncing: true, error: null }, false, 'sync/start');
         try {
-          await api.sync();
+          await fileApi.syncAll();
           await get().loadPoems();
           await get().fetchFileTree(); // Обновляем дерево после полного синка
           set({ isSyncing: false }, false, 'sync/success');
@@ -73,7 +75,7 @@ export const usePoemsStore = create<PoemsState>()(
       syncSingleFile: async (path: string) => {
         set({ isSyncing: true, error: null }, false, `syncSingleFile/start/${path}`);
         try {
-          await api.syncSingleFile(path);
+          await fileApi.syncSingle(path);
           await get().loadPoems();
           await get().fetchFileTree(); // Обновляем дерево, чтобы показать галочку
           set({ isSyncing: false }, false, 'syncSingleFile/success');
