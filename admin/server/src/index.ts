@@ -1,6 +1,13 @@
+import { serve } from '@hono/node-server';
 import app from './app';
 import { PORT } from './config';
 
-app.listen(PORT, () => {
-  console.log(`🚀 Admin server running on http://localhost:${PORT}`);
-});
+serve(
+  {
+    fetch: app.fetch,
+    port: Number(PORT),
+  },
+  (info) => {
+    console.log(`🚀 Admin server running on http://localhost:${info.port}`);
+  }
+);

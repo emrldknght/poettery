@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Context } from 'hono';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
@@ -7,7 +7,7 @@ import { poems } from '../schema';
 import { eq } from 'drizzle-orm';
 import { CONTENT_DIR } from '../config';
 
-export const getFileTree = async (req: Request, res: Response) => {
+export const getFileTree = async (c: Context) => {
   try {
     const syncedPoems = await db.select({ slug: poems.slug }).from(poems);
     const syncedSlugs = new Set(syncedPoems.map(p => p.slug));
@@ -48,33 +48,40 @@ export const getFileTree = async (req: Request, res: Response) => {
     }
 
     const tree = buildTree(CONTENT_DIR);
-    res.json(tree);
+    return c.json(tree);
   } catch (e) {
     console.error('Error building tree:', e);
-    res.status(500).json({ error: String(e) });
+    return c.json({ error: String(e) }, 500);
   }
 };
 
-export const getFileContent = async (req: Request, res: Response) => {
-  const { slug } = req.params;
-  try {
-    const poemList = await db.select().from(poems).where(eq(poems.slug, slug));
-    const poem = poemList[0];
+export const getFileContent = async (c: Context) => {
+  // Явно указываем тип string, чтобы TypeScript и IDE успокоились
+  const slug = c.req.param('slug') as string;
 
-    if (!poem) return res.status(404).json({ error: 'Not found' });
+  try {
+    // findFirst — это правильный и типобезопасный способ получить одну запись в Drizzle
+    const poem = await db.query.poems.findFirst({
+      where: eq(poems.slug, slug),
+    });
+
+    if (!poem) {
+      return c.json({ error: 'Not found' }, 404);
+    }
 
     const fullPath = path.join(CONTENT_DIR, poem.file_path);
     const content = fs.readFileSync(fullPath, 'utf-8');
-    res.json({ content, path: poem.file_path });
+
+    return c.json({ content, path: poem.file_path });
   } catch (e) {
     console.error('Error reading file:', e);
-    res.status(500).json({ error: String(e) });
+    return c.json({ error: String(e) }, 500);
   }
 };
 
-export const syncSingleFile = async (req: Request, res: Response) => {
+export const syncSingleFile = async (c: Context) => {
   try {
-    const { path: relativePath } = req.body;
+    const { path: relativePath } = await c.req.json<{ path: string }>();
     const fullPath = path.join(CONTENT_DIR, relativePath);
 
     const fileContent = fs.readFileSync(fullPath, 'utf-8');
@@ -103,9 +110,9 @@ export const syncSingleFile = async (req: Request, res: Response) => {
       },
     });
 
-    res.json({ message: 'File synced' });
+    return c.json({ message: 'File synced' });
   } catch (e) {
     console.error('Error syncing single file:', e);
-    res.status(500).json({ error: String(e) });
+    return c.json({ error: String(e) }, 500);
   }
 };

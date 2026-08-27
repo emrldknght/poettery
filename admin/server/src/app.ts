@@ -1,24 +1,28 @@
-import express from 'express';
-import cors from 'cors';
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import { logger } from 'hono/logger';
 import poemsRoutes from './routes/poems.routes';
 import filesRoutes from './routes/files.routes';
 
-const app = express();
+const app = new Hono();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use('*', logger());
+app.use('*', cors());
 
-// Отключаем кэш для API
-app.use((req, res, next) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  next();
+// Отключаем кэш для всех API-запросов
+app.use('/api/*', async (c, next) => {
+  await next();
+  c.res.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  c.res.headers.set('Pragma', 'no-cache');
+  c.res.headers.set('Expires', '0');
 });
 
-// Подключаем роуты с префиксами
-app.use('/api/poems', poemsRoutes);
-app.use('/api/files', filesRoutes);
+// Подключаем роуты
+app.route('/api/poems', poemsRoutes);
+app.route('/api/files', filesRoutes);
+
+// Базовый health-check
+app.get('/', (c) => c.json({ status: 'ok', name: 'poettery-admin' }));
 
 export default app;
