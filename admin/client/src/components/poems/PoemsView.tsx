@@ -1,6 +1,6 @@
-import { usePoemsStore } from '../../store/poemsStore';
-import { Badge } from '../ui/Badge';
-import { Checkbox } from '../ui/Checkbox';
+import { usePoemsStore } from '@/store/poemsStore.ts';
+import { Badge } from '@/components/ui/Badge';
+import { Checkbox } from '@/components/ui/Checkbox';
 
 export function PoemsView() {
   const { poems, view, setView, togglePublish, selectedSlug, selectPoem, isLoading } = usePoemsStore();

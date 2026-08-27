@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 import { api, type Poem } from '../api/api';
 
 type View = 'by-sections' | 'by-folders';
@@ -24,7 +25,9 @@ interface PoemsState {
   clearError: () => void;
 }
 
-export const usePoemsStore = create<PoemsState>((set, get) => ({
+export const usePoemsStore = create<PoemsState>()(
+  devtools(
+  (set, get) => ({
   // Начальное состояние
   poems: [],
   selectedSlug: null,
@@ -94,4 +97,5 @@ export const usePoemsStore = create<PoemsState>((set, get) => ({
 
   setView: (view) => set({ view }),
   clearError: () => set({ error: null }),
-}));
+}))
+  );
