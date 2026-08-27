@@ -1,24 +1,23 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { api, type Poem } from '../api/api';
+import { api, type Poem, type FileNode } from '@/api/api';
 
 type View = 'by-sections' | 'by-folders';
 
 interface PoemsState {
-  // Данные
   poems: Poem[];
+  fileTree: FileNode[];
   selectedSlug: string | null;
   previewContent: string | null;
-
-  // UI состояние
   view: View;
   isLoading: boolean;
   isSyncing: boolean;
   error: string | null;
 
-  // Actions
   loadPoems: () => Promise<void>;
+  fetchFileTree: () => Promise<void>;
   sync: () => Promise<void>;
+  syncSingleFile: (path: string) => Promise<void>;
   togglePublish: (slug: string) => Promise<void>;
   selectPoem: (slug: string | null) => Promise<void>;
   setView: (view: View) => void;
@@ -27,75 +26,105 @@ interface PoemsState {
 
 export const usePoemsStore = create<PoemsState>()(
   devtools(
-  (set, get) => ({
-  // Начальное состояние
-  poems: [],
-  selectedSlug: null,
-  previewContent: null,
-  view: 'by-sections',
-  isLoading: false,
-  isSyncing: false,
-  error: null,
+    (set, get) => ({
+      poems: [],
+      fileTree: [],
+      selectedSlug: null,
+      previewContent: null,
+      view: 'by-sections',
+      isLoading: false,
+      isSyncing: false,
+      error: null,
 
-  loadPoems: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const poems = await api.fetchPoems();
-      set({ poems, isLoading: false });
-    } catch (e) {
-      set({ error: (e as Error).message, isLoading: false });
-    }
-  },
+      loadPoems: async () => {
+        set({ isLoading: true, error: null }, false, 'loadPoems/start');
+        try {
+          const poems = await api.fetchPoems();
+          set({ poems, isLoading: false }, false, 'loadPoems/success');
+        } catch (e) {
+          set({ error: (e as Error).message, isLoading: false }, false, 'loadPoems/error');
+        }
+      },
 
-  sync: async () => {
-    set({ isSyncing: true, error: null });
-    try {
-      await api.sync();
-      await get().loadPoems();
-      set({ isSyncing: false });
-    } catch (e) {
-      set({ error: (e as Error).message, isSyncing: false });
-    }
-  },
+      fetchFileTree: async () => {
+        try {
+          const fileTree = await api.fetchFileTree();
+          set({ fileTree }, false, 'fetchFileTree/success');
+        } catch (e) {
+          set({ error: (e as Error).message }, false, 'fetchFileTree/error');
+        }
+      },
 
-  togglePublish: async (slug: string) => {
-    const poem = get().poems.find(p => p.slug === slug);
-    if (!poem) return;
+      sync: async () => {
+        set({ isSyncing: true, error: null }, false, 'sync/start');
+        try {
+          await api.sync();
+          await get().loadPoems();
+          await get().fetchFileTree(); // Обновляем дерево после полного синка
+          set({ isSyncing: false }, false, 'sync/success');
+        } catch (e) {
+          set({ error: (e as Error).message, isSyncing: false }, false, 'sync/error');
+        }
+      },
 
-    const newStatus = !poem.published;
-    // Оптимистичное обновление UI
-    set(state => ({
-      poems: state.poems.map(p =>
-        p.slug === slug ? { ...p, published: newStatus } : p
-      ),
-    }));
+      syncSingleFile: async (path: string) => {
+        set({ isSyncing: true, error: null }, false, `syncSingleFile/start/${path}`);
+        try {
+          await api.syncSingleFile(path);
+          await get().loadPoems();
+          await get().fetchFileTree(); // Обновляем дерево, чтобы показать галочку
+          set({ isSyncing: false }, false, 'syncSingleFile/success');
+        } catch (e) {
+          set({ error: (e as Error).message, isSyncing: false }, false, 'syncSingleFile/error');
+        }
+      },
 
-    try {
-      await api.togglePublish(slug, newStatus);
-    } catch (e) {
-      // Откат при ошибке
-      set(state => ({
-        poems: state.poems.map(p =>
-          p.slug === slug ? { ...p, published: !newStatus } : p
-        ),
-        error: (e as Error).message,
-      }));
-    }
-  },
+      togglePublish: async (slug: string) => {
+        const poem = get().poems.find(p => p.slug === slug);
+        if (!poem) return;
 
-  selectPoem: async (slug) => {
-    set({ selectedSlug: slug, previewContent: null });
-    if (slug) {
-      try {
-        const data = await api.fetchFileContent(slug);
-        set({ previewContent: data.content });
-      } catch (e) {
-        set({ error: (e as Error).message });
-      }
-    }
-  },
+        const newStatus = !poem.published;
+        set(
+          state => ({
+            poems: state.poems.map(p =>
+              p.slug === slug ? { ...p, published: newStatus } : p
+            ),
+          }),
+          false,
+          `togglePublish/${slug}/${newStatus}`
+        );
 
-  setView: (view) => set({ view }),
-  clearError: () => set({ error: null }),
-}))
-  );
+        try {
+          await api.togglePublish(slug, newStatus);
+        } catch (e) {
+          set(
+            state => ({
+              poems: state.poems.map(p =>
+                p.slug === slug ? { ...p, published: !newStatus } : p
+              ),
+              error: (e as Error).message,
+            }),
+            false,
+            'togglePublish/rollback'
+          );
+        }
+      },
+
+      selectPoem: async (slug) => {
+        set({ selectedSlug: slug, previewContent: null }, false, `selectPoem/${slug}`);
+        if (slug) {
+          try {
+            const data = await api.fetchFileContent(slug);
+            set({ previewContent: data.content }, false, 'selectPoem/loaded');
+          } catch (e) {
+            set({ error: (e as Error).message }, false, 'selectPoem/error');
+          }
+        }
+      },
+
+      setView: (view) => set({ view }, false, `setView/${view}`),
+      clearError: () => set({ error: null }, false, 'clearError'),
+    }),
+    { name: 'PoemsStore', enabled: true }
+  )
+);
