@@ -3,10 +3,11 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import poemsRoutes from './routes/poems.routes';
 import filesRoutes from './routes/files.routes';
+import tagsRoutes from './routes/tags.routes';
 
 const app = new Hono();
 
-// Middleware
+// Middleware (ИСПРАВЛЕНО: '*' вместо '')
 app.use('*', logger());
 app.use('*', cors());
 
@@ -21,6 +22,7 @@ app.use('/api/*', async (c, next) => {
 // Подключаем роуты
 app.route('/api/poems', poemsRoutes);
 app.route('/api/files', filesRoutes);
+app.route('/api/tags', tagsRoutes);
 
 // Базовый health-check
 app.get('/', (c) => c.json({ status: 'ok', name: 'poettery-admin' }));

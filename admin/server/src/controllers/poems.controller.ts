@@ -1,7 +1,7 @@
 import { Context } from 'hono';
 import { db } from '../db';
-import { poems, tags, poemTags } from '../schema';
-import { desc, eq, and } from 'drizzle-orm';
+import { poems } from '../schema';
+import {eq } from 'drizzle-orm';
 import { syncFiles } from '../sync';
 
 export const getAllPoems = async (c: Context) => {
@@ -53,45 +53,3 @@ export const togglePublish = async (c: Context) => {
   }
 };
 
-// --- НОВЫЕ МЕТОДЫ ДЛЯ ТЕГОВ ---
-
-export const addTag = async (c: Context) => {
-  const slug = c.req.param('slug') as string;
-  const { tagName } = await c.req.json<{ tagName: string }>();
-  const normalizedName = tagName.trim().toLowerCase();
-
-  if (!normalizedName) return c.json({ error: 'Tag name is required' }, 400);
-
-  try {
-    // 1. Ищем тег, если нет — создаем
-    let tag = await db.query.tags.findFirst({ where: eq(tags.name, normalizedName) });
-    if (!tag) {
-      const [newTag] = await db.insert(tags).values({ name: normalizedName }).returning();
-      tag = newTag;
-    }
-
-    // 2. Связываем стих и тег (игнорируем, если связь уже есть)
-    await db.insert(poemTags).values({ slug, tagId: tag.id }).onConflictDoNothing();
-
-    return c.json({ success: true });
-  } catch (e) {
-    console.error('Error adding tag:', e);
-    return c.json({ error: String(e) }, 500);
-  }
-};
-
-export const removeTag = async (c: Context) => {
-  const slug = c.req.param('slug') as string;
-  const tagName = c.req.param('tagName'); // из URL: /api/poems/:slug/tags/:tagName
-
-  try {
-    const tag = await db.query.tags.findFirst({ where: eq(tags.name, tagName) });
-    if (tag) {
-      await db.delete(poemTags).where(and(eq(poemTags.slug, slug), eq(poemTags.tagId, tag.id)));
-    }
-    return c.json({ success: true });
-  } catch (e) {
-    console.error('Error removing tag:', e);
-    return c.json({ error: String(e) }, 500);
-  }
-};
