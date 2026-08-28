@@ -53,3 +53,29 @@ export const togglePublish = async (c: Context) => {
   }
 };
 
+export const updateMetadata = async (c: Context) => {
+  const slug = c.req.param('slug') as string;
+  const body = await c.req.json<{
+    title?: string | null;
+    date?: string | null;
+    section?: string;
+  }>();
+
+  try {
+    const updateData: any = {};
+
+    if (body.title !== undefined) updateData.title = body.title || null;
+    if (body.date !== undefined) updateData.date = body.date || null;
+    if (body.section !== undefined) updateData.section = body.section;
+
+    if (Object.keys(updateData).length === 0) {
+      return c.json({ error: 'No fields to update' }, 400);
+    }
+
+    await db.update(poems).set(updateData).where(eq(poems.slug, slug));
+    return c.json({ success: true });
+  } catch (e) {
+    console.error('Error updating metadata:', e);
+    return c.json({ error: String(e) }, 500);
+  }
+};

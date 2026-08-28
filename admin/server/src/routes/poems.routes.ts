@@ -7,4 +7,6 @@ router.get('/', poemsController.getAllPoems);
 router.post('/sync', poemsController.syncAll);
 router.patch('/:slug{.+}/publish', poemsController.togglePublish);
 
+router.patch('/:slug{.+}', poemsController.updateMetadata);
+
 export default router;

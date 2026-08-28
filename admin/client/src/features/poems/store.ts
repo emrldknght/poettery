@@ -22,6 +22,9 @@ interface PoemsState {
   clearError: () => void;
   addTag: (slug: string, tagName: string) => Promise<void>;
   removeTag: (slug: string, tagName: string) => Promise<void>;
+
+  updateMetadata: (slug: string, data: { title?: string | null; date?: string | null; section?: string }) => Promise<void>;
+
 }
 
 export const usePoemsStore = create<PoemsState>()(
@@ -115,6 +118,26 @@ export const usePoemsStore = create<PoemsState>()(
           }), false, 'tags/removeTag/rollback');
         }
       },
+
+      updateMetadata: async (slug, data) => {
+        try {
+          await poemApi.updateMetadata(slug, data);
+          // Обновляем локальное состояние
+          set(
+            (state) => ({
+              poems: state.poems.map((p) =>
+                p.slug === slug ? { ...p, ...data } : p
+              ),
+            }),
+            false,
+            'poems/updateMetadata/success'
+          );
+        } catch (e) {
+          set({ error: (e as Error).message }, false, 'poems/updateMetadata/error');
+        }
+      },
+
+
     }),
     { name: 'PoemsStore', enabled: true }
   )

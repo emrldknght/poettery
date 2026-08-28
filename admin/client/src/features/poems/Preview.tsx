@@ -1,5 +1,6 @@
 import { usePoemsStore } from '@/features/poems/store.ts';
 import MarkdownIt from 'markdown-it';
+import {MetadataEditor} from "@/features/poems/MetadataEditor.tsx";
 
 const md = new MarkdownIt();
 
@@ -16,20 +17,17 @@ export function Preview() {
   }
 
   // Убираем YAML-хедер
-  const body = (previewContent || '').replace(/^---[\s\S]*?---\n/, '');
+  const body = (previewContent || '').replace(/^---\s*[\s\S]*?\s*---\s*\n?/, '');
   const html = md.render(body);
 
   return (
     <div style={{ padding: '20px' }}>
-      <div style={{ marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
-          Preview
-        </div>
-        <div style={{ fontSize: '16px', fontWeight: 600 }}>{poem.title || poem.slug}</div>
-        <div className="mono" style={{ color: 'var(--text-subtle)', fontSize: '11px', marginTop: '4px' }}>
-          {poem.file_path}
-        </div>
-      </div>
+      <MetadataEditor
+        slug={poem.slug}
+        title={poem.title}
+        date={poem.date}
+        section={poem.section}
+      />
 
       <div
         className="markdown-preview"

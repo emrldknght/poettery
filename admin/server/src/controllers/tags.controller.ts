@@ -122,25 +122,3 @@ export const createTag = async (c: Context) => {
     return c.json({ error: String(e) }, 500);
   }
 };
-
-// Создание нового тега (без привязки к стиху)
-export const createTag409 = async (c: Context) => {
-  const { name } = await c.req.json<{ name: string }>();
-  const normalizedName = name.trim().toLowerCase();
-
-  if (!normalizedName) return c.json({ error: 'Tag name is required' }, 400);
-
-  try {
-    // Проверяем, не существует ли уже
-    const existing = await db.query.tags.findFirst({ where: eq(tags.name, normalizedName) });
-    if (existing) {
-      return c.json({ error: `Tag "${normalizedName}" already exists` }, 409);
-    }
-
-    const [newTag] = await db.insert(tags).values({ name: normalizedName }).returning();
-    return c.json(newTag);
-  } catch (e) {
-    console.error('Error creating tag:', e);
-    return c.json({ error: String(e) }, 500);
-  }
-};

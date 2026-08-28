@@ -8,4 +8,7 @@ export const poemApi = {
 
   getContent: (slug: string) =>
     apiClient.get<{ content: string; path: string }>(`/api/files/${encodeURIComponent(slug)}`),
+
+  updateMetadata: (slug: string, data: { title?: string | null; date?: string | null; section?: string }) =>
+    apiClient.patch(`/api/poems/${encodeURIComponent(slug)}`, data),
 };
