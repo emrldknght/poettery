@@ -1,3 +1,3 @@
 export { apiClient } from './client';
-export type { Poem, FileNode } from './types';
+export type { Poem } from './types';
 // export { api } from './api';

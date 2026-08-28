@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { type FileNode } from '@/shared/api';
+import { type FileNode } from '@/features/files';
 import { usePoemsStore } from '@/features/poems/store';
 import { fileApi } from "@/features/files/api.ts";
 

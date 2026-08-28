@@ -1,3 +1,5 @@
+import type {FileNode} from "@/features/files";
+
 export interface Poem {
   slug: string;
   file_path: string;
@@ -7,15 +9,6 @@ export interface Poem {
   section: string;
   published: boolean;
   tags: string[];
-}
-
-export interface FileNode {
-  name: string;
-  type: 'folder' | 'file';
-  path: string;
-  slug?: string;
-  inDb?: boolean;
-  children?: FileNode[];
 }
 
 export const _api = {
