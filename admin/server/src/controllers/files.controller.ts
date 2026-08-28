@@ -83,10 +83,9 @@ export const syncSingleFile = async (c: Context) => {
   try {
     const { path: relativePath } = await c.req.json<{ path: string }>();
     const fullPath = path.join(CONTENT_DIR, relativePath);
-
     const fileContent = fs.readFileSync(fullPath, 'utf-8');
-    const parsed = matter(fileContent);
 
+    const parsed = matter(fileContent);
     const slug = relativePath.replace(/\.md$/, '').replace(/\\/g, '/');
     const dirName = path.dirname(relativePath).replace(/\\/g, '/');
     const folderName = dirName === '.' ? 'main' : path.basename(dirName);
@@ -101,11 +100,8 @@ export const syncSingleFile = async (c: Context) => {
       section: finalSection,
     }).onConflictDoUpdate({
       target: poems.slug,
+      // ИСПРАВЛЕНО: НЕ перезаписываем метаданные, только обновляем timestamp
       set: {
-        layout: parsed.data.layout || 'poem',
-        title: parsed.data.title || null,
-        date: parsed.data.date || null,
-        section: finalSection,
         updated_at: new Date(),
       },
     });
