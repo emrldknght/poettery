@@ -1,13 +1,23 @@
 import { usePoemsStore } from '@/features/poems/store.ts';
 import { useFilesStore } from '@/features/files/store';
 import { Button } from '@/shared/ui';
+import {TagEditorModal} from "@/features/layout/TagEditorModal.tsx";
+import {useEffect, useState} from "react";
+import {useTagsStore} from "@/features/tags/store.ts";
 
 export function Header() {
   const { poems, error, clearError } = usePoemsStore();
 
   const { sync, isSyncing } = useFilesStore();
+  const { tags, fetchTags } = useTagsStore();
+  useEffect(() => {
+    fetchTags();
+  }, [fetchTags]);
+
+  const [isTagEditorOpen, setIsTagEditorOpen] = useState(false);
 
   return (
+    <>
     <header
       style={{
         display: 'flex',
@@ -42,10 +52,16 @@ export function Header() {
             ⚠ {error}
           </button>
         )}
+        <Button variant="secondary" onClick={() => setIsTagEditorOpen(true)}>
+          🏷 Теги [{tags.length}]
+        </Button>
         <Button variant="primary" onClick={sync} disabled={isSyncing}>
           {isSyncing ? 'Синхронизация...' : '↻ Sync'}
         </Button>
       </div>
     </header>
+
+      <TagEditorModal isOpen={isTagEditorOpen} onClose={() => setIsTagEditorOpen(false)} />
+    </>
   );
 }

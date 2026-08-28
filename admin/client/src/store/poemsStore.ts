@@ -3,6 +3,7 @@ import { devtools } from 'zustand/middleware';
 import { type Poem, type FileNode } from '@/shared/api/api.ts';
 import {poemApi} from "@/features/poems";
 import {fileApi} from "@/features/files";
+import {tagApi} from "@/features/tags";
 
 type View = 'by-sections' | 'by-folders';
 
@@ -100,7 +101,7 @@ export const _usePoemsStore = create<PoemsState>()(
         );
 
         try {
-          await api.togglePublish(slug, newStatus);
+          await poemApi.togglePublish(slug, newStatus);
         } catch (e) {
           set(
             state => ({
@@ -119,7 +120,7 @@ export const _usePoemsStore = create<PoemsState>()(
         set({ selectedSlug: slug, previewContent: null }, false, `selectPoem/${slug}`);
         if (slug) {
           try {
-            const data = await api.fetchFileContent(slug);
+            const data = await poemApi.getContent(slug);
             set({ previewContent: data.content }, false, 'selectPoem/loaded');
           } catch (e) {
             set({ error: (e as Error).message }, false, 'selectPoem/error');
@@ -141,7 +142,7 @@ export const _usePoemsStore = create<PoemsState>()(
         }), false, `addTag/${slug}/${tagName}`);
 
         try {
-          await api.addTag(slug, tagName);
+          await tagApi.add(slug, tagName);
         } catch (e) {
           // Откат при ошибке
           set(state => ({
@@ -162,7 +163,7 @@ export const _usePoemsStore = create<PoemsState>()(
         }), false, `removeTag/${slug}/${tagName}`);
 
         try {
-          await api.removeTag(slug, tagName);
+          await tagApi.remove(slug, tagName);
         } catch (e) {
           // Откат при ошибке
           set(state => ({
