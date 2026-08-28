@@ -1,7 +1,6 @@
 import type { Poem } from '@/shared/api/api.ts';
 import { Checkbox } from '@/shared/ui/Checkbox.tsx';
-import { TagBadge } from '@/features/tags/TagBadge.tsx';
-import { TagInput } from '@/features/tags/TagInput.tsx';
+import { TagDisplay } from '@/features/tags/TagDisplay.tsx';
 
 interface PoemRowProps {
   poem: Poem;
@@ -13,13 +12,13 @@ interface PoemRowProps {
 }
 
 export function PoemRow({
-  poem,
-  isSelected,
-  onSelect,
-  onTogglePublish,
-  onAddTag,
-  onRemoveTag,
-}: PoemRowProps) {
+                          poem,
+                          isSelected,
+                          onSelect,
+                          onTogglePublish,
+                          onAddTag,
+                          onRemoveTag,
+                        }: PoemRowProps) {
   return (
     <tr
       onClick={() => onSelect(poem.slug)}
@@ -29,38 +28,24 @@ export function PoemRow({
         borderBottom: '1px solid var(--border)',
       }}
     >
-      {/* Чекбокс published */}
       <td style={{ padding: '8px', width: '40px' }} onClick={(e) => e.stopPropagation()}>
         <Checkbox
           checked={poem.published}
           onChange={() => onTogglePublish(poem.slug)}
         />
       </td>
-
-      {/* Основная информация */}
       <td style={{ padding: '8px' }}>
         <div style={{ fontWeight: 500 }}>{poem.title || poem.slug}</div>
         <div className="mono" style={{ color: 'var(--text-subtle)', marginTop: '2px' }}>
           {poem.file_path}
         </div>
-
-        {/* Теги */}
-        <div
-          style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '6px' }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {poem.tags.map((tag) => (
-            <TagBadge
-              key={tag}
-              name={tag}
-              onRemove={() => onRemoveTag(poem.slug, tag)}
-            />
-          ))}
-          <TagInput onAdd={(tagName) => onAddTag(poem.slug, tagName)} />
-        </div>
+        <TagDisplay
+          slug={poem.slug}
+          tags={poem.tags}
+          onAdd={onAddTag}
+          onRemove={onRemoveTag}
+        />
       </td>
-
-      {/* Дата */}
       <td
         style={{
           padding: '8px',

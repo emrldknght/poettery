@@ -85,7 +85,7 @@ export const usePoemsStore = create<PoemsState>()(
         const newTags = [...poem.tags, tagName];
         set(state => ({
           poems: state.poems.map(p => p.slug === slug ? { ...p, tags: newTags } : p)
-        }), false, `poems/addTag/${tagName}`);
+        }), false, `tags/addTag/${tagName}`);
 
         try {
           await tagApi.add(slug, tagName);
@@ -93,7 +93,7 @@ export const usePoemsStore = create<PoemsState>()(
           set(state => ({
             poems: state.poems.map(p => p.slug === slug ? { ...p, tags: poem.tags } : p),
             error: (e as Error).message,
-          }), false, 'poems/addTag/rollback');
+          }), false, 'tags/addTag/rollback');
         }
       },
 
@@ -104,7 +104,7 @@ export const usePoemsStore = create<PoemsState>()(
         const newTags = poem.tags.filter(t => t !== tagName);
         set(state => ({
           poems: state.poems.map(p => p.slug === slug ? { ...p, tags: newTags } : p)
-        }), false, `poems/removeTag/${tagName}`);
+        }), false, `tags/removeTag/${tagName}`);
 
         try {
           await tagApi.remove(slug, tagName);
@@ -112,7 +112,7 @@ export const usePoemsStore = create<PoemsState>()(
           set(state => ({
             poems: state.poems.map(p => p.slug === slug ? { ...p, tags: poem.tags } : p),
             error: (e as Error).message,
-          }), false, 'poems/removeTag/rollback');
+          }), false, 'tags/removeTag/rollback');
         }
       },
     }),
