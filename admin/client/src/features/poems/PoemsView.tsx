@@ -11,8 +11,6 @@ export function PoemsView() {
     selectedSlug,
     selectPoem,
     isLoading,
-    addTag,
-    removeTag,
   } = usePoemsStore();
 
   if (isLoading) {
@@ -49,8 +47,6 @@ export function PoemsView() {
         groupBy={view === 'by-sections' ? 'section' : 'folder'}
         onSelect={selectPoem}
         onTogglePublish={togglePublish}
-        onAddTag={addTag}
-        onRemoveTag={removeTag}
       />
     </div>
   );

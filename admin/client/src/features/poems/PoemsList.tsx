@@ -10,8 +10,6 @@ interface PoemsListProps {
   groupBy: GroupBy;
   onSelect: (slug: string) => void;
   onTogglePublish: (slug: string) => void;
-  onAddTag: (slug: string, tagName: string) => void;
-  onRemoveTag: (slug: string, tagName: string) => void;
 }
 
 function getFolder(filePath: string): string {
@@ -25,8 +23,6 @@ export function PoemsList({
   groupBy,
   onSelect,
   onTogglePublish,
-  onAddTag,
-  onRemoveTag,
 }: PoemsListProps) {
   // Группируем стихи
   const groups = new Map<string, Poem[]>();
@@ -76,8 +72,6 @@ export function PoemsList({
                   isSelected={selectedSlug === poem.slug}
                   onSelect={onSelect}
                   onTogglePublish={onTogglePublish}
-                  onAddTag={onAddTag}
-                  onRemoveTag={onRemoveTag}
                 />
               ))}
             </tbody>

@@ -7,8 +7,6 @@ interface PoemRowProps {
   isSelected: boolean;
   onSelect: (slug: string) => void;
   onTogglePublish: (slug: string) => void;
-  onAddTag: (slug: string, tagName: string) => void;
-  onRemoveTag: (slug: string, tagName: string) => void;
 }
 
 export function PoemRow({
@@ -16,8 +14,6 @@ export function PoemRow({
                           isSelected,
                           onSelect,
                           onTogglePublish,
-                          onAddTag,
-                          onRemoveTag,
                         }: PoemRowProps) {
   return (
     <tr
@@ -42,8 +38,6 @@ export function PoemRow({
         <TagDisplay
           slug={poem.slug}
           tags={poem.tags}
-          onAdd={onAddTag}
-          onRemove={onRemoveTag}
         />
       </td>
       <td
