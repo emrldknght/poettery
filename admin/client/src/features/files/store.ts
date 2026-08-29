@@ -10,7 +10,7 @@ interface FilesState {
 
   fetchFileTree: () => Promise<void>;
   sync: () => Promise<void>;
-  syncSingleFile: (path: string) => Promise<void>;
+  syncSingleFile: (path: string, mode?: 'full' | 'partial') => Promise<void>;
 }
 
 export const useFilesStore = create<FilesState>()(
@@ -44,10 +44,10 @@ export const useFilesStore = create<FilesState>()(
         }
       },
 
-      syncSingleFile: async (path: string) => {
+      syncSingleFile: async (path: string, mode: 'full' | 'partial' = 'full') => {
         set({ isSyncing: true }, false, `files/syncSingle/start/${path}`);
         try {
-          await fileApi.syncSingle(path);
+          await fileApi.syncSingle(path, mode);
           await usePoemsStore.getState().loadPoems();
           await get().fetchFileTree();
           set({ isSyncing: false }, false, 'files/syncSingle/success');

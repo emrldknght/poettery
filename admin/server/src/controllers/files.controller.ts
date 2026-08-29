@@ -81,32 +81,49 @@ export const getFileContent = async (c: Context) => {
 
 export const syncSingleFile = async (c: Context) => {
   try {
-    const { path: relativePath } = await c.req.json<{ path: string }>();
+    const body = await c.req.json<{ path: string; mode?: 'full' | 'partial' }>();
+    const { path: relativePath, mode = 'full' } = body;
+
+    console.log('sync single file, mode', mode);
+
     const fullPath = path.join(CONTENT_DIR, relativePath);
     const fileContent = fs.readFileSync(fullPath, 'utf-8');
-
     const parsed = matter(fileContent);
+
     const slug = relativePath.replace(/\.md$/, '').replace(/\\/g, '/');
     const dirName = path.dirname(relativePath).replace(/\\/g, '/');
     const folderName = dirName === '.' ? 'main' : path.basename(dirName);
     const finalSection = parsed.data.section ? String(parsed.data.section) : folderName;
 
-    await db.insert(poems).values({
+    // Вставляем запись (если её нет) или обновляем (если есть)
+    const insertData = {
       slug,
       file_path: relativePath.replace(/\\/g, '/'),
       layout: parsed.data.layout || 'poem',
       title: parsed.data.title || null,
       date: parsed.data.date || null,
       section: finalSection,
-    }).onConflictDoUpdate({
-      target: poems.slug,
-      // ИСПРАВЛЕНО: НЕ перезаписываем метаданные, только обновляем timestamp
-      set: {
+    };
+
+    // Для обновления: полная или частичная
+    const updateData = mode === 'full'
+      ? {
+        layout: parsed.data.layout || 'poem',
+        title: parsed.data.title || null,
+        date: parsed.data.date || null,
+        section: finalSection,
         updated_at: new Date(),
-      },
+      }
+      : {
+        updated_at: new Date(),
+      };
+
+    await db.insert(poems).values(insertData).onConflictDoUpdate({
+      target: poems.slug,
+      set: updateData,
     });
 
-    return c.json({ message: 'File synced' });
+    return c.json({ message: 'File synced', mode });
   } catch (e) {
     console.error('Error syncing single file:', e);
     return c.json({ error: String(e) }, 500);
