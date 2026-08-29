@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { usePoemsStore } from './store';
 import { Button } from '@/shared/ui/Button';
+import {SectionInput} from "@/features/poems/SectionInput.tsx";
 
 interface MetadataEditorProps {
   slug: string;
@@ -11,6 +12,14 @@ interface MetadataEditorProps {
 
 export function MetadataEditor({ slug, title, date, section }: MetadataEditorProps) {
   const updateMetadata = usePoemsStore((state) => state.updateMetadata);
+
+  // Синхронизация состояния с пропсами при смене стиха
+  useEffect(() => {
+    setEditTitle(title || '');
+    setEditDate(date || '');
+    setEditSection(section || '');
+    setIsEditing(false); // Выходим из режима редактирования
+  }, [slug, title, date, section]);
 
   const [editTitle, setEditTitle] = useState(title || '');
   const [editDate, setEditDate] = useState(date || '');
@@ -124,18 +133,9 @@ export function MetadataEditor({ slug, title, date, section }: MetadataEditorPro
             <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Section
             </label>
-            <input
-              type="text"
+            <SectionInput
               value={editSection}
-              onChange={(e) => setEditSection(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '6px 8px',
-                border: '1px solid var(--border)',
-                borderRadius: '4px',
-                fontSize: '13px',
-                marginTop: '4px',
-              }}
+              onChange={setEditSection}
             />
           </div>
         </div>

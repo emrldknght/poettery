@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { type Poem, type FileNode } from '@/shared/api/api.ts';
+import { type Poem } from '@/shared/api/api.ts';
 import {poemApi} from "@/features/poems";
-import {fileApi} from "@/features/files";
+import {fileApi, type FileNode} from "@/features/files";
 import {tagApi} from "@/features/tags";
 
 type View = 'by-sections' | 'by-folders';

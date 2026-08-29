@@ -1,35 +1,29 @@
 import type { Poem } from '@/shared/api/api.ts';
+import { useUIStore } from '@/store/uiStore';
 import { Badge } from '@/shared/ui/Badge.tsx';
 import { PoemRow } from './PoemRow.tsx';
-
-type GroupBy = 'section' | 'folder';
 
 interface PoemsListProps {
   poems: Poem[];
   selectedSlug: string | null;
-  groupBy: GroupBy;
   onSelect: (slug: string) => void;
   onTogglePublish: (slug: string) => void;
 }
 
-function getFolder(filePath: string): string {
-  const parts = filePath.split('/');
-  return parts.length > 1 ? parts[0] : 'root';
-}
-
 export function PoemsList({
-  poems,
-  selectedSlug,
-  groupBy,
-  onSelect,
-  onTogglePublish,
-}: PoemsListProps) {
-  // Группируем стихи
+                            poems,
+                            selectedSlug,
+                            onSelect,
+                            onTogglePublish,
+                          }: PoemsListProps) {
+  const { collapsedSections, toggleSection } = useUIStore();
+
+  // Группируем стихи по секциям
   const groups = new Map<string, Poem[]>();
   for (const poem of poems) {
-    const key = groupBy === 'section' ? poem.section : getFolder(poem.file_path);
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key)!.push(poem);
+    const section = poem.section || 'без секции';
+    if (!groups.has(section)) groups.set(section, []);
+    groups.get(section)!.push(poem);
   }
 
   // Сортируем группы по алфавиту
@@ -39,45 +33,57 @@ export function PoemsList({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {sortedGroups.map(([groupName, items]) => (
-        <div key={groupName}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              marginBottom: '8px',
-            }}
-          >
-            <span
+      {sortedGroups.map(([sectionName, items]) => {
+        const isCollapsed = collapsedSections.includes(sectionName);
+
+        return (
+          <div key={sectionName}>
+            <div
+              onClick={() => toggleSection(sectionName)}
               style={{
-                fontSize: '11px',
-                fontWeight: 600,
-                color: 'var(--text-muted)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '8px',
+                cursor: 'pointer',
+                userSelect: 'none',
               }}
             >
-              {groupName}
-            </span>
-            <Badge variant="muted">{items.length}</Badge>
-          </div>
+              <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                {isCollapsed ? '+' : '−'}
+              </span>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  color: 'var(--text-muted)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                {sectionName}
+              </span>
+              <Badge variant="muted">{items.length}</Badge>
+            </div>
 
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-            <tbody>
-              {items.map((poem) => (
-                <PoemRow
-                  key={poem.slug}
-                  poem={poem}
-                  isSelected={selectedSlug === poem.slug}
-                  onSelect={onSelect}
-                  onTogglePublish={onTogglePublish}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
+            {!isCollapsed && (
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                <tbody>
+                {items.map((poem) => (
+                  <PoemRow
+                    key={poem.slug}
+                    poem={poem}
+                    isSelected={selectedSlug === poem.slug}
+                    onSelect={onSelect}
+                    onTogglePublish={onTogglePublish}
+                  />
+                ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }

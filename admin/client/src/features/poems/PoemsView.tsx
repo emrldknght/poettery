@@ -1,12 +1,9 @@
 import { usePoemsStore } from '@/features/poems/store.ts';
-import { TabButton } from '@/shared/ui/TabButton.tsx';
 import { PoemsList } from './PoemsList.tsx';
 
 export function PoemsView() {
   const {
     poems,
-    view,
-    setView,
     togglePublish,
     selectedSlug,
     selectPoem,
@@ -23,28 +20,20 @@ export function PoemsView() {
 
   return (
     <div style={{ padding: '20px' }}>
-      {/* Табы */}
-      <div
-        style={{
-          display: 'flex',
-          gap: '4px',
-          marginBottom: '20px',
-          borderBottom: '1px solid var(--border)',
-        }}
-      >
-        <TabButton active={view === 'by-sections'} onClick={() => setView('by-sections')}>
-          По секциям
-        </TabButton>
-        <TabButton active={view === 'by-folders'} onClick={() => setView('by-folders')}>
-          По каталогам
-        </TabButton>
+      <div style={{
+        fontSize: '11px',
+        fontWeight: 600,
+        color: 'var(--text-muted)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em',
+        marginBottom: '16px'
+      }}>
+        По секциям
       </div>
 
-      {/* Список стихов */}
       <PoemsList
         poems={poems}
         selectedSlug={selectedSlug}
-        groupBy={view === 'by-sections' ? 'section' : 'folder'}
         onSelect={selectPoem}
         onTogglePublish={togglePublish}
       />
