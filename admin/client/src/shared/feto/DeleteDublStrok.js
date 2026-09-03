@@ -1,10 +1,11 @@
-export function DeleteDublStrok() {
-  DelSpace();
+/** @param state {FetoState} */
+export function DeleteDublStrok(state) {
+  DelSpace(state);
 // ---- удаление повторяющихся строк
   let stihDublDelete = "";
   let str = "";
   let DublStr = 0;
-  let StihDubl = document.formStih1.TextStih.value + "\n";
+  let StihDubl = state.OriginalTextInput + "\n";
   StihDubl = StihDubl.split("\n");
 
 // перебираем строки==================================================
@@ -26,6 +27,6 @@ export function DeleteDublStrok() {
     }
 
   }
-// закончили перебор строк =====================================================================
-  document.formStih1.TextStih.value = stihDublDelete;
+  // закончили перебор строк =====================================================================
+  state.OriginalTextInput = stihDublDelete;
 }

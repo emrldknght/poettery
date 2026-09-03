@@ -1,4 +1,5 @@
-export function AnalizSbornika() {
+/** @param state {FetoState} */
+export function AnalizSbornika(state) {
 
   document.getElementById("BallClassicManual").value = ""; //Оценка классики вручную - сброс
   document.getElementById("BallContentManual").value = ""; // Оценка эксперта за содержание  - сброс
@@ -7,8 +8,8 @@ export function AnalizSbornika() {
 
   SbornikCount = Number(document.getElementById("SbornikCount").value);
   LentaClearFormStih();
-  flagSetAccent = 0;
-  document.formStih1.TextStih.value = SbornikMas[SbornikCount];
+  state.flagSetAccent = 0;
+  state.OriginalTextInput = SbornikMas[SbornikCount];
   SbornikCount = SbornikCount + 1;
   document.getElementById("SbornikCount").value = SbornikCount;
 }

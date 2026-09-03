@@ -1,8 +1,9 @@
-export function AnalizSbornika5() {
+/** @param state {FetoState} */
+export function AnalizSbornika5(state) {
   SbornikCount = Number(document.getElementById("SbornikCount").value);
   LentaClearFormStih();
-  flagSetAccent = 0;
-  document.formStih1.TextStih.value = SbornikMas[SbornikCount];
+  state.flagSetAccent = 0;
+  state.OriginalTextInput = SbornikMas[SbornikCount];
 
   FIOAuthorReport = SbornikMas[SbornikCount + 1];
   GodAuthorReport = SbornikMas[SbornikCount + 2];

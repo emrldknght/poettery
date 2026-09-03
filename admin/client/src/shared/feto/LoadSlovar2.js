@@ -8,7 +8,7 @@ export function LoadSlovar2() {
     file1
       .text()
       .then(text => {
-        slovarGlobal = text;
+        // slovarGlobal = text;
 
       });
   }

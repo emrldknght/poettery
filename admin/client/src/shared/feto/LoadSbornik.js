@@ -1,4 +1,5 @@
-export function LoadSbornik() {
+/** @param state {FetoState} */
+export function LoadSbornik(state) {
   SbornikMas = [];
   let textstih = "";
   let GlobalClassicBall = "";
@@ -26,9 +27,9 @@ export function LoadSbornik() {
     // получаем стих
     textstih = SbornikMasText[key];
     // форматируем и удаляем лишние пробелы
-    document.formStih1.TextStih.value = textstih;
-    DelSpace;
-    textstih = document.formStih1.TextStih.value;
+    state.OriginalTextInput = textstih;
+    DelSpace(state);
+    textstih = state.OriginalTextInput;
     textstih = textstih.replace(/^\n+/g, '');
     // получаем заголовок стиха
     stihMas = textstih.split("\n");

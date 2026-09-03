@@ -1,9 +1,13 @@
-function TemplateAnaliz() {
+/** @param state {FetoState} */
+function TemplateAnaliz(state) {
+  // todo - check if passed correctly
+  const Ritm = state.Ritm;
+
 // Анализ шаблона О:О. Подсчёт ударных, слабоударных, безударных. Выявление ритма (ударных и безударных столбцов). Создание массива базового ритмического рисунка и комментариев.
-  TemplateMas = TemplateAccent.split("\n");
-  window.flagRitmBall = 0;
+  state.TemplateMas = state.TemplateAccent.split("\n");
+  state.flagRitmBall = 0;
   Ritm.length = 0;
-  RitmErr.length = 0;
+  state.RitmErr.length = 0;
 // обнуляем массив базового ритмического рисунка
   let k = 0;
   let max = 0;
@@ -18,7 +22,7 @@ function TemplateAnaliz() {
   let CommentText = "";
   let CommentTextMin = "";
   let CommentNext = "";
-  let KolStrok = TemplateMas.length;
+  let KolStrok = state.TemplateMas.length;
   let RealKolStrok = "";
   let proc = 0;
 // типы ударных (безударных) столбцов
@@ -35,7 +39,7 @@ function TemplateAnaliz() {
     let Accent1 = 0;
 // перебираем столбец шаблона
     for (let s = 0; s < KolStrok; s++) {
-      let nextStr = TemplateMas[s];
+      let nextStr = state.TemplateMas[s];
 //количество столбцов уточняется в цикле методом замены max
       if (max < nextStr.length) {
         max = nextStr.length
@@ -85,7 +89,7 @@ function TemplateAnaliz() {
       CommentText = CommentText + CommentNext + "\n";
       ++TypeSlogErr;
       Ritm[k + 1] = 1;
-      RitmErr[k + 1] = 9;
+      state.RitmErr[k + 1] = 9;
     } else if (Accent3 === 0) {
       CommentNext = (k + 1) + " слог - ПОЛНОСТЬЮ БЕЗУДАРНЫЙ";
       CommentText = CommentText + CommentNext + "\n";

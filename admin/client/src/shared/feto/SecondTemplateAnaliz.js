@@ -1,39 +1,42 @@
-export function SecondTemplateAnaliz()
+/** @param state {FetoState} */
+export function SecondTemplateAnaliz(state)
 // На основе вычисленного базового ритмического рисунка заменяем в шаблоне слабоударные ударными или безударными. Заодно корректируем TemplateGlasn - двусложные слова в безударных столбцах делаем безударными
 {
 
-  TemplateAccent = TemplateAccent.replace(/\n+$/g, ''); // удаляем пустые строки в конце
-  TemplateGlasn = TemplateGlasn.replace(/\n+$/g, '');
-  TemplateNumGlas = TemplateNumGlas.replace(/\n+$/g, '');
+  state.TemplateAccent = state.TemplateAccent.replace(/\n+$/g, ''); // удаляем пустые строки в конце
+  state.TemplateGlasn = state.TemplateGlasn.replace(/\n+$/g, '');
+  state.TemplateNumGlas = state.TemplateNumGlas.replace(/\n+$/g, '');
 
 
-  TemplateMas = TemplateAccent.split("\n"); //массив содержит ударения в формате О:.
-  TemplateGlasnMas = TemplateGlasn.split("\n"); //массив содержит гласные
-  TemplateNumGlasMas = TemplateNumGlas.split("\n"); //массив содержит позиции гласных в словах
+  state.TemplateMas = state.TemplateAccent.split("\n"); //массив содержит ударения в формате О:.
+  state.TemplateGlasnMas = state.TemplateGlasn.split("\n"); //массив содержит гласные
+  state.TemplateNumGlasMas = state.TemplateNumGlas.split("\n"); //массив содержит позиции гласных в словах
 
   console.log("SecondTemplateAnaliz()");
 
   console.log("TemplateMas");
-  console.log(TemplateMas);
+  console.log(state.TemplateMas);
 
   console.log("TemplateGlasnMas");
-  console.log(TemplateGlasnMas);
+  console.log(state.TemplateGlasnMas);
 
   console.log("TemplateNumGlasMas");
-  console.log(TemplateNumGlasMas);
+  console.log(state.TemplateNumGlasMas);
 
   let resStrAccent = "";
   let resStrGlasn = "";
   let resStrNumGlas = "";
 
+  const Ritm = state.Ritm;
 
-  let KolStrok = TemplateMas.length;
+
+  let KolStrok = state.TemplateMas.length;
   console.log("nextStrGlasn2");
 // сравниваем каждую строку с шаблоном Ritm - базовый ритмический рисунок (цифра означает силу ударения)
   for (let s = 0; s < KolStrok; s++) {
-    let nextStr = TemplateMas[s]; // строка содержит ударения в формате О:.
-    let nextStrGlasn = TemplateGlasnMas[s];  //строка содержит гласные
-    let nextStrNumGlas = TemplateNumGlasMas[s];  //строка содержит позиции гласных в словах
+    let nextStr = state.TemplateMas[s]; // строка содержит ударения в формате О:.
+    let nextStrGlasn = state.TemplateGlasnMas[s];  //строка содержит гласные
+    let nextStrNumGlas = state.TemplateNumGlasMas[s];  //строка содержит позиции гласных в словах
 
 
     let nextStr2 = "";
@@ -93,21 +96,21 @@ export function SecondTemplateAnaliz()
   }
 
 // возвращаем изменения в исходные массивы
-  TemplateAccent = resStrAccent;
-  TemplateGlasn = resStrGlasn;
-  TemplateNumGlas = resStrNumGlas;
+  state.TemplateAccent = resStrAccent;
+  state.TemplateGlasn = resStrGlasn;
+  state.TemplateNumGlas = resStrNumGlas;
 
   console.log("_TemplateAccent");
-  console.log(TemplateAccent);
+  console.log(state.TemplateAccent);
 
   console.log("_TemplateGlasn");
-  console.log(TemplateGlasn);
+  console.log(state.TemplateGlasn);
 
   console.log("_TemplateNumGlas");
-  console.log(TemplateNumGlas);
-  RitmAnaliz();
-  CreateBlockRitm();
+  console.log(state.TemplateNumGlas);
+  RitmAnaliz(state);
+  CreateBlockRitm(state);
   CrossRitm = Ritm;
-  Ritmkontrast();
+  Ritmkontrast(state);
 
 }

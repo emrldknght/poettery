@@ -1,5 +1,6 @@
-export function CountSimvol() {
-  let stih = document.formStih1.TextStih.value;
-  SimvolCount = stih.length;
-  return SimvolCount;
+/** @param state {FetoState} */
+export function CountSimvol(state) {
+  let stih = state.OriginalTextInput;
+  state.SimvolCount = stih.length;
+  return state.SimvolCount;
 }

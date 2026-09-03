@@ -1,9 +1,10 @@
-export function grekinsert() {
+/** @param state {FetoState} */
+export function grekinsert(state) {
   if (CountStrofaPatternType > 1) {
     return;
   }
-  let grektextinsert = grek();
+  let grektextinsert = grek(state);
   console.log(grektextinsert);
   grektextinsert = grektextinsert.replace(/\n/ig, '<br>');
-  document.getElementById("ContainerAnaliz1f").innerHTML = grektextinsert + '<br>';
+  state.ContainerAnaliz1f = grektextinsert + '<br>';
 }

@@ -1,6 +1,7 @@
 // загрузка словаря Ё ---------------------------------------------------------------------------------------------------------------
 
 export async function LoadSlovarE() {
+  console.log("START -- LoadSlovarE");
 
   let url = "https://fet.vpoezii.online/slovar/slovar_Yo.txt";
 
@@ -11,14 +12,16 @@ export async function LoadSlovarE() {
 
     let slovar_noaccent_E = slovarE.toLowerCase();
     slovar_noaccent_E_Mas = slovar_noaccent_E.split(",");
+    /*
     if (isMobile == null) {
       document.getElementById('ContainerComment0').innerHTML = "Для начала нажмите «Анализ стихотворения».";
     }
-    ;
+
     if (isMobile != null) {
       document.getElementById('ContainerComment0').innerHTML = "Для анализа стихотворения нажмите «Анализ».";
     }
-    ;
+    */
+
     return;
   } else {
     alert("slovar_Yo.txt Ошибка HTTP: " + response.status);

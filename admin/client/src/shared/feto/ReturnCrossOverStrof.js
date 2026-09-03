@@ -1,4 +1,5 @@
-export function ReturnCrossOverStrof()
+/** @param state {FetoState} */
+export function ReturnCrossOverStrof(state)
 // возвращаем перекрёстные строфы (развернув обратно) в первое текстовое поле, а шаблоны в поле шаблонов ==========================================================================================
 // ритм блока CrossLentaRitm[lenta] - возвращаем (рисуем) в блок шаблона, заодно формируем новый массив ритмов строф CrossRitmResult, чтобы потом искать ритмично идентичные строфы
 // шаблон гласных  CrossTemplateGlasn[lenta] возвращаем (рисуем) в блок шаблона (подпрограмма цветного рисования CreateBlockRitmStroka)
@@ -72,11 +73,11 @@ export function ReturnCrossOverStrof()
 
   }
 
-  document.getElementById('ContainerTemplate1').innerHTML = slog + FullBlockRitm;
-  document.formStih1.TextStih.value = NewAccentLentaText;
+  state.ContainerTemplate1 = slog + FullBlockRitm;
+  state.OriginalTextInput = NewAccentLentaText;
 
   console.log('CrossRitmResult');
   console.log(CrossRitmResult);
-  AnalizCrossOverStrof();
+  AnalizCrossOverStrof(state);
 
 }

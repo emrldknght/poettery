@@ -1,4 +1,5 @@
-export function ReversAccent()
+/** @param state {FetoState} */
+export function ReversAccent(state)
 // Находим неразмеченные слова и размечаем по шаблону Ritm[]. Если не помогло, то предлагаем несколько ударений на выбор.
 {
   let flagAccentSlovo = 0;
@@ -17,15 +18,16 @@ export function ReversAccent()
   let glasnyLow = "аоиеёэыуюя";
   let glasnyCaps = "АОИЕЁЭЫУЮЯ";
   let kirill = /[а-яА-ЯёЁ]/;
-  let StrStih = document.formStih1.TextStih.value + "\n";
+  let StrStih = state.OriginalTextInput + "\n";
   let StrStihMas = StrStih.split("\n");
   let CaseAccent = [];
-  CountSlov = 0;
-  CountAccentSlov = 0;
-  CountNoAccentSlov = 0;
+  state.CountSlov = 0;
+  state.CountAccentSlov = 0;
+  state.CountNoAccentSlov = 0;
+  const Ritm = state.Ritm;
 
 
-  let nexttext = document.formStih1.TextStih.value;
+  let nexttext = state.OriginalTextInput;
   if (nexttext.length === 0) {
     return;
   }
@@ -45,7 +47,8 @@ export function ReversAccent()
       if (kir) {
         NextSlovo = NextSlovo + NextZnak;
       } else {
-        ++CountSlov; //количество слов
+        // todo - check ++ expression
+        ++state.CountSlov; //количество слов
         // размечаем слово по шаблону Ritm[]
         let onlycaps = NextSlovo.replace(/[ёйцукенгшщзхъфывапролджэячсмитьбюЙЦКНГШЩЗХЪФВПРЛДЖЧСМТЬБ]/g, '');
         let onlyGlasny = NextSlovo.replace(/[йцкнгшщзхъфвпрлджчсмтьбЙЦКНГШЩЗХЪФВПРЛДЖЧСМТЬБ]/g, '');
@@ -74,7 +77,7 @@ export function ReversAccent()
                       NextBukva = NextBukva.toUpperCase();
                       NextSlovo = NextSlovo.substr(0, s) + NextBukva + NextSlovo.substr(s + 1, NextSlovo.length - s);
                       flagAccentSlovo = 1;
-                      ++CountAccentSlov;
+                      ++state.CountAccentSlov;
                     }
                   }
                 }
@@ -115,9 +118,14 @@ export function ReversAccent()
 
             // ==============
 
+            if (!state) {
+              console.error('[ERROR] No state in ctx')
+            }
+            const HandAccent = state.HandAccent;
+
             // или предлагаем несколько ударений на выбор CaseAccent[] - номер безударной в слове;
             // если ручной режим расстановки ударений отключен то HandAccent=0;
-            if (UnicStrof < 2 && HandAccent > 0 && window.project != 'epigramma') // если уникальных строф не много, то это не вольный стих (будет слишком много иправлений)
+            if (state.UnicStrof < 2 && HandAccent > 0 && window.project != 'epigramma') // если уникальных строф не много, то это не вольный стих (будет слишком много иправлений)
             {
               ++CountCase;
               for (let b = 1; b < CaseAccent.length; b++) {
@@ -160,9 +168,9 @@ export function ReversAccent()
     NextSlovo = "";
   }
   //закончились строки в стихотворении
-  document.formStih1.TextStih.value = newStrStih;
+  state.OriginalTextInput = newStrStih;
   StrStih = newStrStih;
 
-  CountNoAccentSlov = CountSlov - CountAccentSlov;
+  state.CountNoAccentSlov = state.CountSlov - state.CountAccentSlov;
 
 }

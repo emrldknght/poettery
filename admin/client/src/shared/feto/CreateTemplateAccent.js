@@ -1,4 +1,5 @@
-function CreateTemplateAccent() {
+/** @param state {FetoState} */
+function CreateTemplateAccent(state) {
 // Создаём шаблон ударений. Выбираем гласные, заменяем маркерами ударений О:. и записываем шаблон в переменную TemplateAccent.
 // Заодно создаём массив номеров гласных в словах - TemplateNumGlas. Каждая гласная помечается числом 1 -  если она первая в слове, числом 2 - если вторая и тд (NumGlas)
 
@@ -11,7 +12,7 @@ function CreateTemplateAccent() {
   var NextSlovo = "";
   let TemplateStr = "";
   let TemplateZnak = "";
-  TemplateNumGlas = "";
+  state.TemplateNumGlas = "";
   let TemplateNumGlasStr = "";
   let NextBukva = "";
   let Countgl = 0;
@@ -28,7 +29,7 @@ function CreateTemplateAccent() {
   let TemplateZnak32 = "О";
   let TemplateZnak33 = ":";
 
-  let stih = document.formStih1.TextStih.value + "\n";
+  let stih = state.OriginalTextInput + "\n";
   for (let i = 0; i < stih.length; i++) {
     let NextZnak = stih[i];
 
@@ -53,7 +54,7 @@ function CreateTemplateAccent() {
         if (onlyGlasny.length > 1) {
           if (onlycaps.length === 0) {
             flagAccent = krest + "Не во всех словах расставлены ударения! ";
-            window.flagAccentBall = 0;
+            state.flagAccentBall = 0;
           }
         }
       }
@@ -91,31 +92,31 @@ function CreateTemplateAccent() {
         ResText = ResText + "\n";
       }
 
-      TemplateNumGlas = TemplateNumGlas + TemplateNumGlasStr; // заодно создаём массив номеров гласных
+      state.TemplateNumGlas = state.TemplateNumGlas + TemplateNumGlasStr; // заодно создаём массив номеров гласных
       if (NextZnak === "\n") {
-        TemplateNumGlas = TemplateNumGlas + "\n";
+        state.TemplateNumGlas = state.TemplateNumGlas + "\n";
       } // заодно создаём массив номеров гласных
 
     }
 
   }
-  TemplateAccent = ResText;
+  state.TemplateAccent = ResText;
   console.log("TemplateAnaliz()");
 // Анализ шаблона О:О. Подсчёт ударных, слабоударных, безударных. Выявление ритма (ударных и безударных столбцов). Создание массива базового ритмического рисунка и комментариев.
-  TemplateAnaliz();
+  TemplateAnaliz(state);
   console.log("TemplateAccent1");
-  console.log(TemplateAccent);
+  console.log(state.TemplateAccent);
   console.log("SecondTemplateAnaliz");
 // На основе вычисленного базового ритмического рисунка заменяем в шаблоне слабоударные ударными или безударными. Заодно корректируем TemplateGlasn - двусложные слова в безударных столбцах делаем безударными
-  SecondTemplateAnaliz();
+  SecondTemplateAnaliz(state);
   console.log("TemplateAccent2");
-  console.log(TemplateAccent);
+  console.log(state.TemplateAccent);
   console.log("TemplateAnaliz()");
 // Анализ шаблона О:О. Подсчёт ударных, слабоударных, безударных. Выявление ритма (ударных и безударных столбцов). Создание массива базового ритмического рисунка и комментариев.
-  TemplateAnaliz();
+  TemplateAnaliz(state);
   console.log("SecondTemplateAnaliz()");
 // На основе вычисленного базового ритмического рисунка заменяем в шаблоне слабоударные ударными или безударными. Заодно корректируем TemplateGlasn - двусложные слова в безударных столбцах делаем безударными
-  SecondTemplateAnaliz();
+  SecondTemplateAnaliz(state);
   console.log("TemplateNumGlas");
-  console.log(TemplateNumGlas);
+  console.log(state.TemplateNumGlas);
 }

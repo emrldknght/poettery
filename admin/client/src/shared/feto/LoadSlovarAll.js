@@ -4,7 +4,8 @@
 
 
 export async function Load_slovar_full_accent() {
-  document.getElementById('ContainerComment0').innerHTML = "Загружается словарь " + '<img src="https://fet.vpoezii.online/idikator.gif" width="15" style="vertical-align: middle;">';
+  console.log("START -- Load_slovar_full_accent");
+  state.ContainerComment0 = "Загружается словарь " + '<img src="https://fet.vpoezii.online/idikator.gif" width="15" style="vertical-align: middle;" alt="i">';
   let url = "https://fet.vpoezii.online/slovar/slovar_full_accent.txt";
   let response = await fetch(url);
   if (response.ok) {

@@ -1,7 +1,8 @@
-export function PoiskStrof() {
-  DelSpace();
+/** @param state {FetoState} */
+export function PoiskStrof(state) {
+  DelSpace(state);
 //
-  let StihText3 = document.formStih1.TextStih.value + "\n";
+  let StihText3 = state.OriginalTextInput + "\n";
   let stihMas3 = StihText3.split("\n");
   let stihMas4 = "";
   let СountStrok = 0;
@@ -36,7 +37,7 @@ export function PoiskStrof() {
       }
     }
 
-    document.formStih1.TextStih.value = stihMas4;
+    state.OriginalTextInput = stihMas4;
   }
 
 }

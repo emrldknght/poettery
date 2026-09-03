@@ -1,6 +1,7 @@
-export function LentaClear1() {
+/** @param state {FetoState} */
+export function LentaClear1(state) {
   LentaClearFormStih();
-  flagSetAccent = 0;
-  AccentCountSimvol = 0;
+  state.flagSetAccent = 0;
+  state.AccentCountSimvol = 0;
   TextStihResize();
 }

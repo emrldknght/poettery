@@ -1,4 +1,5 @@
-export function CreateCrossOverStrof()
+/** @param state {FetoState} */
+export function CreateCrossOverStrof(state)
 // интегральный анализ на основе группированных строф CrossOverStihMas -  CrossOverProbelStrofMas
 // берем исходный текст и TemplateGlasn, сортируем строки по размеру, группируем, добавляем пробел между строфами
 
@@ -23,8 +24,8 @@ export function CreateCrossOverStrof()
   let CrossNumvStrofe = []; //массив содержит позицию строки в строфе
 
   NewPosCrossOverStihMas = []; //массив содержит новые позиции строк стиха после сортировки и разбивки на строфы (индекс - исходная позиция строки, значение - новая позиция строки)
-  DelSpace();
-  let stih = document.formStih1.TextStih.value; // запоминаем исходный стих
+  DelSpace(state);
+  let stih = state.OriginalTextInput; // запоминаем исходный стих
   NaturalStih = stih; // запоминаем исходный стих
 
   OldCrossOverStihMas = stih.split("\n"); //массив содержит исходный стих - сохраняем его до сортировки (с пробелами)
@@ -53,9 +54,9 @@ export function CreateCrossOverStrof()
   CrossOverStihMas = stih.split("\n"); //массив содержит исходный стих до сортировки (для перекрёсных строф)
 
 
-  TemplateGlasn = TemplateGlasn.replace(/\n{2,}/gm, '\n'); // заменить две пустые строки одной
-  TemplateGlasn = '\n' + TemplateGlasn; // добавим пробел в нулевую позицию
-  CrossTemplateGlasnMas = TemplateGlasn.split("\n"); //массив содержит гласные (без пустых строк)
+  state.TemplateGlasn = state.TemplateGlasn.replace(/\n{2,}/gm, '\n'); // заменить две пустые строки одной
+  state.TemplateGlasn = '\n' + state.TemplateGlasn; // добавим пробел в нулевую позицию
+  CrossTemplateGlasnMas = state.TemplateGlasn.split("\n"); //массив содержит гласные (без пустых строк)
 
   OldCrossTemplateGlasnMas = CrossTemplateGlasnMas.slice(); //массив содержит гласные - сохраняем его до сортировки
 
@@ -202,9 +203,9 @@ export function CreateCrossOverStrof()
   console.log(CrossOverProbelStrofMas);
 
 // возвращаем стих в текстовое поле
-  document.formStih1.TextStih.value = CrossOverProbelStrofMas.join("\n");
+  state.OriginalTextInput = CrossOverProbelStrofMas.join("\n");
 
-  stih = document.formStih1.TextStih.value;
-  DelSpace();
+  stih = state.OriginalTextInput;
+  DelSpace(state);
 
 }

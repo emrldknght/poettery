@@ -1,4 +1,5 @@
-export function grek()
+/** @param state {FetoState} */
+export function grek(state)
 // сравнение выявленного размера с классическими
 // _TemplateAccent - скорректированный шаблон гласных в формате О:. по нему можно определить соответствие ямбу и хорею, найти строки, которые не соответствуют им. Эталонный ямб это .О.О.О.О
 
@@ -14,12 +15,12 @@ export function grek()
 
 
 //измеряемый ритм
-  let ritmstroka = Ritm.join(''); // базовый ритм в виде строки
+  let ritmstroka = state.Ritm.join(''); // базовый ритм в виде строки
 
   console.log("ritmstroka=" + ritmstroka);
 
 // переводим TemplateAccent из О:. в шаблон 123
-  let grekTemplateAccent = TemplateAccent;
+  let grekTemplateAccent = state.TemplateAccent;
   grekTemplateAccent = grekTemplateAccent.replace(/[О]/g, '3');
   grekTemplateAccent = grekTemplateAccent.replace(/[:]/g, '2');
   grekTemplateAccent = grekTemplateAccent.replace(/[.]/g, '1');
@@ -32,7 +33,7 @@ export function grek()
   console.log("grekTemplateAccentMas=" + "\n" + grekTemplateAccentMas);
 
 // реальный стих ------------------
-  let grekStih = document.formStih1.TextStih.value + "\n";
+  let grekStih = state.OriginalTextInput + "\n";
   let grekStihMas = grekStih.split("\n");
 
 // сравниваем реальный ритм с идеальным ------------------

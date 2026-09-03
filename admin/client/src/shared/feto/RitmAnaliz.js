@@ -1,6 +1,9 @@
-export function RitmAnaliz()
+/** @param state {FetoState} */
+export function RitmAnaliz(state)
 // анализ базового ритмического рисунка и комментарии к нему
 {
+  const Ritm = state.Ritm;
+
   LastAccent = 0;
   let bb = 0;
   let uu = 0;
@@ -19,7 +22,7 @@ export function RitmAnaliz()
   let CommentSpondey = "";
   TriCodRitm = "";
 
-  let nexttext = document.formStih1.TextStih.value;
+  let nexttext = state.OriginalTextInput;
   if (nexttext.length === 0) {
     return;
   }
@@ -86,7 +89,7 @@ export function RitmAnaliz()
 
     if (bb > (Ritm.length - 2)) {
       CommentRitmika = CommentRitmika + "Ударения в словах не расставлены.  ";
-      window.flagAccentBall = 0;
+      state.flagAccentBall = 0;
     }
     ;
 
@@ -111,23 +114,23 @@ export function RitmAnaliz()
 
   if (CountStop > 1) {
     CommentStopa = "Текст имеет слабые признаки ритма. ";
-    flagRitm = galka + "Ритм слабый!  ";
-    window.flagRitmBall = 1;
+    state.flagRitm = galka + "Ритм слабый!  ";
+    state.flagRitmBall = 1;
   } else {
     CommentRitmika = CommentRitmika + "В тексте не обнаружен ритм. " + "\n" + "Расставьте ударения в словах. " + "\n" + "УдарЕния обозначАются заглАвной бУквой. " + "\n" + "Для автоматической расстановки ударений нажмите кнопку [Анализ стихотворения]. " + "\n" + "\n";
-    flagRitm = "";
+    state.flagRitm = "";
   }
 
   if (CountStop > Ritm.length * 0.3) {
     CommentStopa = "Строфы имеют явный ритмический рисунок, повторяющийся в каждой строке. ";
-    flagRitm = galka + "Ритм явный!  ";
-    window.flagRitmBall = 2;
+    state.flagRitm = galka + "Ритм явный!  ";
+    state.flagRitmBall = 2;
   }
 
   if (SuperStopa > 1 || uu > 1) {
     CommentStopa = "Строфы имеют очень чёткий ритмический рисунок, повторяющийся в каждой строке. ";
-    flagRitm = galka + "Ритм чёткий!  ";
-    window.flagRitmBall = 3;
+    state.flagRitm = galka + "Ритм чёткий!  ";
+    state.flagRitmBall = 3;
   }
 
   CommentRitmika = CommentRitmika + CommentStopa;
@@ -151,5 +154,10 @@ export function RitmAnaliz()
   if (risunok2.length > 3) {
     CommentRitmika = CommentRitmika + "Ритм можно записать в виде: " + TriCodRitm + ", где 0-безударный, 1-слабоударный, 2-ударный слог. ";
   }
+
+  // console.log('state.flagRitmBall', state.flagRitmBall)
+  // === ВРЕМЕННЫЙ КОСТЫЛЬ ДЛЯ АДАПТЕРА (TODO: refactor) ===
+  _TempFlagRitmBall = state.flagRitmBall;
+  _TempTriCodeRitm = TriCodRitm
 
 }

@@ -1,4 +1,5 @@
-export function ReturnGroupStrof() {
+/** @param state {FetoState} */
+export function ReturnGroupStrof(state) {
   // возвращаем сгруппированные строфы после анализа из ленты в основной блок. Длина ленты = GroupStrof.length
   // запомнили ReturnStrofaPositionMas [s]=kk; в какую группу kk какая строфа s переместилась.
   // берем из второй группы шаблона containertemplate2 весь второй блок и сплитим в массив GroupTemplateMas по <br><br>
@@ -11,11 +12,11 @@ export function ReturnGroupStrof() {
   let idt = "";
   let ReturnContainerTemplate = [];
   let ReturnContainerTemplateReverse = [];
-  if (GroupStrof.length === 1) {
+  if (state.GroupStrof.length === 1) {
     return;
   }
   // перебираем группы строф (шаблоны) со второго ContainerTemplate2 ContainerTemplate3 ContainerTemplate4 и тд
-  for (let s = 2; s < GroupStrof.length + 1; s++) {
+  for (let s = 2; s < state.GroupStrof.length + 1; s++) {
 
     idt = 'ContainerTemplate' + (s);
     elem = document.getElementById(idt).innerHTML; // находим шаблон в следующей группе
@@ -42,15 +43,17 @@ export function ReturnGroupStrof() {
 
 // объединяем шаблоны и переносим в первый блок шаблонов
   ReturnContainerTemplate.shift(); // удаляем нулевой
-  document.getElementById('ContainerTemplate1').innerHTML = ReturnContainerTemplate.join("<br><br>");
+  state.ContainerTemplate1 = ReturnContainerTemplate.join("<br><br>");
 // убирем легенду
+  /*
   elem = document.getElementById('ContainerTemplate1');
   elem.querySelectorAll('.legenda1').forEach(function (a) {
     a.remove()
   })
+   */
 // заменяем три "<br><br>" на два "<br><br>"
-  elem = document.getElementById('ContainerTemplate1').innerHTML;
+  elem = state.ContainerTemplate1;
   elem = elem.replace(/<br><br><br>/g, '<br><br>');
   elem = elem.replace(/<br><\/div><br><br>/g, '</div><br>'); // если остались
-  document.getElementById('ContainerTemplate1').innerHTML = elem;
+  state.ContainerTemplate1 = elem;
 }

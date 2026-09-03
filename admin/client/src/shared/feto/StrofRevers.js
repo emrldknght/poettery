@@ -1,6 +1,7 @@
-export function StrofRevers() {
-  DelSpace();
-  let StrofaFullPattern = StrofaPatternMas.join(',');
+/** @param state {FetoState} */
+export function StrofRevers(state) { // used in #adminPanel
+  DelSpace(state);
+  let StrofaFullPattern = state.StrofaPatternMas.join(',');
   console.log("StrofaFullPattern", StrofaFullPattern);
 // ---- разбивка на строфы повторно после анализа (подсчёт длины строк и количества строк, ищем кратность - количество делим на 2, 3, 4; поиск повторяющихся паттернов по 2, 3, 4 строки) alex
 

@@ -1,4 +1,5 @@
-export function AnalizCrossOverStrof() {
+/** @param state {FetoState} */
+export function AnalizCrossOverStrof(state) {
   let CountUniCrossRitm = 0;
   let FlagUniCrossRitm = 0;
   let UniCrossRitmResume = "";
@@ -22,20 +23,20 @@ export function AnalizCrossOverStrof() {
   if (CountUniCrossRitm == 1) {
     UniCrossRitmResume = "Ритм в " + UniCrossRitmResume + " строфе отличается от всех остальных."
   }
-  ;
+
   if (CountUniCrossRitm > 1) {
     UniCrossRitmResume = "Ритм в " + UniCrossRitmResume + " строфах отличается от всех остальных."
   }
-  ;
-  if (CountUniCrossRitm == CrossRitmResult.length) {
-    window.ClassicBall = 0;
-  }
-  ;
-  if (CountUniCrossRitm > 0 && CountUniCrossRitm < CrossRitmResult.length) {
-    window.ClassicBall = 1;
-  }
-  ;
 
-  document.getElementById('ContainerAnaliz1').innerHTML = document.getElementById('ContainerAnaliz1').innerHTML + UniCrossRitmResume;
+  if (CountUniCrossRitm == CrossRitmResult.length) {
+    state.ClassicBall = 0;
+  }
+
+  if (CountUniCrossRitm > 0 && CountUniCrossRitm < CrossRitmResult.length) {
+    state.ClassicBall = 1;
+  }
+
+
+  state.ContainerAnaliz1 = state.ContainerAnaliz1 + UniCrossRitmResume;
   console.log(UniCrossRitmResume);
 }

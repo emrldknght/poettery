@@ -1,31 +1,21 @@
-export function AccentTonic() {
-  DelSpace();
+/** @param state {FetoState} */
+export function AccentTonic(state) {
+  DelSpace(state);
   ClearForm2();
-  if (slovarMas.length < 1) {
-    slovarMas = slovarGlobal.split(",");
-  }
-  ;
-  if (slovarEMas.length < 1) {
-    slovarEMas = slovarGlobalE.split(",");
-  }
-  ;
-
-  slovarMas = slovarGlobal.split(",");
-  slovarEMas = slovarGlobalE.split(",");
 
   let k = 0;
   let ResText = "";
   let NextZnak = "";
   var NextSlovo = "";
-  CountSlov = 0;
-  CountAccentSlov = 0;
-  CountNoAccentSlov = 0;
+  state.CountSlov = 0;
+  state.CountAccentSlov = 0;
+  state.CountNoAccentSlov = 0;
   let LowGlasny = "";
   let flagYo = 0;
 
   let kirill = /[а-яА-ЯёЁ]/;
-  stih = document.formStih1.TextStih.value + "\n";
-  stih0 = document.formStih1.TextStih.value + "\n";
+  stih = state.OriginalTextInput + "\n";
+  stih0 = state.OriginalTextInput + "\n";
   stihMas0 = stih0.split("\n");
   let LowStih = stih.toLowerCase();
 
@@ -42,7 +32,8 @@ export function AccentTonic() {
       NextSlovo = NextSlovo + NextZnak;
     } else {
       if (NextSlovo.length > 0) {
-        ++CountSlov;
+        // todo - check ++ expression
+        ++state.CountSlov;
         // отображаем прогресс
 
         // односложные слова делаем ударными, ё делаем ударным, остальные ищем по словарю
@@ -64,11 +55,11 @@ export function AccentTonic() {
 
   console.log("цикл AccentTonic завершён");
 
-  flagSetAccent = 1;
-  AccentCountSimvol = CountSimvol();
+  state.flagSetAccent = 1;
+  state.AccentCountSimvol = CountSimvol(state);
 
-  CountNoAccentSlov = CountSlov - CountAccentSlov;
+  state.CountNoAccentSlov = state.CountSlov - state.CountAccentSlov;
 
-  document.formStih1.TextStih.value = LowStih;
+  state.OriginalTextInput = LowStih;
 
 }

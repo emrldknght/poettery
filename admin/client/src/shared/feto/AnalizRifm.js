@@ -1,4 +1,8 @@
-export function AnalizRifm(tryRifma)
+/**
+ @param tryRifma {number}
+ @param state {FetoState}
+ */
+export function AnalizRifm(tryRifma, state)
 // Ищем рифмы - последние ударные гласные. Заменяем на фонетические аналоги. Заодно записываем рифмующиеся слова в массив. Ёфицируем рифмующееся слово. Если ёфикация была лишней, то не учитываем ёфикацию.
 
 {
@@ -48,9 +52,11 @@ export function AnalizRifm(tryRifma)
   FlagRifm = "";
   flagErrorRifma = "";
   FlagRifmaYo = 0;
-  window.flagCountErrorRifma = 0;
+  state.flagCountErrorRifma = 0;
   RifmComment = "";
-  window.flagRifmBall = 0;
+
+  state.flagRifmBall = 0;
+
   let startRifm = 0;
   let EndRifm = 0;
   let SlovoRifm = "";
@@ -59,26 +65,25 @@ export function AnalizRifm(tryRifma)
   let SlovoRifmEnd1 = 0;
   let Eslovo = "";
 
-  let nexttext = document.formStih1.TextStih.value;
+  let nexttext = state.OriginalTextInput;
   if (nexttext.length === 0) {
     return;
   }
-  ;
 
 
-  stih = document.formStih1.TextStih.value + "\n";
+  stih = state.OriginalTextInput + "\n";
   stihMas = stih.split("\n");
 
 
 // сканируем все строки - берем последний ударный столбец AccentRifmPos
-  BlockRitmTemplateMas = BlockRitmTemplate.split("\n");
+  state.BlockRitmTemplateMas = state.BlockRitmTemplate.split("\n");
 
-  let KolStrok = BlockRitmTemplateMas.length;
+  let KolStrok = state.BlockRitmTemplateMas.length;
 // строки стихотворения (цветной шаблон) перебираем в цикле
   for (let s = 0; s < KolStrok; s++) {
-    NextStr = BlockRitmTemplateMas[s];
+    NextStr = state.BlockRitmTemplateMas[s];
     NextStrStih = stihMas[s];
-    nextStrNumGlas = TemplateNumGlasMas[s];
+    nextStrNumGlas = state.TemplateNumGlasMas[s];
 
     let dlina = NextStr.length;
 
@@ -86,7 +91,7 @@ export function AnalizRifm(tryRifma)
     for (let k = dlina; k > 0; k--) {
       NextZnak = NextStr.substr(k - 1, 1);
       let glcaps = glasnyCaps.includes(NextZnak);
-      if (glcaps && Ritm[k] === 3) {
+      if (glcaps && state.Ritm[k] === 3) {
         // заодно делаем массив рифмующихся слов, используем ProbelPositionMas =[] это позиции пробелов по отношению к позиции конкретной гласной
 
         SlovoRifmBegin = ProbelPositionMas[s][k];
@@ -187,7 +192,7 @@ export function AnalizRifm(tryRifma)
         if (!RealRifm && NaturalNextRifm != "Е" && NextRifm != "О") {
           RifmComment = RifmComment + 'Для строки "' + stihMas[n] + '" отсутствует рифма. ';
           flagErrorRifma = krest + 'Есть сбои рифмы! ';
-          window.flagCountErrorRifma = window.flagCountErrorRifma + 1;
+          state.flagCountErrorRifma = state.flagCountErrorRifma + 1;
         }
 
 
@@ -220,7 +225,7 @@ export function AnalizRifm(tryRifma)
   if (flagErrorRifma === "") {
     RifmComment = RifmComment + "Рифмы в строфах достаточно точные, в рифмующихся словах ударные гласные совпадают. ";
     FlagRifm = galka + "Рифма точная!";
-    window.flagRifmBall = 1;
+    state.flagRifmBall = 1;
   }
   ;
   if (flagErrorRifma !== "") {
@@ -238,6 +243,8 @@ export function AnalizRifm(tryRifma)
 // вычислим тип рифмовки отдельной строфы AABB ABAB ABAB 03.06.2023
   console.log("FullRifmMas-02");
   console.log(FullRifmMas);
+  // === ВРЕМЕННЫЙ КОСТЫЛЬ ДЛЯ АДАПТЕРА (TODO: refactor) ===
+  _TempFullRifmMas = FullRifmMas.slice();
 
   NumStrofaRifm = 0;
   NumStrokaRifm = 0;
@@ -291,6 +298,9 @@ export function AnalizRifm(tryRifma)
 
 // закончили вычислять тип рифмовки ==================================
 
+
+
+
 // строку рифм FullRifmMas переводим в формат 123456
   Numberrifm = 0;
   RifmGlasn = "ОАЭИУ";
@@ -324,78 +334,78 @@ export function AnalizRifm(tryRifma)
     flagErrorRifma = "";
     RifmComment = "Рифмы в строфах достаточно точные, в рифмующихся словах ударные гласные совпадают. ";
     FlagRifm = galka + "Рифма точная!";
-    window.flagRifmBall = 1;
-    GlobalflagCountErrorRifmaMas = 0;
+    state.flagRifmBall = 1;
+    // GlobalflagCountErrorRifmaMas = 0;
     GlobalClassicBall = 3;
-    window.ClassicBall = 3;
-    UnicStrof = 0;
+    state.ClassicBall = 3;
+    state.UnicStrof = 0;
     GlobalflagStrofaRazbitaMas = 1;
-    GlobalflagCountStrofaPatternTypeMas = 0;
+    state.GlobalflagCountStrofaPatternTypeMas = 0;
   }
 
   if (epigramma == 1 && epigrammatype == "Калач" && window.project == "epigramma" && (rifmovkatext == "полуперекрёстная" || rifmovkatext == "перекрёстная" || rifmovkatext == "полная")) {
     flagErrorRifma = "";
     RifmComment = "Рифмы в строфах достаточно точные, в рифмующихся словах ударные гласные совпадают. ";
     FlagRifm = galka + "Рифма точная!";
-    window.flagRifmBall = 1;
-    GlobalflagCountErrorRifmaMas = 0;
+    state.flagRifmBall = 1;
+    // GlobalflagCountErrorRifmaMas = 0;
     GlobalClassicBall = 3;
-    window.ClassicBall = 3;
-    UnicStrof = 0;
+    state.ClassicBall = 3;
+    state.UnicStrof = 0;
     GlobalflagStrofaRazbitaMas = 1;
-    GlobalflagCountStrofaPatternTypeMas = 0;
+    state.GlobalflagCountStrofaPatternTypeMas = 0;
   }
 
   if (epigramma == 1 && epigrammatype == "Бублик" && window.project == "epigramma" && (rifmovkatext == "полуперекрёстная" || rifmovkatext == "перекрёстная" || rifmovkatext == "полная")) {
     flagErrorRifma = "";
     RifmComment = "Рифмы в строфах достаточно точные, в рифмующихся словах ударные гласные совпадают. ";
     FlagRifm = galka + "Рифма точная!";
-    window.flagRifmBall = 1;
-    GlobalflagCountErrorRifmaMas = 0;
+    state.flagRifmBall = 1;
+    // GlobalflagCountErrorRifmaMas = 0;
     GlobalClassicBall = 3;
-    window.ClassicBall = 3;
-    UnicStrof = 0;
+    state.ClassicBall = 3;
+    state.UnicStrof = 0;
     GlobalflagStrofaRazbitaMas = 1;
-    GlobalflagCountStrofaPatternTypeMas = 0;
+    state.GlobalflagCountStrofaPatternTypeMas = 0;
   }
 
   if (epigramma == 1 && epigrammatype == "Ватрушка" && window.project == "epigramma" && (rifmovkatext == "полная" || rifmovkatext == "смежная")) {
     flagErrorRifma = "";
     RifmComment = "Рифмы в строфах достаточно точные, в рифмующихся словах ударные гласные совпадают. ";
     FlagRifm = galka + "Рифма точная!";
-    window.flagRifmBall = 1;
-    GlobalflagCountErrorRifmaMas = 0;
+    state.flagRifmBall = 1;
+    // GlobalflagCountErrorRifmaMas = 0;
     GlobalClassicBall = 3;
-    window.ClassicBall = 3;
-    UnicStrof = 0;
+    state.ClassicBall = 3;
+    state.UnicStrof = 0;
     GlobalflagStrofaRazbitaMas = 1;
-    GlobalflagCountStrofaPatternTypeMas = 0;
+    state.GlobalflagCountStrofaPatternTypeMas = 0;
   }
 
   if (epigramma == 1 && epigrammatype == "Пампушка" && window.project == "epigramma" && (rifmovkatext == "полуперекрёстная" || rifmovkatext == "перекрёстная")) {
     flagErrorRifma = "";
     RifmComment = "Рифмы в строфах достаточно точные, в рифмующихся словах ударные гласные совпадают. ";
     FlagRifm = galka + "Рифма точная!";
-    window.flagRifmBall = 1;
-    GlobalflagCountErrorRifmaMas = 0;
+    state.flagRifmBall = 1;
+    // GlobalflagCountErrorRifmaMas = 0;
     GlobalClassicBall = 3;
-    window.ClassicBall = 3;
-    UnicStrof = 0;
+    state.ClassicBall = 3;
+    state.UnicStrof = 0;
     GlobalflagStrofaRazbitaMas = 1;
-    GlobalflagCountStrofaPatternTypeMas = 0;
+    state.GlobalflagCountStrofaPatternTypeMas = 0;
   }
 
   if (epigramma == 1 && epigrammatype == "Пирожок" && window.project == "epigramma") {
     flagErrorRifma = "";
     RifmComment = "";
     FlagRifm = galka + "Рифма не требуется.";
-    window.flagRifmBall = 1;
-    GlobalflagCountErrorRifmaMas = 0;
+    state.flagRifmBall = 1;
+    // GlobalflagCountErrorRifmaMas = 0;
     GlobalClassicBall = 3;
-    window.ClassicBall = 3;
-    UnicStrof = 0;
+    state.ClassicBall = 3;
+    state.UnicStrof = 0;
     GlobalflagStrofaRazbitaMas = 1;
-    GlobalflagCountStrofaPatternTypeMas = 0;
+    state.GlobalflagCountStrofaPatternTypeMas = 0;
   }
 
 

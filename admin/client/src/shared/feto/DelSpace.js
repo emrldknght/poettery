@@ -1,7 +1,8 @@
-export function DelSpace() {
+/** @param state {FetoState} */
+export function DelSpace(state) {
 // форматируем текст
 // удалить одиночные строки
-  StihText = document.formStih1.TextStih.value + "\n";
+  StihText = state.OriginalTextInput + "\n";
   stihMas = StihText.split("\n");
   stihMas.unshift("");
   let TextProbel = "";
@@ -13,10 +14,10 @@ export function DelSpace() {
       }
       ;
     }
-    document.formStih1.TextStih.value = TextProbel;
+    state.OriginalTextInput = TextProbel;
   }
 //=====================================================================
-  StihText = document.formStih1.TextStih.value + "\n";
+  StihText = state.OriginalTextInput + "\n";
   StihText = StihText.replace(/^\n+/g, '');    // удалить пустые строки в начале
   StihText = StihText.replace(/\:/g, '\: '); // добавить пробел после :
   StihText = StihText.replace(/\;/g, '\; '); // добавить пробел после ;
@@ -45,7 +46,7 @@ export function DelSpace() {
   StihText = StihText.replace(/[\"][ :]/g, '»:'); // заменить правые кавычки треугольными (кавычка с небуквой)
   StihText = StihText.replace(/ +/g, ' '); // заменить длинные пробелы одним
 
-  document.formStih1.TextStih.value = StihText + "\n";
+  state.OriginalTextInput = StihText + "\n";
   TextStihResize();
 
 }

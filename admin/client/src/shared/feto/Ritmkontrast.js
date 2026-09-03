@@ -1,4 +1,5 @@
-export function Ritmkontrast() {
+/** @param state {FetoState} */
+export function Ritmkontrast(state) {
 // alex если ритм явный, то формируем контрастный ритм (без смешанных)  ritmkontrast - сверточный слой ==========================================
 
   RitmkontrastMas = [];
@@ -9,11 +10,16 @@ export function Ritmkontrast() {
   let Ritmstring = "";
 
   console.log('Ritm');
-  console.log(Ritm);
+  console.log(state.Ritm);
 
-// создаём копию массива Ritm массив RitmkontrastMas
+  // создаём копию массива Ritm массив RitmkontrastMas
 
-  Ritmstring = Ritm.join(',');
+
+  Ritmstring = state.Ritm.join(',');
+
+  // === ВРЕМЕННЫЙ КОСТЫЛЬ ДЛЯ АДАПТЕРА (TODO: refactor) ===
+  _TempRitmstring = Ritmstring;
+
   RitmkontrastMas = Ritmstring.split(',');
   RitmkontrastMas = Ritmstring.split(',');
 
@@ -26,7 +32,7 @@ export function Ritmkontrast() {
   console.log('RitmkontrastMas1');
   console.log(RitmkontrastMas);
 
-  if (flagRitmBall > 1) {
+  if (state.flagRitmBall > 1) {
 
     for (let kk = 1; kk < RitmkontrastMas.length; kk++) {
       kontrast0 = Number(RitmkontrastMas[kk - 1]);
@@ -76,7 +82,7 @@ export function Ritmkontrast() {
   console.log(ritmkontrastplus);
 
 // ищем ritmkontrastminus - сверточный слой с усиленными безударными - заменяем в переменной Ritmstring смешанные на безударные  =====================================
-  Ritmstring = Ritm.join('');
+  Ritmstring = state.Ritm.join('');
   ritmkontrastminus = Ritmstring.replace(/[2]/g, '1'); // меняем везде 2 на 1
 
   console.log('ritmkontrastminus');
