@@ -1,7 +1,7 @@
 /** @param state {FetoState} */
 export function CreateBlockRitm(state) {
 // создаём блок гласных с цветовой маркировкой ударений
-  state.ContainerTemplate1 = indikator;
+  state.ContainerTemplate1 = state.indikator;
   let NextStrofa = 0;
   state.CountSlogSer = 0;
   state.CountSlog = 0;
@@ -17,7 +17,7 @@ export function CreateBlockRitm(state) {
   let RitmColor = "";
   let html = '<span class="text-main">';
   state.BlockRitmTemplate = "";
-  BlockRitmTemplateColor = "";
+  let BlockRitmTemplateColor = "";
 
 
   state.flagRitmError = "";
@@ -29,8 +29,8 @@ export function CreateBlockRitm(state) {
 
 
 
-  stih = state.OriginalTextInput + "\n";
-  stihMas = stih.split("\n");
+  state.stih = state.OriginalTextInput + "\n";
+  state.stihMas = state.stih.split("\n");
 
   state.TemplateGlasn = state.TemplateGlasn.replace(/\n+$/g, '');    // подготовить массив-удалить пустые строки в конце
   state.TemplateMas = state.TemplateGlasn.split("\n");
@@ -40,7 +40,7 @@ export function CreateBlockRitm(state) {
   for (let s = 0; s < KolStrok; s++) {
     let nextStr = state.TemplateMas[s];
 // выводим длину строки (размер)
-    let str = stihMas[s];
+    let str = state.stihMas[s];
 
 //считаем строфы (и разброс ошибок по стофам)
     if (nextStr.length === 0) {
@@ -77,7 +77,7 @@ export function CreateBlockRitm(state) {
           RitmCommentErr = RitmCommentErr + 'Возможно есть ритмический сбой в строке «' + str + '...», в которой ударение падает на ' + kk + ' слог, хотя в других строках ' + kk + ' слог безударный. ';
           RitmColor = '9';
           state.flagCountRitmError = state.flagCountRitmError + 1;
-          state.flagRitmError = krest + "Есть сбои ритма! ";
+          state.flagRitmError = state.krest + "Есть сбои ритма! ";
           if (FlagNextStrofaErr === 0) {
             ++state.CountStrofaRitmEr;
             FlagNextStrofaErr = 1
@@ -135,19 +135,25 @@ export function CreateBlockRitm(state) {
   }
 
 
-  CountSlogBluetext = ' 0-БЕЗУДАРНЫЕ ГЛАСНЫЕ:' + state.CountSlogBlue + ' шт.              ';
-  CountSlogSertext = ' 1-СЛАБОУДАРНЫЕ ГЛАСНЫЕ:' + state.CountSlogSer + ' шт.              ';
-  CountSlogBlacktext = ' 2-УДАРНЫЕ ГЛАСНЫЕ:' + state.CountSlogBlack + ' шт.              ';
+  state.CountSlogBluetext = ' 0-БЕЗУДАРНЫЕ ГЛАСНЫЕ:' + state.CountSlogBlue + ' шт.              ';
+  state.CountSlogSertext = ' 1-СЛАБОУДАРНЫЕ ГЛАСНЫЕ:' + state.CountSlogSer + ' шт.              ';
+  state.CountSlogBlacktext = ' 2-УДАРНЫЕ ГЛАСНЫЕ:' + state.CountSlogBlack + ' шт.              ';
 
-  state.ContainerTemplate1 = '<div id="shema" class="text-main lh">' + slog + html + '<div id="TriCodRitm"></div></div><div class="legenda1" style="margin: 10px 0px 0px 10px; line-height: 1.3;"><br><span class="blue-symbol" style="letter-spacing: 1px; white-space:pre-wrap;">' + CountSlogBluetext.substr(0, 32) + '</span><br><span class="gray-symbol" style="letter-spacing: 1px; white-space:pre-wrap;">' + CountSlogSertext.substr(0, 32) + '</span><br><span class="black-symbol" style="letter-spacing: 1px; white-space:pre-wrap;">' + CountSlogBlacktext.substr(0, 32) + '</span></div>';
+  state.ContainerTemplate1 = '<div id="shema" class="text-main lh">' + state.slog + html + '<div id="TriCodRitm"></div></div><div class="legenda1" style="margin: 10px 0px 0px 10px; line-height: 1.3;"><br><span class="blue-symbol" style="letter-spacing: 1px; white-space:pre-wrap;">'
+    + state.CountSlogBluetext.substring(0, 32)
+    + '</span><br><span class="gray-symbol" style="letter-spacing: 1px; white-space:pre-wrap;">'
+    + state.CountSlogSertext.substring(0, 32)
+    + '</span><br><span class="black-symbol" style="letter-spacing: 1px; white-space:pre-wrap;">'
+    + state.CountSlogBlacktext.substring(0, 32)
+    + '</span></div>';
 
 //document.getElementById('ContainerTemplate1').innerHTML = '<div id="shema" class="text-main lh">'+slog+html + '<div class="slog" id="TriCodRitm"></div></div><div class="legenda1"><br><span class="blue..-symbol" style="letter-spacing: 1px;">&nbsp;0-СИНИЙ - БЕЗУДАРНЫЕ ГЛАСНЫЕ:'+CountSlogBlue+' шт.&nbsp;</span><br><span class="gray-symbol"  style="letter-spacing: 1px;">&nbsp;1-СЕРЫЙ - СЛАБОУДАРНЫЕ ГЛАСНЫЕ:'+CountSlogSer+' шт.&nbsp;&nbsp;</span><br><span class="black-symbol"  style="letter-spacing: 1px;">&nbsp;2-ЧЕРНЫЙ - УДАРНЫЕ ГЛАСНЫЕ:'+CountSlogBlack+' шт.&nbsp;&nbsp;&nbsp;</span></div></div>';
 
 
-  state.RitmComment = RitmCommentMin + CommentRitmika + RitmCommentErr;
+  state.RitmComment = state.RitmCommentMin + state.CommentRitmika + RitmCommentErr;
 
   window.flagProcentCountSlogSer = Math.round(state.CountSlogSer / state.CountSlog * 100);
 
-  LentaCountSlogSer = state.CountSlogSer;
-  LentaCountSlog = state.CountSlog;
+  state.LentaCountSlogSer = state.CountSlogSer;
+  state.LentaCountSlog = state.CountSlog;
 }

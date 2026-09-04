@@ -1,4 +1,7 @@
-export function oldLoadSbornik() {
+/** @param state {FetoState} */
+export function oldLoadSbornik(state) {
+  let Sbornik = "";
+
   console.log("LoadSbornik");
   let files1 = document.getElementById("your-files11").files;
   // Перебираем все файлы
@@ -10,9 +13,9 @@ export function oldLoadSbornik() {
       .text()
       .then(text => {
         Sbornik = text;
-        SbornikMas = Sbornik.split("=");
+        state.SbornikMas = Sbornik.split("=");
       });
   }
-  SbornikMas = Sbornik.split("=");
-  console.log("SbornikMas.length = " + SbornikMas.length);
+  state.SbornikMas = Sbornik.split("=");
+  console.log("SbornikMas.length = " + state.SbornikMas.length);
 }

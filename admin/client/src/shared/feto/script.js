@@ -15,8 +15,9 @@
 
 // ==================================================================================================================================
 
-const primer = [];
+// const primer = [];
 
+/*
 primer[0] = "Призрачно все в этом мире бушующем.\nЕсть только миг - за него и держись.\nЕсть только миг между прошлым и будущим.\nИменно он называется жизнь.\n\nВечный покой сердце вряд ли обрадует.\nВечный покой для седых пирамид\nА для звезды, что сорвалась и падает\nЕсть только миг - ослепительный миг.\n\nПусть этот мир вдаль летит сквозь столетия.\nНо не всегда по дороге мне с ним.\nЧем дорожу, чем рискую на свете я -\nМигом одним - только мигом одним.\n\nСчастье дано повстречать иль беду ещё\nЕсть только миг - за него и держись.\nЕсть только миг между прошлым и будущим.\nИменно он называется жизнь.";
 
 primer[1] = "Буря мглою небо кроет,\nВихри снежные крутя;\nТо, как зверь, она завоет,\nТо заплачет, как дитя,\n\nТо по кровле обветшалой\nВдруг соломой зашумит,\nТо, как путник запоздалый,\nК нам в окошко застучит.\n\nНаша ветхая лачужка\nИ печальна и темна.\nЧто же ты, моя старушка,\nПриумолкла у окна?\n\nИли бури завываньем\nТы, мой друг, утомлена,\nИли дремлешь под жужжаньем\nСвоего веретена?\n\nВыпьем, добрая подружка\nБедной юности моей,\nВыпьем с горя; где же кружка?\nСердцу будет веселей.\n\nСпой мне песню, как синица\nТихо за морем жила;\nСпой мне песню, как девица\nЗа водой поутру шла.\n\nБуря мглою небо кроет,\nВихри снежные крутя;\nТо, как зверь, она завоет,\nТо заплачет, как дитя.\n\nВыпьем, добрая подружка\nБедной юности моей,\nВыпьем с горя; где же кружка?\nСердцу будет веселей.\n";
@@ -54,6 +55,7 @@ primer[15] = "человЕку нАдо мАло:\nчтОб искАл И нах
 primer[16] = "цЕлую нОчь сОловей нам насвИстывал, \nгОрод молчАл И молчАли домА... \nбЕлой акАции грОздья душИстые\nнОчь напролЕт нАс сводИли с умА. \n\nсАд весь умЫт бЫл весЕнними лИвнями, \nв тЕмных оврАгах стоЯла водА. \nбОже, какИми мы бЫли наИвными, \nкАк же мы мОлоды бЫли тогдА! \n\nгОды промчАлись, седЫми нас дЕлая... \nгдЕ чистотА Этих вЕток живЫх? \nтОлько зимА И метЕль Эта бЕлая\nнапоминАет сегОдня о нИх. \n\nв чАс, когдА вЕтер бушУет неИстово, \nс нОвою сИлою чУвствую Я: \nбЕлой акАции грОздья душИстые\nневозвратИмы, как Юность моЯ! ";
 
 primer[17] = "нА святОй русИ, нашей мАтушке,\nнЕ найтИ, не сыскАть такОй красАвицы:\nхОдит плАвно — бУдто лебЕдушка;\nсмОтрит слАдко — кАк голУбушка; \n\nМолвит слово — соловей поет;\nГорят щеки ее румяные,\nКак заря на небе божием;\nКосы русые, золотистые,\n\nВ ленты яркие заплетенные,\nПо плечам бегут, извиваются,\nС грудью белою цалуются.";
+ */
 
 
 // let legenda1 = "Обозначения:\nО  ударный слог\n:  слабоударный слог\n.  безударный слог.";
@@ -78,32 +80,32 @@ if (isMobile != null) {
 // var slovarE = "";
 
 
-var slovar_accent_Mas = [];
-var slovar_noaccent_Mas = [];
-var slovar_narod_Mas = [];
-var slovar_classic_Mas = [];
-var slovar_neoclassic_Mas = [];
-var slovar_E_Mas = [];
+// var slovar_accent_Mas = [];
+// var slovar_noaccent_Mas = [];
+// var slovar_narod_Mas = [];
+// var slovar_classic_Mas = [];
+// var slovar_neoclassic_Mas = [];
+// var slovar_E_Mas = [];
 
-var slovar_noaccent_E_Mas = [];
-var slovar_noaccent_narod_Mas = [];
-var slovar_noaccent_classic_Mas = [];
-var slovar_noaccent_neoclassic_Mas = [];
+// var slovar_noaccent_E_Mas = [];
+// var slovar_noaccent_narod_Mas = [];
+// var slovar_noaccent_classic_Mas = [];
+// var slovar_noaccent_neoclassic_Mas = [];
 
-var slovoAccent = "";
+// var slovoAccent = "";
 // var CountAccentSlov = 0;
 // var CountNoAccentSlov = 0;
 
-var stih = "";
-var stih0 = "";
-var StihText = "";
-var stihMas = [];
-var SbornikMas = [];
-var SbornikMasText = [];
+// var stih = "";
+// var stih0 = "";
+// var StihText = "";
+// var stihMas = [];
+// var SbornikMas = [];
+// var SbornikMasText = [];
 // var KonkursMas = [];
-var Sbornik = "";
-var stihMas0 = [];
-var NaturalStih = "";
+// var Sbornik = "";
+// var stihMas0 = [];
+// var NaturalStih = "";
 // var slovarOmogrMas = [];
 // var slovarEMas = [];
 // var slovarMas = [];
@@ -113,57 +115,55 @@ var NaturalStih = "";
 // var TemplateGlasn = "";
 // var TemplateGlasnMas = []; //массив содержит гласные
 // var Ritm = [];
-var RitmkontrastMas = [];
+// var RitmkontrastMas = [];
 // var RitmErr = [];
 // var resSecond = "";
 // var RitmComment = "";
-var RitmCommentMin = "";
+// var RitmCommentMin = "";
 // var RitmCommentErr = "";
-var RifmComment = "";
-var FlagRifm = "";
-var SlovaRifmMas = [];
-var CommentRitmika = "";
+// var RifmComment = "";
+// var FlagRifm = "";
+// var SlovaRifmMas = [];
+// var CommentRitmika = "";
 // var razmerComment = "";
 // var minRazmerComment = "";
 // var ResumeComment = "В целом, текст не вполне соответствует канонам русского классического стихосложения. ";
 // var ResumeCommentMini = "Текст не вполне соответствует стандартам русского классического стихосложения. ";
-var rn = 999;
-var galka = '<span style="color:#32CD32 ; font-weight: 900;">' + String.fromCharCode(10003) + '&nbsp;</span>';
-var greengalka = '<span style="background-color: #32CD32; color: #ffffff; font-weight: 900;">&nbsp;' + String.fromCharCode(10003) + '&nbsp;</span>';
-
-var krest = '<span style="color:#FF0000 ; font-weight: bold;">X&nbsp;</span>';
-var redkrest = '<span style="background-color: #FF0000; color:#ffffff ; font-weight: bold;">&nbsp;X&nbsp;</span>';
-
+// var rn = 999;
+// var galka = '<span style="color:#32CD32 ; font-weight: 900;">' + String.fromCharCode(10003) + '&nbsp;</span>';
+// var greengalka = '<span style="background-color: #32CD32; color: #ffffff; font-weight: 900;">&nbsp;' + String.fromCharCode(10003) + '&nbsp;</span>';
+// var krest = '<span style="color:#FF0000 ; font-weight: bold;">X&nbsp;</span>';
+// var redkrest = '<span style="background-color: #FF0000; color:#ffffff ; font-weight: bold;">&nbsp;X&nbsp;</span>';
 // var flagRitm = "";
-var flagErrorRitm = "";
-var flagErrorRifma = "";
-var FlagRifmaYo = 0;
-var flagRazmer = "";
-var flagStrofa = "";
-var flagAccent = "";
-var LastAccent = 0;
+// var flagErrorRitm = "";
+// var flagErrorRifma = "";
+// var FlagRifmaYo = 0;
+// var flagRazmer = "";
+// var flagStrofa = "";
+// var flagAccent = "";
+// var LastAccent = 0;
 // var flagSetAccent = 0;
 // var BlockRitmTemplate = "";
 // var BlockRitmTemplateMas = [];
 // var TemplateNumGlasMas = []; // номера гласных в шаблоне (разбивка на слова)
-var ProbelPositionMas = []; // позиция пробела, чтобы соотносить гласную с конкретным словом.
-var SlovaRifmBegin = []; // позиция начала рифмующегося слова
-var SlovaRifmDlina = []; // длина рифмующегося слова
-var BlockRitmTemplateColor = "";
-var TriCodRitm = "";
-var SbornikCount = 0;
-var SbornikCountTxt = "";
+// var ProbelPositionMas = []; // позиция пробела, чтобы соотносить гласную с конкретным словом.
+// var SlovaRifmBegin = []; // позиция начала рифмующегося слова
+// var SlovaRifmDlina = []; // длина рифмующегося слова
+// var BlockRitmTemplateColor = "";
+// var TriCodRitm = "";
+// var SbornikCount = 0;
+// var SbornikCountTxt = "";
 // var SbornikHTML = "";
-var FullContainerTemplate = "";
+// var FullContainerTemplate = "";
 
 // var SbornikContainerTemplate = "";
 // var SbornikContainerAnaliz = "";
 // var SbornikContainerFlag1Report = "";
 // var SbornikResumeCommentMiniReport = "";
 
-var typeSbornik = 0;
-var idSbornik = 0;
-var nameSbornik = "";
+// var typeSbornik = 0;
+// var idSbornik = 0;
+// var nameSbornik = "";
 
 // var StrofaPatternMas = [];
 // var StrofaPatternTypeMas = [];
@@ -172,16 +172,17 @@ var nameSbornik = "";
 // var GroupStrof = [];
 // var CountGroupStrof = 0;
 // var CommentGroupStrof = "";
-var ResumeStrofaPatternType = "";
-var CountStrofaPatternType = 0;
-var FullRazmerComment = "";
+// var ResumeStrofaPatternType = "";
+// var CountStrofaPatternType = 0;
+// var FullRazmerComment = "";
 // var StrofaRepeatTypeMas = [];
 // var ReportMas = [];
 
-var FIOAuthorReport;
-var GodAuthorReport;
-var AdresAuthorReport
-var EmailAuthorReport
+// for AnalizSbornika5
+// var FIOAuthorReport;
+// var GodAuthorReport;
+// var AdresAuthorReport
+// var EmailAuthorReport
 // var lastnameReport;
 // var firstnameReport;
 // var middlenameReport;
@@ -200,40 +201,40 @@ var EmailAuthorReport
 
 
 // строка отчёта для базы данных
-var stihReport; // исходный стих
-var TitulStihReport; //заголовок
-var TitulStih;//заголовок стиха
-var StrofaPatternReport; //размер
+// var stihReport; // исходный стих
+// var TitulStihReport; //заголовок
+// var TitulStih; //заголовок стиха
+// var StrofaPatternReport; //размер
 // var RitmReport; // ритм в виде чисел через запятую
 // var RitmReportInt; // ритм в виде числа без запятых
-var ResumeCommentMiniReport; // резюме
-var ContainerFlag1Report; // флаги
-var ContainerAnaliz1Report; // Полный анализ
-var Report = ""; // строка отчёта для базы данных
-var Report2 = ""; // строка отчёта для базы данных
+// var ResumeCommentMiniReport; // резюме
+// var ContainerFlag1Report; // флаги
+// var ContainerAnaliz1Report; // Полный анализ
+// var Report = ""; // строка отчёта для базы данных
+// var Report2 = ""; // строка отчёта для базы данных
 
 // var ReportMas = "";// строка массив отчёты анализ
-var ReportMasBall0 = "";// строка массив отчёта балл=0
-var ReportMasBall1 = "";// строка массив отчёта балл=1
-var ReportMasBall2 = "";// строка массив отчёта  балл=2
-var ReportMasBall3 = "";// строка массив отчёта  балл=3
+// var ReportMasBall0 = "";// строка массив отчёта балл=0
+// var ReportMasBall1 = "";// строка массив отчёта балл=1
+// var ReportMasBall2 = "";// строка массив отчёта  балл=2
+// var ReportMasBall3 = "";// строка массив отчёта  балл=3
 
-var ReportTab = "";// строка-таблицы для записи в базу (текстовая строка для последующего импорта файла в базу SQL)
+// var ReportTab = "";// строка-таблицы для записи в базу (текстовая строка для последующего импорта файла в базу SQL)
 // var ReportTabBall0 = "";// строка-таблицы для записи в базу балл=0
 // var ReportTabBall1 = "";// строка-таблицы для записи в базу балл=1
 // var ReportTabBall2 = "";// строка-таблицы для записи в базу балл=2
 // var ReportTabBall3 = "";// строка-таблицы для записи в базу балл=3
 
 
-var ReportAccent = ""; // строка массив стихи с ударениями
-var ReportAccentBall0 = ""; // строка массив стихи с ударениями балл=0
-var ReportAccentBall1 = "";// строка массив стихи с ударениями балл=1
-var ReportAccentBall2 = "";// строка массив стихи с ударениями балл=2
-var ReportAccentBall3 = "";// строка массив стихи с ударениями балл=3
+// var ReportAccent = ""; // строка массив стихи с ударениями
+// var ReportAccentBall0 = ""; // строка массив стихи с ударениями балл=0
+// var ReportAccentBall1 = "";// строка массив стихи с ударениями балл=1
+// var ReportAccentBall2 = "";// строка массив стихи с ударениями балл=2
+// var ReportAccentBall3 = "";// строка массив стихи с ударениями балл=3
 
 // var ReportCount;// счетчик строк отчёта для базы данных
 // UnicStrof = 0;// счетчик уникальных несогласованных строф
-var FlagStrofaMultiPatternType = 0; //признак строф разного размера
+// var FlagStrofaMultiPatternType = 0; //признак строф разного размера
 
 // var CountSlov = 0;
 // var CountSlog = 0;
@@ -251,69 +252,69 @@ var FlagStrofaMultiPatternType = 0; //признак строф разного �
 // стихотворение не совсем классическое по структуре, если строф больше одной, одиночных строф (без пары) нет, количество строф в любой группе >1, ударения расставлены, ритм найден, количество нерифмованных строк <=2
 // анализ не проводится, если не расставлены ударения, если строфа одна.
 
-var flagStrofaBallMas = [];// количество типов строф, если 1 - то все строфы одного размера
-var flagRitmBallMas = [];// 1 - ритм найден, 2 - ритм явный, 3 -ритм чёткий.
-var flagRifmBallMas = [];// Рифма точная - flagRifmBall=1
-var flagAccentBallMas = [];// Ударения в словах не расставлены. flagAccentBall=0
-var flagStrofaRazbitaMas = [];// строфа не разбита =0, разбита =1
-var flagGroupStrofaBallMas = [];// количество строф в одной группе
-var flagCountStrofaPatternTypeMas = [];// количество типов строф, если 1 - то все строфы одного размера
-var flagCountErrorRifmaMas = []; // количество нерифмованных строк (надо делить на два, у рифмы всегда есть пара)
-var flagProcentCountSlogSerMas = []; // процент серых гласных
+// var flagStrofaBallMas = [];// количество типов строф, если 1 - то все строфы одного размера
+// var flagRitmBallMas = [];// 1 - ритм найден, 2 - ритм явный, 3 -ритм чёткий.
+// var flagRifmBallMas = [];// Рифма точная - flagRifmBall=1
+// var flagAccentBallMas = [];// Ударения в словах не расставлены. flagAccentBall=0
+// var flagStrofaRazbitaMas = [];// строфа не разбита =0, разбита =1
+// var flagGroupStrofaBallMas = [];// количество строф в одной группе
+// var flagCountStrofaPatternTypeMas = [];// количество типов строф, если 1 - то все строфы одного размера
+// var flagCountErrorRifmaMas = []; // количество нерифмованных строк (надо делить на два, у рифмы всегда есть пара)
+// var flagProcentCountSlogSerMas = []; // процент серых гласных
 
-var flagCountRitmErrorMas = []; // количество сбоев ритма
-var Strof = 0;
+// var flagCountRitmErrorMas = []; // количество сбоев ритма
+// var Strof = 0;
 // // todo - [EXT] disabled -- check usage
 // var disclamer = '<a href="https://vpoezii.online" target="_blank" style="text-decoration: none; color: #0d6f9c; link: #aaaaaa;">* Мнение редакции альманаха «Венец поэзии» может отличаться от выводов интеллектуальной системы</a>.';
 
-var JsonBase = "";
-var RecordMas = "";
+// var JsonBase = "";
+// var RecordMas = "";
 // var tryRifma = 1;
-var lenta = 1;
-var lentacount = 0;
-var LentaStihMas = []; // разбивка стиха на простые строфы без группировки (анализировать будем каждую)
-var LentaStihText = "";
+// var lenta = 1;
+// var lentacount = 0;
+// var LentaStihMas = []; // разбивка стиха на простые строфы без группировки (анализировать будем каждую)
+// var LentaStihText = "";
 
-var ReturnStrofaPositionMas = [];
-var CountPatternStrofaType = 0;
+// var ReturnStrofaPositionMas = [];
+// var CountPatternStrofaType = 0; // todo - check single usage
 // var SimvolCount = 0;
-var AccentCountSimvol = 0;
-var NoLentaComment = "";
+// var AccentCountSimvol = 0;
+// var NoLentaComment = "";
 
-var LentaCountSlogSer = 0;
-var LentaCountSlog = 0;
-var CrossRitm = []; // массив базового ритмического рисунка (запасной)
-var CrossRitmResult = []; // массив базового ритмического рисунка (результат)
-var CrossOverStihMas = []; //массив содержит исходный стих до сортировки (для перекрёсных строф)
-var CrossOverProbelStrofMas = []; // исходный стих отсортирован и разбит на суперстрофы
-var CrossOverProbelStrofMas2 = []; // исходный стих отсортирован и разбит на суперстрофы (с маленькими строфами)
-var CrossTemplateGlasnMas = []; //массив содержит гласные - сортируем его (создаем кросс-строфы)
-var OldCrossTemplateGlasnMas = []; //массив содержит гласные - сохраняем его до сортировки
-var OldCrossOverStihMas = []; //массив содержит исходный стих - сохраняем его до сортировки
-var NewPosCrossOverStihMas = []; //массив содержит новые позиции строк стиха после сортировки и разбивки на строфы (индекс - исходная позиция строки, значение - новая позиция строки)
-var CrossLentaRitm = []; // массив базового ритмического рисунка для перекрестных строф (одна строфа-один ритм). После перекрёстного анализа служит восстановлению ритма в востановленных строфах
-var CrossTemplateGlasn = []; // массив гласных для перекрестных строф
-var CrossOverMode = 0;
-var CrossRitmStrofa = []; // массив ритмов для строф в режиме кросс-ленты
+// var LentaCountSlogSer = 0;
+// var LentaCountSlog = 0;
+// var CrossRitm = []; // массив базового ритмического рисунка (запасной)
+// var CrossRitmResult = []; // массив базового ритмического рисунка (результат)
+// var CrossOverStihMas = []; //массив содержит исходный стих до сортировки (для перекрёсных строф)
+// var CrossOverProbelStrofMas = []; // исходный стих отсортирован и разбит на суперстрофы
+// var CrossOverProbelStrofMas2 = []; // исходный стих отсортирован и разбит на суперстрофы (с маленькими строфами)
+// var CrossTemplateGlasnMas = []; //массив содержит гласные - сортируем его (создаем кросс-строфы)
+// var OldCrossTemplateGlasnMas = []; //массив содержит гласные - сохраняем его до сортировки
+// var OldCrossOverStihMas = []; //массив содержит исходный стих - сохраняем его до сортировки
+// var NewPosCrossOverStihMas = []; //массив содержит новые позиции строк стиха после сортировки и разбивки на строфы (индекс - исходная позиция строки, значение - новая позиция строки)
+// var CrossLentaRitm = []; // массив базового ритмического рисунка для перекрестных строф (одна строфа-один ритм). После перекрёстного анализа служит восстановлению ритма в востановленных строфах
+// var CrossTemplateGlasn = []; // массив гласных для перекрестных строф
+// var CrossOverMode = 0;
+// var CrossRitmStrofa = []; // массив ритмов для строф в режиме кросс-ленты
 // var CrossRitmStrofaMas = [];
 // var CrossRitmStrofaProbelMas = [];
-var NewAccentLentaText = "";
+// var NewAccentLentaText = "";
 // var HandAccent = 1;
-var picsize = 0;
+// var picsize = 0;
 // var picsrc = "";
 // var picnaturalWidth = 0;
 // var picnaturalHeight = 0;
 // var objdemoimage = "";
 
-var ritmkontrastplus = "";
-var ritmkontrastminus = "";
+// var ritmkontrastplus = "";
+// var ritmkontrastminus = "";
 
-var rifmovkatext = "";
-var rifmovkalong = "";
-var rifmovkatype = "";
+// var rifmovkatext = "";
+// var rifmovkalong = "";
+// var rifmovkatype = "";
 
-var epigramma = 0;
-var epigrammatype = "";
+// var epigramma = 0;
+// var epigrammatype = "";
 // var flagrealimg = 0;
 // var objuserstatus = "";
 
@@ -329,25 +330,25 @@ var epigrammatype = "";
 // var CountFindRifm = 0;
 // var maxKratnoBase = 0;
 
-var CountSlogBluetext = "";
-var CountSlogSertext = "";
-var CountSlogBlacktext = "";
+// var CountSlogBluetext = "";
+// var CountSlogSertext = "";
+// var CountSlogBlacktext = "";
 // var realotvet = "";
 // переменные для тонического анализа ======================================================
-var tonicBall = 0;
+// var tonicBall = 0;
 
 
 // конец объявления глобальных переменных ======================================================
 // ??? ======================================================
 
-LentaMode.checked = false;
-var ResumeLentaMode = "";
+// state.LentaMode.checked = false;
+// var ResumeLentaMode = "";
 // var flagStrofaRazbita = 0;
-var ProcentCountSlogSer = 0;
+// var ProcentCountSlogSer = 0;
 // var GlobalflagProcentCountSlogSer = 0;
 // var UnicStrof = 0;
-var GlobalflagStrofaRazbitaMas = 0;
-var GlobalflagAccentBallMas = 0;
+// var GlobalflagStrofaRazbitaMas = 0;
+// var GlobalflagAccentBallMas = 0;
 // var GlobalflagCountStrofaPatternTypeMas = 0;
 // var GlobalflagRitmBallMas = 0;
 // var GlobalflagCountRitmErrorMas = 0;
@@ -357,7 +358,7 @@ var GlobalflagAccentBallMas = 0;
 // var GlobalResumeCommentCountStrofaPatternTypeMas0 = "";
 // var GlobalflagRitmBallMas = 0;
 // var GlobalflagCountErrorRifmaMas = 0;  // todo - [EXT] -- disabled
-var GlobalClassicBall = 0;
+// var GlobalClassicBall = 0;
 // var ClassicBall = 0;
 // var ResumeComment = "";
 // var TitleComment = "";
@@ -369,15 +370,15 @@ var GlobalClassicBall = 0;
 
 // const user = "";
 // var user_id = 0;
-var email = "";
+// var email = "";
 // var userjson = "";
 // var KonkursHTML = "";
-var konkurs_id = -1;
+// var konkurs_id = -1;
 // var konkursnameText = "";
-var slog = '<div id="slog" >&nbsp;&nbsp;123456789012345</div>';
-var indikator = '<img alt="i" src="https://fet.vpoezii.online/idikator.gif" style="vertical-align: middle; text-align:center;">';
+// var slog = '<div id="slog" >&nbsp;&nbsp;123456789012345</div>';
+// var indikator = '<img alt="i" src="https://fet.vpoezii.online/idikator.gif" style="vertical-align: middle; text-align:center;">';
 // var  urlimage=document.recordstih.urlimage;
-var flagupdaterecord = 0;
+// var flagupdaterecord = 0;
 // var SbornikMasRubrika = []; // todo - [EXT]
 // var zahod = 0; // todo - [EXT] check WITH zadanie
 
@@ -402,32 +403,36 @@ function ontargetpole(targetpole) {
 }
 */
 
-
+/*
 // предпросмотр иллюстрации -------------------------------
 $("#picfile").change(function () {
   readURL(this);
 });
+*/
 
-window.onload = function () {
+
+function windowOnload () {
 
 // ----------------- загружаем словари -------------------------------------------------------------------------------------------
 
 
 // считываем параметры урл -----------------
 
-  var paramsString = document.location.search;
-  var searchParams = new URLSearchParams(paramsString);
+  // const paramsString = document.location.search;
+  // const searchParams = new URLSearchParams(paramsString);
 
-  var project = searchParams.get("project"); // варианты konkurs_pesni, book, zadanie, epigramma, admin
-  var type = searchParams.get("type"); // варианты noclassic
-  var video = searchParams.get("video");
-  var audio = searchParams.get("audio");
-  var image = searchParams.get("image");
-  var writer = searchParams.get("writer");
-  var composer = searchParams.get("composer");
-  var musician = searchParams.get("musician");
-  var vocalist = searchParams.get("vocalist");
-  var soavtor = searchParams.get("soavtor");
+  /* todo - place to state.inWindow
+
+  const project = searchParams.get("project"); // варианты konkurs_pesni, book, zadanie, epigramma, admin
+  const type = searchParams.get("type"); // варианты noclassic
+  const video = searchParams.get("video");
+  const audio = searchParams.get("audio");
+  const image = searchParams.get("image");
+  const writer = searchParams.get("writer");
+  const composer = searchParams.get("composer");
+  const musician = searchParams.get("musician");
+  const vocalist = searchParams.get("vocalist");
+  const soavtor = searchParams.get("soavtor");
 
 
   window.project = project;
@@ -453,16 +458,21 @@ window.onload = function () {
 
   window.konkurs_title = konkurs_title;
 
+   */
+  /*
   if (screen === "login") {
     loginprofile(''); // no user
   }
-
+   */
+  /*
   if (konkurs_id !== "" && konkurs_id != null) {
 
     const ustav = "https://konkurs.vpoezii.online/ustav.php?konkurs_id=" + konkurs_id;
     document.getElementById('ustav').innerHTML = '<p>Согласен с Положением о конкурсе <a href="' + ustav + '" target="_blank">(открыть)</a></p>';
 
   }
+   */
+  /*
   if (nomination1 !== "" && nomination1 != null) {
 
 // заменяем рубрики   если есть
@@ -475,7 +485,9 @@ window.onload = function () {
     objRubrika.options[3] = new Option(nomination4, nomination4);
     objRubrika.options[4] = new Option(nomination5, nomination5);
   }
+   */
 
+/*
 // добавляем цель-название конкурса (если есть)
   if (konkurs_title !== "" && konkurs_title != null) {
     var objTarget = document.recordstih.targetpole;
@@ -487,6 +499,7 @@ window.onload = function () {
 
     document.getElementById('konkurs_title_note').innerHTML = "<br>Прямо сейчас вы можете отправить стихи на " + window.konkurs_title + ".";
   }
+ */
 
   /*
   // примеры для эпиграмм
@@ -553,3 +566,4 @@ window.onload = function () {
 
 
 }
+// window.onload = windowOnload

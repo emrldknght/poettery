@@ -17,14 +17,14 @@ export function ReturnCrossOverStrof(state)
 
   let RitmStroka = "";
   let RitmStrokaMas = []; // ритм одной строки в виде одномерного массива
-  CrossRitmResult = []; // массив ритмов строф
+  state.CrossRitmResult = []; // массив ритмов строф
   let ColorStroka = "";
   let NewAccentLentaTextMas = [];  //массив содержит исходный стих с ударениями, расставленными в кросс-строфах
 
   //массив содержит исходный стих с ударениями, расставленными в кросс-строфах
-  NewAccentLentaText = '\n' + NewAccentLentaText; // добавим пробел в нулевую позицию
-  NewAccentLentaTextMas = NewAccentLentaText.split("\n"); //массив содержит исходный стих с ударениями, расставленными в кросс-строфах
-  NewAccentLentaText = "";
+  state.NewAccentLentaText = '\n' + state.NewAccentLentaText; // добавим пробел в нулевую позицию
+  NewAccentLentaTextMas = state.NewAccentLentaText.split("\n"); //массив содержит исходный стих с ударениями, расставленными в кросс-строфах
+  state.NewAccentLentaText = "";
   let NewAccentLentaStroka = "";
 
 
@@ -33,8 +33,8 @@ export function ReturnCrossOverStrof(state)
   let AntiPosCrossOverStihMas = [];
   let gg = 0;
 
-  for (let g = 1; g < NewPosCrossOverStihMas.length; g++) {
-    gg = NewPosCrossOverStihMas[g];
+  for (let g = 1; g < state.NewPosCrossOverStihMas.length; g++) {
+    gg = state.NewPosCrossOverStihMas[g];
     AntiPosCrossOverStihMas[gg] = g;
   }
 
@@ -44,15 +44,15 @@ export function ReturnCrossOverStrof(state)
 
 // берём массив гласных OldCrossTemplateGlasnMas, применяем к нему цветной шаблон с вызовом функции CreateBlockRitmStroka(ColorStroka,RitmStroka)
 
-  for (let k = 1; k < OldCrossTemplateGlasnMas.length; k++) {
+  for (let k = 1; k < state.OldCrossTemplateGlasnMas.length; k++) {
     m = AntiPosCrossOverStihMas[k];
     console.log("k=" + k + "  m=" + m);
-    RitmStroka = CrossRitmStrofa[m];
+    RitmStroka = state.CrossRitmStrofa[m];
 
     NewAccentLentaStroka = NewAccentLentaTextMas[m];
-    NewAccentLentaText = NewAccentLentaText + NewAccentLentaStroka + "\n";
+    state.NewAccentLentaText = state.NewAccentLentaText + NewAccentLentaStroka + "\n";
 
-    ColorStroka = OldCrossTemplateGlasnMas[k];
+    ColorStroka = state.OldCrossTemplateGlasnMas[k];
 
     CrossRitmResultStroka = CrossRitmResultStroka + RitmStroka;
     RitmStrokaMas = RitmStroka.split(",");
@@ -62,22 +62,22 @@ export function ReturnCrossOverStrof(state)
 
 // отлавливаем пробелы в исходном стихе OldCrossOverStihMas и добавляем в цветной шаблон и в стих
     pStrofa = pStrofa + 1;
-    if (OldCrossOverStihMas[pStrofa] == "") {
+    if (state.OldCrossOverStihMas[pStrofa] === "") {
       FullBlockRitm = FullBlockRitm + "<br>";
       pStrofa = pStrofa + 1;
       nStrofa = nStrofa + 1;
-      CrossRitmResult[nStrofa] = CrossRitmResultStroka;
+      state.CrossRitmResult[nStrofa] = CrossRitmResultStroka;
       CrossRitmResultStroka = "";
-      NewAccentLentaText = NewAccentLentaText + "\n";
+      state.NewAccentLentaText = state.NewAccentLentaText + "\n";
     }
 
   }
 
-  state.ContainerTemplate1 = slog + FullBlockRitm;
-  state.OriginalTextInput = NewAccentLentaText;
+  state.ContainerTemplate1 = state.slog + FullBlockRitm;
+  state.OriginalTextInput = state.NewAccentLentaText;
 
   console.log('CrossRitmResult');
-  console.log(CrossRitmResult);
+  console.log(state.CrossRitmResult);
   AnalizCrossOverStrof(state);
 
 }

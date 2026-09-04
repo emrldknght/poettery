@@ -60,23 +60,23 @@ export function LayerAnaliz(state, options = {}) {
     TonicAnaliz(state);
   }
 
-  if (state.ClassicBall < 2 && tonicBall < 1 && project !== 'zadanie') {
+  if (state.ClassicBall < 2 && state.tonicBall < 1 && project !== 'zadanie') {
     CrossAnaliz(state);
   }
 
   // HandAccent = 1;
   state.HandAccent = 1;
 
-  if (state.ClassicBall < 2 && tonicBall < 1 && project !== 'zadanie') {
+  if (state.ClassicBall < 2 && state.tonicBall < 1 && project !== 'zadanie') {
     LentaAnaliz(state);
   }
 
-  console.log('ResumeLentaMode:', ResumeLentaMode);
+  console.log('ResumeLentaMode:', state.ResumeLentaMode);
   console.log('flagStrofaRazbita:', state.flagStrofaRazbita);
-  console.log('ProcentCountSlogSer:', ProcentCountSlogSer);
+  console.log('ProcentCountSlogSer:', state.ProcentCountSlogSer);
   console.log('UnicStrof:', state.UnicStrof);
   console.log('ClassicBall:', state.ClassicBall);
-  console.log('tonicBall:', tonicBall);
+  console.log('tonicBall:', state.tonicBall);
   console.log('ResumeComment:', state.ResumeComment);
   console.log('ResumeCommentMini:', state.ResumeCommentMini);
   console.timeEnd('test');
@@ -87,7 +87,7 @@ export function LayerAnaliz(state, options = {}) {
   state.SbornikContainerFlag1Report = state.ContainerFlag1;
   state.SbornikResumeCommentMiniReport = state.ContainerComment1;
 
-  if (tonicBall < 1) {
-    TriCodCount();
+  if (state.tonicBall < 1) {
+    TriCodCount(state);
   }
 }

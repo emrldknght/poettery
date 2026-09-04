@@ -1,5 +1,6 @@
 export function LoadJson() {
-
+  let JsonBase = "";
+  let RecordMas = "";
 
   let files1 = document.getElementById("your-files").files;
   // Перебираем все файлы

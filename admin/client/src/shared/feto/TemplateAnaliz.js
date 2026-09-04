@@ -119,6 +119,6 @@ function TemplateAnaliz(state) {
     KolSpace = 0;
   }
 
-  RitmCommentMin = CommentTextMin;
+  state.RitmCommentMin = CommentTextMin;
 
 }

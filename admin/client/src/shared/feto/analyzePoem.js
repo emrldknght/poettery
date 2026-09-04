@@ -122,7 +122,7 @@ export function checkTonicSystem(columnAverages, resultDiv, state) {
   let i;
   let isValidTonic = true;
   const errors = [];
-  tonicBall=0;
+  state.tonicBall = 0;
 
   // Условие 1: Не менее двух ударных позиций
   const stressCount = columnAverages.filter(x => x === 2).length;
@@ -162,11 +162,15 @@ export function checkTonicSystem(columnAverages, resultDiv, state) {
 
   // Вывод результата проверки
   if (isValidTonic) {
-    resultDiv.innerHTML += '<b>Стихи соответствуют тонической системе. Обнаружен ' + stressCount + '-х ударный тонический ритм.<br></b>'; tonicBall=1;
-    state.ContainerAnaliz1f += '<b>Стихи соответствуют тонической системе. Обнаружен ' + stressCount + '-х ударный тонический ритм.<br></b>'; tonicBall=1;
+    resultDiv.innerHTML += '<b>Стихи соответствуют тонической системе. Обнаружен ' + stressCount + '-х ударный тонический ритм.<br></b>';
+    // state.tonicBall = 1;
+    state.ContainerAnaliz1f += '<b>Стихи соответствуют тонической системе. Обнаружен ' + stressCount + '-х ударный тонический ритм.<br></b>';
+    state.tonicBall = 1;
   } else {
-    resultDiv.innerHTML += '<b>Ритм НЕ соответствует тонической системе. Ошибки:<br></b>'; tonicBall=0;
-    state.ContainerAnaliz1f += '<b>Ритм НЕ соответствует тонической системе. Ошибки:<br></b>'; tonicBall=0;
+    resultDiv.innerHTML += '<b>Ритм НЕ соответствует тонической системе. Ошибки:<br></b>';
+    // state.tonicBall = 0;
+    state.ContainerAnaliz1f += '<b>Ритм НЕ соответствует тонической системе. Ошибки:<br></b>';
+    state.tonicBall = 0;
     resultDiv.innerHTML += errors.join('<br>') + '<br>';
     state.ContainerAnaliz1f += errors.join('<br>') + '<br>';
   }

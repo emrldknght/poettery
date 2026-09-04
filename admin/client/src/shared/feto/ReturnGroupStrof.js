@@ -26,9 +26,9 @@ export function ReturnGroupStrof(state) {
 //===============================================
     // перебираем массив ReturnStrofaPositionMas, который содержит принадлежность очередной строфы к группе 1,2,3
     n = 0;
-    for (let CountStrofa = 1; CountStrofa < ReturnStrofaPositionMas.length; CountStrofa++) {
+    for (let CountStrofa = 1; CountStrofa < state.ReturnStrofaPositionMas.length; CountStrofa++) {
       // перебираем массив из очередной группы строф (шаблонов) GroupTemplateMas (перебираем строфы в группе)
-      numgr = ReturnStrofaPositionMas[CountStrofa]; // если номер группы текущей строфы совпадает с массивом ReturnStrofaPositionMas
+      numgr = state.ReturnStrofaPositionMas[CountStrofa]; // если номер группы текущей строфы совпадает с массивом ReturnStrofaPositionMas
       if (numgr === s) {
         ReturnContainerTemplate[CountStrofa] = GroupTemplateMas[n];
         n = n + 1;

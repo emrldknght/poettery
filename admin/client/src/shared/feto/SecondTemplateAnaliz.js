@@ -110,7 +110,7 @@ export function SecondTemplateAnaliz(state)
   console.log(state.TemplateNumGlas);
   RitmAnaliz(state);
   CreateBlockRitm(state);
-  CrossRitm = Ritm;
+  state.CrossRitm = Ritm;
   Ritmkontrast(state);
 
 }

@@ -1,6 +1,8 @@
 /** @param state {FetoState} */
 export function LoadSbornik(state) {
-  SbornikMas = [];
+  state.SbornikMas = [];
+  const SbornikMasText = []; // from $picker
+
   let textstih = "";
   let GlobalClassicBall = "";
   let ContainerTemplate = "";
@@ -10,16 +12,16 @@ export function LoadSbornik(state) {
 
 
 // перебираем массив SbornikMasText и строим список
-  typeSbornik = 1;
-  email = document.login.email.value;
-  nameSbornik = document.getElementById("polenameSbornik").value;
-  idSbornik = Number(document.getElementById("poleidSbornik").value);
-  SbornikCount = Number(document.getElementById("SbornikCount").value);
+  const typeSbornik = 1;
+  // email = document.login.email.value;
+  const nameSbornik = document.getElementById("polenameSbornik").value;
+  const idSbornik = Number(document.getElementById("poleidSbornik").value);
+  // SbornikCount = Number(document.getElementById("SbornikCount").value);
   console.log("LoadSbornik()");
   console.log("typeSbornik = " + typeSbornik);
   console.log("idSbornik = " + idSbornik);
   console.log("nameSbornik = " + nameSbornik);
-  console.log("email = " + email);
+  // console.log("email = " + email);
   console.log("SbornikMasText.length = " + SbornikMasText.length);
 
 
@@ -32,17 +34,17 @@ export function LoadSbornik(state) {
     textstih = state.OriginalTextInput;
     textstih = textstih.replace(/^\n+/g, '');
     // получаем заголовок стиха
-    stihMas = textstih.split("\n");
-    TitulStih = stihMas[0];
-    TitulStih = TitulStih.toUpperCase();
-    TitulStih = TitulStih.replace(/[.,:!?()-;]+$/gm, '') + "...";
-    stihMas = [];
+    state.stihMas = textstih.split("\n");
+    state.TitulStih = state.stihMas[0];
+    state.TitulStih = state.TitulStih.toUpperCase();
+    state.TitulStih = state.TitulStih.replace(/[.,:!?()-;]+$/gm, '') + "...";
+    state.stihMas = [];
     // запоминаем шаблон
     // создаём массив объектов
-    SbornikMas.push({
+    state.SbornikMas.push({
       id: key,
       stih: textstih,
-      title: TitulStih,
+      title: state.TitulStih,
       GlobalClassicBall: GlobalClassicBall,
       ContainerTemplate: ContainerTemplate,
       ContainerAnaliz: ContainerAnaliz,
@@ -51,14 +53,14 @@ export function LoadSbornik(state) {
     });
   }
 
-  ShowSbornikList();
+  ShowSbornikList(state);
 
 
 // если стихи загружены, и опция "Обновить" не добавлена, то добавляем "обновить" ==========
-  if (!flagupdaterecord == 1) {
+  if (state.flagUpdateRecord !== 1) {
     var objTarget = document.recordstih.targetpole;
     var lenTarget = objTarget.options.length;
     objTarget.options[lenTarget] = new Option('Обновить существующую запись', 'Обновить');
-    flagupdaterecord = 1;
+    state.flagUpdateRecord = 1;
   }
 }

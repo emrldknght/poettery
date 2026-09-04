@@ -1,10 +1,10 @@
 /** @param state {FetoState} */
 export function ClassicAnaliz(state) {
 // проводим классический анализ - с группировкой строф
-  CrossOverMode = 0;
+  state.CrossOverMode = 0;
   console.log('проводим классический анализ - с группировкой строф');
-  LentaMode.checked = false; // не ленточный (стандартный) режим
-  SaveRecord.checked = false; // запись не нужна
+  state.LentaMode.checked = false; // не ленточный (стандартный) режим
+  state.SaveRecord.checked = false; // запись не нужна
 // удаляем ленту-элементы с классом lenta
   document.querySelectorAll('.lenta').forEach(function (a) {
     a.remove()
@@ -26,5 +26,5 @@ export function ClassicAnaliz(state) {
   }
    */
 
-  TriCodCount();
+  TriCodCount(state);
 }

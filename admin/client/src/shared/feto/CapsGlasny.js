@@ -1,4 +1,6 @@
-export function CapsGlasny(NextSlovo)
+/** @param NextSlovo
+ @param state {FetoState} */
+export function CapsGlasny(NextSlovo, state)
 // односложные слова делаем ударными, остальные ищем по словарю
 {
   let OneAccent = "";
@@ -11,7 +13,7 @@ export function CapsGlasny(NextSlovo)
   let flagtonic = document.getElementById('level-tonic').checked;
 
   if (flagtonic && LowGlasny.length === 1) {
-    return slovoAccent.toLowerCase();
+    return state.slovoAccent.toLowerCase();
   }
 
   if (LowGlasny.length === 1) {
@@ -19,16 +21,16 @@ export function CapsGlasny(NextSlovo)
       NextZnak = Slovo.substr(s, 1);
       gllow = glasnyLow.includes(NextZnak);
       if (gllow) {
-        slovoAccent = Slovo.substr(0, s) + NextZnak.toUpperCase() + Slovo.substr(s + 1,);
+        state.slovoAccent = Slovo.substr(0, s) + NextZnak.toUpperCase() + Slovo.substr(s + 1,);
       }
     }
   } else {
 
-    slovoAccent = PoiskSlov(NextSlovo)
+    state.slovoAccent = PoiskSlov(NextSlovo, state)
     //slovoAccent=PoiskSlovClassic(NextSlovo);
     //if (slovoAccent==NextSlovo || slovoAccent=="") {slovoAccent=PoiskSlov(NextSlovo)};
   }
 
 
-  return slovoAccent;
+  return state.slovoAccent;
 }

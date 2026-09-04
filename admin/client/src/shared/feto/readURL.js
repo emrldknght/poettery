@@ -1,4 +1,5 @@
 export function readURL(input) {
+  let picsize = 0;
   if (input.files && input.files[0]) {
 
     var reader = new FileReader();

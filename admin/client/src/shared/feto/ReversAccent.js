@@ -26,6 +26,8 @@ export function ReversAccent(state)
   state.CountNoAccentSlov = 0;
   const Ritm = state.Ritm;
 
+  let SbornikCountTxt = '';
+
 
   let nexttext = state.OriginalTextInput;
   if (nexttext.length === 0) {
@@ -125,7 +127,7 @@ export function ReversAccent(state)
 
             // или предлагаем несколько ударений на выбор CaseAccent[] - номер безударной в слове;
             // если ручной режим расстановки ударений отключен то HandAccent=0;
-            if (state.UnicStrof < 2 && HandAccent > 0 && window.project != 'epigramma') // если уникальных строф не много, то это не вольный стих (будет слишком много иправлений)
+            if (state.UnicStrof < 2 && HandAccent > 0 && state.inWindow.project !== 'epigramma') // если уникальных строф не много, то это не вольный стих (будет слишком много иправлений)
             {
               ++CountCase;
               for (let b = 1; b < CaseAccent.length; b++) {

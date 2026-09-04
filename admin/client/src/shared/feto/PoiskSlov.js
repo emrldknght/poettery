@@ -1,4 +1,6 @@
-export function PoiskSlov(NextSlovo) {
+/** @param NextSlovo
+ @param state {FetoState} */
+export function PoiskSlov(NextSlovo, state) {
 
   let slovoAccent = "";
   if (NextSlovo.length < 3 || NextSlovo === undefined) {
@@ -6,11 +8,11 @@ export function PoiskSlov(NextSlovo) {
     return slovoAccent;
   }
 
-  for (let j = 0; j < slovar_noaccent_Mas.length; j++) {
+  for (let j = 0; j < state.slovar_noaccent_Mas.length; j++) {
 
-    if (NextSlovo == slovar_noaccent_Mas[j]) {
-      slovoAccent = slovar_accent_Mas[j];
-      j = slovar_noaccent_Mas.length;
+    if (NextSlovo == state.slovar_noaccent_Mas[j]) {
+      slovoAccent = state.slovar_accent_Mas[j];
+      j = state.slovar_noaccent_Mas.length;
       return slovoAccent;
       break;
     }

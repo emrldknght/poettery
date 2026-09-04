@@ -15,10 +15,10 @@ export function Accent(state) {
   let flagYo = 0;
 
   let kirill = /[а-яА-ЯёЁ]/;
-  stih = state.OriginalTextInput + "\n";
-  stih0 = state.OriginalTextInput + "\n";
-  stihMas0 = stih0.split("\n");
-  let LowStih = stih.toLowerCase();
+  state.stih = state.OriginalTextInput + "\n";
+  state.stih0 = state.OriginalTextInput + "\n";
+  state.stihMas0 = state.stih0.split("\n");
+  let LowStih = state.stih.toLowerCase();
 
 
   for (let i = 0; i < LowStih.length; i++) {
@@ -39,18 +39,18 @@ export function Accent(state) {
         // односложные слова делаем ударными, ё делаем ударным, остальные ищем по словарю
 
         if (flagYo === 1) {
-          slovoAccent = NextSlovo.replace(new RegExp("ё", 'g'), "Ё");
+          state.slovoAccent = NextSlovo.replace(new RegExp("ё", 'g'), "Ё");
           flagYo = 0;
         } else {
-          slovoAccent = CapsGlasny(NextSlovo);
+          state.slovoAccent = CapsGlasny(NextSlovo, state);
         }
         ;
         NextSlovo = "";
       }
     }
 
-    LowStih = LowStih.substr(0, i - slovoAccent.length) + slovoAccent + LowStih.substr(i,);
-    slovoAccent = "";
+    LowStih = LowStih.substr(0, i - state.slovoAccent.length) + state.slovoAccent + LowStih.substr(i,);
+    state.slovoAccent = "";
   }
 
   state.flagSetAccent = 1;
@@ -61,6 +61,6 @@ export function Accent(state) {
   state.OriginalTextInput = LowStih;
 
   // document.getElementById('ContainerTemplate1').innerHTML = indikator;
-  state.ContainerTemplate1 = indikator;
+  state.ContainerTemplate1 = state.indikator;
   FullAnaliz(state);
 }

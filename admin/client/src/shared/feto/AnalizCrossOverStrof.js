@@ -5,10 +5,10 @@ export function AnalizCrossOverStrof(state) {
   let UniCrossRitmResume = "";
   let zn9 = " ";
 // анализ перекрестных строф CrossRitmResult на уникальность ритма
-  for (let k = 1; k < CrossRitmResult.length; k++) {
+  for (let k = 1; k < state.CrossRitmResult.length; k++) {
     FlagUniCrossRitm = 0;
-    for (let n = 1; n < CrossRitmResult.length; n++) {
-      if (CrossRitmResult[k] == CrossRitmResult[n] && n != k) {
+    for (let n = 1; n < state.CrossRitmResult.length; n++) {
+      if (state.CrossRitmResult[k] === state.CrossRitmResult[n] && n !== k) {
         FlagUniCrossRitm = 1;
       }
     }
@@ -28,11 +28,11 @@ export function AnalizCrossOverStrof(state) {
     UniCrossRitmResume = "Ритм в " + UniCrossRitmResume + " строфах отличается от всех остальных."
   }
 
-  if (CountUniCrossRitm == CrossRitmResult.length) {
+  if (CountUniCrossRitm === state.CrossRitmResult.length) {
     state.ClassicBall = 0;
   }
 
-  if (CountUniCrossRitm > 0 && CountUniCrossRitm < CrossRitmResult.length) {
+  if (CountUniCrossRitm > 0 && CountUniCrossRitm < state.CrossRitmResult.length) {
     state.ClassicBall = 1;
   }
 

@@ -54,6 +54,6 @@ export function AnalizGroupStrof(state)
   console.log("StrofaPatternMas");
   console.log(state.StrofaPatternMas);
 
-  stih = state.OriginalTextInput + "\n";
-  stihMas = stih.split("\n");
+  state.stih = state.OriginalTextInput + "\n";
+  state.stihMas = state.stih.split("\n");
 }

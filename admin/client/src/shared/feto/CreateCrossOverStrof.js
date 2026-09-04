@@ -13,30 +13,30 @@ export function CreateCrossOverStrof(state)
 
 
 {
-  CrossOverMode = 1;
-  CrossOverStihMas = []; //массив содержит исходный стих до сортировки (для перекрёсных строф)
-  CrossOverProbelStrofMas = []; // исходный стих отсортирован и разбит на кросс-строфы (добавлены пробелы)
-  CrossOverProbelStrofMas2 = []; // исходный стих отсортирован и разбит на кросс-строфы (добавлены пробелы ещё раз)
-  CrossTemplateGlasnMas = []; //массив содержит гласные - сортируем его
+  state.CrossOverMode = 1;
+  state.CrossOverStihMas = []; //массив содержит исходный стих до сортировки (для перекрёсных строф)
+  state.CrossOverProbelStrofMas = []; // исходный стих отсортирован и разбит на кросс-строфы (добавлены пробелы)
+  state.CrossOverProbelStrofMas2 = []; // исходный стих отсортирован и разбит на кросс-строфы (добавлены пробелы ещё раз)
+  state.CrossTemplateGlasnMas = []; //массив содержит гласные - сортируем его
 
-  OldCrossTemplateGlasnMas = []; //массив содержит гласные - сохраняем его до сортировки
-  OldCrossOverStihMas = []; //массив содержит исходный стих - сохраняем его до сортировки
+  state.OldCrossTemplateGlasnMas = []; //массив содержит гласные - сохраняем его до сортировки
+  state.OldCrossOverStihMas = []; //массив содержит исходный стих - сохраняем его до сортировки
   let CrossNumvStrofe = []; //массив содержит позицию строки в строфе
 
-  NewPosCrossOverStihMas = []; //массив содержит новые позиции строк стиха после сортировки и разбивки на строфы (индекс - исходная позиция строки, значение - новая позиция строки)
+  state.NewPosCrossOverStihMas = []; //массив содержит новые позиции строк стиха после сортировки и разбивки на строфы (индекс - исходная позиция строки, значение - новая позиция строки)
   DelSpace(state);
   let stih = state.OriginalTextInput; // запоминаем исходный стих
-  NaturalStih = stih; // запоминаем исходный стих
+  const NaturalStih = stih; // запоминаем исходный стих
 
-  OldCrossOverStihMas = stih.split("\n"); //массив содержит исходный стих - сохраняем его до сортировки (с пробелами)
+  state.OldCrossOverStihMas = stih.split("\n"); //массив содержит исходный стих - сохраняем его до сортировки (с пробелами)
 
   let numst = 0; // номер строки в строфе
   let nn = 0; // номер строки
 // создаём массив CrossNumvStrofe, определяющий номер строки в строфе ==========================================
-  for (let k = 0; k < OldCrossOverStihMas.length; k++) {
+  for (let k = 0; k < state.OldCrossOverStihMas.length; k++) {
     numst = numst + 1;
 
-    if (OldCrossOverStihMas[k] == "") {
+    if (state.OldCrossOverStihMas[k] === "") {
       numst = 0;
     } else {
       nn = nn + 1;
@@ -51,39 +51,39 @@ export function CreateCrossOverStrof(state)
   stih = stih.replace(/\n{2,}/gm, '\n'); // заменить две пустые строки одной
   stih = '\n' + stih; // добавим пробел в нулевую позицию
 
-  CrossOverStihMas = stih.split("\n"); //массив содержит исходный стих до сортировки (для перекрёсных строф)
+  state.CrossOverStihMas = stih.split("\n"); //массив содержит исходный стих до сортировки (для перекрёсных строф)
 
 
   state.TemplateGlasn = state.TemplateGlasn.replace(/\n{2,}/gm, '\n'); // заменить две пустые строки одной
   state.TemplateGlasn = '\n' + state.TemplateGlasn; // добавим пробел в нулевую позицию
-  CrossTemplateGlasnMas = state.TemplateGlasn.split("\n"); //массив содержит гласные (без пустых строк)
+  state.CrossTemplateGlasnMas = state.TemplateGlasn.split("\n"); //массив содержит гласные (без пустых строк)
 
-  OldCrossTemplateGlasnMas = CrossTemplateGlasnMas.slice(); //массив содержит гласные - сохраняем его до сортировки
+  state.OldCrossTemplateGlasnMas = state.CrossTemplateGlasnMas.slice(); //массив содержит гласные - сохраняем его до сортировки
 
 // заполняем NewPosCrossOverStihMas индексами от 1 до количества строк (потом будем сортировать) ======================================================
-  for (let k = 1; k < CrossTemplateGlasnMas.length + 1; k++) {
-    NewPosCrossOverStihMas[k] = k;
+  for (let k = 1; k < state.CrossTemplateGlasnMas.length + 1; k++) {
+    state.NewPosCrossOverStihMas[k] = k;
   }
 
   // заполнили NewPosCrossOverStihMas индексами от 1 до количества строк (потом будем сортировать) ==========================================
 
   console.log("NewPosCrossOverStihMas");
-  console.log(NewPosCrossOverStihMas);
+  console.log(state.NewPosCrossOverStihMas);
 
   console.log("до сортировки строк по длине");
 
   console.log("CrossOverStihMas");
-  console.log(CrossOverStihMas);
+  console.log(state.CrossOverStihMas);
 
 
   console.log("CrossTemplateGlasnMas");
-  console.log(CrossTemplateGlasnMas);
+  console.log(state.CrossTemplateGlasnMas);
 
   console.log("CrossRitmStrofa");
-  console.log(CrossRitmStrofa);
+  console.log(state.CrossRitmStrofa);
 
   console.log('OldCrossTemplateGlasnMas222');
-  console.log(OldCrossTemplateGlasnMas);
+  console.log(state.OldCrossTemplateGlasnMas);
 
 
   let cur = 0;
@@ -93,31 +93,31 @@ export function CreateCrossOverStrof(state)
   let dl2 = 0;
 // сортируем строки по длине
 // попарная перестановка m-максимум
-  for (let k = 1; k < CrossTemplateGlasnMas.length; k++) {
-    for (let m = 1; m < CrossTemplateGlasnMas.length; m++) {
+  for (let k = 1; k < state.CrossTemplateGlasnMas.length; k++) {
+    for (let m = 1; m < state.CrossTemplateGlasnMas.length; m++) {
 
       // сравниваем по длине и номеру строки (склеиваем два числа через запятую)
-      dl1 = CrossTemplateGlasnMas[k].length + "." + CrossNumvStrofe[k];
-      dl2 = CrossTemplateGlasnMas[m].length + "." + CrossNumvStrofe[m];
+      dl1 = state.CrossTemplateGlasnMas[k].length + "." + CrossNumvStrofe[k];
+      dl2 = state.CrossTemplateGlasnMas[m].length + "." + CrossNumvStrofe[m];
       console.log(dl1, dl2);
 
       if (dl1 > dl2) {
         // меняем местами максимум М и текущий cur в шаблоне гласных CrossTemplateGlasnMas
-        cur = CrossTemplateGlasnMas[k];
-        CrossTemplateGlasnMas[k] = CrossTemplateGlasnMas[m];
-        CrossTemplateGlasnMas[m] = cur;
+        cur = state.CrossTemplateGlasnMas[k];
+        state.CrossTemplateGlasnMas[k] = state.CrossTemplateGlasnMas[m];
+        state.CrossTemplateGlasnMas[m] = cur;
         // одновременно меняем местами максимум М и текущий cur в исходном стихе CrossOverStihMas
-        cur = CrossOverStihMas[k];
-        CrossOverStihMas[k] = CrossOverStihMas[m];
-        CrossOverStihMas[m] = cur;
+        cur = state.CrossOverStihMas[k];
+        state.CrossOverStihMas[k] = state.CrossOverStihMas[m];
+        state.CrossOverStihMas[m] = cur;
         // одновременно меняем местами максимум М и текущий cur в массиве ритмов CrossRitmStrofa
-        cur = CrossRitmStrofa[k];
-        CrossRitmStrofa[k] = CrossRitmStrofa[m];
-        CrossRitmStrofa[m] = cur;
+        cur = state.CrossRitmStrofa[k];
+        state.CrossRitmStrofa[k] = state.CrossRitmStrofa[m];
+        state.CrossRitmStrofa[m] = cur;
         // массив NewPosCrossOverStihMas содержит новые позиции строк стиха после сортировки и разбивки на строфы (индекс - исходная позиция строки, значение - новая позиция строки)
-        PosCur = NewPosCrossOverStihMas[k];
-        NewPosCrossOverStihMas[k] = NewPosCrossOverStihMas[m];
-        NewPosCrossOverStihMas[m] = PosCur;
+        PosCur = state.NewPosCrossOverStihMas[k];
+        state.NewPosCrossOverStihMas[k] = state.NewPosCrossOverStihMas[m];
+        state.NewPosCrossOverStihMas[m] = PosCur;
         // одновременно меняем местами максимум М и текущий cur в массиве CrossNumvStrofe, содержащем номер строки в строфе
         PosCur = CrossNumvStrofe[k];
         CrossNumvStrofe[k] = CrossNumvStrofe[m];
@@ -129,10 +129,10 @@ export function CreateCrossOverStrof(state)
   console.log("отсортировали строки по длине");
 
   console.log("CrossOverStihMas");
-  console.log(CrossOverStihMas);
+  console.log(state.CrossOverStihMas);
 
   console.log("CrossRitmStrofa");
-  console.log(CrossRitmStrofa);
+  console.log(state.CrossRitmStrofa);
 
   console.log("CrossNumvStrofe");
   console.log(CrossNumvStrofe);
@@ -140,25 +140,25 @@ export function CreateCrossOverStrof(state)
   console.log("добавляем пробелы между строфами");
 
   let kprobel = 0;
-  CrossTemplateGlasnMas[0] = "";
-  CrossOverStihMas[0] = "";
-  CrossTemplateGlasnMas[CrossTemplateGlasnMas.length] = "";
-  CrossOverStihMas[CrossOverStihMas.length] = "";
+  state.CrossTemplateGlasnMas[0] = "";
+  state.CrossOverStihMas[0] = "";
+  state.CrossTemplateGlasnMas[state.CrossTemplateGlasnMas.length] = "";
+  state.CrossOverStihMas[state.CrossOverStihMas.length] = "";
 
   let kk = 1; // новый массив CrossOverProbelStrofMas длиннее - индекс растёт при добавлении пустой строки.
 // перебираем получившийся CrossOverStihMas (отсортированный массив строк стиха) и добавляем пробелы между строфами в CrossOverProbelStrofMas, когда попадаются строки разной длины
 
-  for (let k = 1; k < CrossTemplateGlasnMas.length - 1; k++) {
+  for (let k = 1; k < state.CrossTemplateGlasnMas.length - 1; k++) {
 
-    if (CrossTemplateGlasnMas[k].length + "." + CrossNumvStrofe[k] == CrossTemplateGlasnMas[k + 1].length + "." + CrossNumvStrofe[k + 1]) {
+    if (state.CrossTemplateGlasnMas[k].length + "." + CrossNumvStrofe[k] === state.CrossTemplateGlasnMas[k + 1].length + "." + CrossNumvStrofe[k + 1]) {
       kk = kk + 1;
-      CrossOverProbelStrofMas[kk] = CrossOverStihMas[k];
+      state.CrossOverProbelStrofMas[kk] = state.CrossOverStihMas[k];
     } else {
       kk = kk + 1;
       kprobel = kprobel + 1;
-      CrossOverProbelStrofMas[kk] = CrossOverStihMas[k];
+      state.CrossOverProbelStrofMas[kk] = state.CrossOverStihMas[k];
       kk = kk + 1;
-      CrossOverProbelStrofMas[kk] = ""; // добавляем пустую строку
+      state.CrossOverProbelStrofMas[kk] = ""; // добавляем пустую строку
       NumCrossStrofa = NumCrossStrofa + 1;
     }
   }
@@ -167,43 +167,43 @@ export function CreateCrossOverStrof(state)
 // для строф больше 7 строк добавим разрывы
   kk = 1;
   let colst = 0; // количество строк в строфе
-  for (let k = 0; k < CrossOverProbelStrofMas.length - 3; k++) {
+  for (let k = 0; k < state.CrossOverProbelStrofMas.length - 3; k++) {
 
 //если строфа больше 3 и впереди четыре не пустые строки, то добавляем пустую строку
-    if (colst > 3 && CrossOverProbelStrofMas[k] != "" && CrossOverProbelStrofMas[k + 1] != "" && CrossOverProbelStrofMas[k + 2] != "" && CrossOverProbelStrofMas[k + 3] != "") {
+    if (colst > 3 && state.CrossOverProbelStrofMas[k] !== "" && state.CrossOverProbelStrofMas[k + 1] !== "" && state.CrossOverProbelStrofMas[k + 2] !== "" && state.CrossOverProbelStrofMas[k + 3] !== "") {
       kk = kk + 1;
-      CrossOverProbelStrofMas2[kk] = "";
+      state.CrossOverProbelStrofMas2[kk] = "";
       kk = kk + 1;
-      CrossOverProbelStrofMas2[kk] = CrossOverProbelStrofMas[k];
+      state.CrossOverProbelStrofMas2[kk] = state.CrossOverProbelStrofMas[k];
       colst = 0;
     } else {
       kk = kk + 1;
-      CrossOverProbelStrofMas2[kk] = CrossOverProbelStrofMas[k];
+      state.CrossOverProbelStrofMas2[kk] = state.CrossOverProbelStrofMas[k];
       colst = colst + 1;
     }
   }
   kk = kk + 1;
-  CrossOverProbelStrofMas2[kk] = CrossOverProbelStrofMas[CrossOverProbelStrofMas.length - 3];
+  state.CrossOverProbelStrofMas2[kk] = state.CrossOverProbelStrofMas[state.CrossOverProbelStrofMas.length - 3];
   kk = kk + 1;
-  CrossOverProbelStrofMas2[kk] = CrossOverProbelStrofMas[CrossOverProbelStrofMas.length - 2];
+  state.CrossOverProbelStrofMas2[kk] = state.CrossOverProbelStrofMas[state.CrossOverProbelStrofMas.length - 2];
   kk = kk + 1;
-  CrossOverProbelStrofMas2[kk] = CrossOverProbelStrofMas[CrossOverProbelStrofMas.length - 1];
+  state.CrossOverProbelStrofMas2[kk] = state.CrossOverProbelStrofMas[state.CrossOverProbelStrofMas.length - 1];
   kk = kk + 1;
-  CrossOverProbelStrofMas2[kk] = CrossOverProbelStrofMas[CrossOverProbelStrofMas.length];
+  state.CrossOverProbelStrofMas2[kk] = state.CrossOverProbelStrofMas[state.CrossOverProbelStrofMas.length];
 
-  CrossOverProbelStrofMas = CrossOverProbelStrofMas2.slice();
+  state.CrossOverProbelStrofMas = state.CrossOverProbelStrofMas2.slice();
 
   console.log('NewPosCrossOverStihMas');
-  console.log(NewPosCrossOverStihMas);
+  console.log(state.NewPosCrossOverStihMas);
 
   console.log("CrossTemplateGlasnMas");
-  console.log(CrossTemplateGlasnMas);
+  console.log(state.CrossTemplateGlasnMas);
 
   console.log("CrossOverProbelStrofMas");
-  console.log(CrossOverProbelStrofMas);
+  console.log(state.CrossOverProbelStrofMas);
 
 // возвращаем стих в текстовое поле
-  state.OriginalTextInput = CrossOverProbelStrofMas.join("\n");
+  state.OriginalTextInput = state.CrossOverProbelStrofMas.join("\n");
 
   stih = state.OriginalTextInput;
   DelSpace(state);

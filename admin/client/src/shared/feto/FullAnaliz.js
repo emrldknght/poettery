@@ -5,6 +5,10 @@ export function FullAnaliz(state) {
   console.log("LOG BallClassicManual", document.getElementById("BallClassicManual"));
   console.log("LOG BallContentManual", document.getElementById("BallContentManual"));
 
+  let NoLentaComment = '';
+
+  const project = state.inWindow.project;
+
 
 // удаляем ленту-элементы с классом lenta
   document.querySelectorAll('.lenta').forEach(function (a) {
@@ -47,23 +51,23 @@ export function FullAnaliz(state) {
 
 
 //массивы с оценками по каждому фрагменту
-  flagStrofaBallMas = [];// количество типов строф, если 1 - то все строфы одного размера
-  flagRitmBallMas = [];// 1 - ритм найден, 2 - ритм явный, 3 -ритм чёткий.
-  flagRifmBallMas = [];// Рифма точная - flagRifmBall=1
-  flagAccentBallMas = [];// Ударения в словах не расставлены. flagAccentBall=0
-  flagStrofaRazbitaMas = [];// строфа не разбита =0, разбита =1
-  flagGroupStrofaBallMas = [];// количество строф в одной группе
-  flagCountStrofaPatternTypeMas = [];// количество типов строф, если 1 - то все строфы одного размера
-  flagCountErrorRifmaMas = []; // количество нерифмованных строк (надо делить на два, у рифмы всегда есть пара)
-  flagCountRitmErrorMas = []; // количество сбоев ритма
-  flagProcentCountSlogSerMas = []; // процент серых гласных
+  state.flagStrofaBallMas = [];// количество типов строф, если 1 - то все строфы одного размера
+  state.flagRitmBallMas = [];// 1 - ритм найден, 2 - ритм явный, 3 -ритм чёткий.
+  state.flagRifmBallMas = [];// Рифма точная - flagRifmBall=1
+  state.flagAccentBallMas = [];// Ударения в словах не расставлены. flagAccentBall=0
+  state.flagStrofaRazbitaMas = [];// строфа не разбита =0, разбита =1
+  state.flagGroupStrofaBallMas = [];// количество строф в одной группе
+  state.flagCountStrofaPatternTypeMas = [];// количество типов строф, если 1 - то все строфы одного размера
+  state.flagCountErrorRifmaMas = []; // количество нерифмованных строк (надо делить на два, у рифмы всегда есть пара)
+  state.flagCountRitmErrorMas = []; // количество сбоев ритма
+  state.flagProcentCountSlogSerMas = []; // процент серых гласных
 
 //интегральная оценка всех фрагментов
   let GlobalflagStrofaBallMas = 0;// количество типов строф, если 1 - то все строфы одного размера
   state.GlobalflagRitmBallMas = 3;// 1 - ритм найден, 2 - ритм явный, 3 -ритм чёткий.
   let GlobalflagRifmBallMas = 1;// Рифма точная - flagRifmBall=1
-  GlobalflagAccentBallMas = 0;// Ударения в словах не расставлены. flagAccentBall=0
-  GlobalflagStrofaRazbitaMas = 0;// строфа не разбита =0, разбита =1
+  state.GlobalflagAccentBallMas = 0;// Ударения в словах не расставлены. flagAccentBall=0
+  state.GlobalflagStrofaRazbitaMas = 0;// строфа не разбита =0, разбита =1
   let GlobalflagGroupStrofaBallMas = 0;// количество строф в одной группе
   state.GlobalflagCountStrofaPatternTypeMas = 0;// количество типов строф, если 1 - то все строфы одного размера
   let GlobalflagCountErrorRifmaMas = 0; // количество нерифмованных строк (надо делить на два, у рифмы всегда есть пара)
@@ -98,18 +102,18 @@ export function FullAnaliz(state) {
   let fragment = "";
   let textfragment = "";
   state.flagRitmError = "";
-  FullRazmerComment = "";
-  FlagStrofaMultiPatternType = 0;
+  state.FullRazmerComment = "";
+  state.FlagStrofaMultiPatternType = 0;
 
 
   state.razmerComment = "";
   // CommentGroupStrof = "";
   state.RitmComment = "";
-  RifmComment = "";
+  state.RifmComment = "";
 
   state.ResumeComment = "";
   let flagCountStrofaRitmEr = "";
-  ProcentCountSlogSer = 0;
+  state.ProcentCountSlogSer = 0;
   let rezumeProcentCountSlogSer = "";
 
   let BallClassicManualText = ""; //"Оценка классики вручную"
@@ -127,37 +131,37 @@ export function FullAnaliz(state) {
   var elem = "";
   var elem2 = "";
   var NextID = "";
-  FullContainerTemplate = "";
+  let FullContainerTemplate = "";
   let FragmentReports = "";
   let FragmentN = 0;
-  lenta = 1;
-  lentacount = 1;
+  state.lenta = 1;
+  state.lentacount = 1;
   var elementArray = [];
-  CrossLentaRitm = []; // массив базового ритмического рисунка для перекрестных строф (одна строфа-один ритм). После перекрёстного анализа служит восстановлению ритма в востановленных строфах
-  CrossTemplateGlasn = []; // массив гласных для перекрестных строф
+  state.CrossLentaRitm = []; // массив базового ритмического рисунка для перекрестных строф (одна строфа-один ритм). После перекрёстного анализа служит восстановлению ритма в востановленных строфах
+  state.CrossTemplateGlasn = []; // массив гласных для перекрестных строф
   let kolStrokTemplateGlasn = 0;
   let countStrokTemplateGlasn = 0;
   let TemplateGlasn2 = [];
   let CrossRitmStr = "";
-  NewAccentLentaText = "";
+  state.NewAccentLentaText = "";
 
-  epigramma = 0;
-  epigrammatype = "";
+  state.epigramma = 0;
+  state.epigrammatype = "";
 
 
-  ResumeLentaMode = "Ниже приводится анализ фрагментов, в которых сгруппированы строфы одного размера.";
+  state.ResumeLentaMode = "Ниже приводится анализ фрагментов, в которых сгруппированы строфы одного размера.";
 
-  if (LentaMode.checked) {
-    ResumeLentaMode = "Группировка одинаковых по размеру строф не дала положительного результата. Ниже приводится анализ отдельных строф.";
+  if (state.LentaMode.checked) {
+    state.ResumeLentaMode = "Группировка одинаковых по размеру строф не дала положительного результата. Ниже приводится анализ отдельных строф.";
   }
-  ;
+
 
 // проверяем чек бокс "не расставлять ударения" - если обрабатываем файл, в котором они уже расставлены
   let FileAccent = document.getElementById("FileAccent").checked;
   if (FileAccent) {
     state.flagSetAccent = 1
   }
-  ;
+
 
 
   if (state.flagSetAccent === 0) {
@@ -167,22 +171,22 @@ export function FullAnaliz(state) {
   }
 
 // Заголовок =========================================
-  stih = state.OriginalTextInput + "\n";
-  stihMas = stih.split("\n");
+  state.stih = state.OriginalTextInput + "\n";
+  state.stihMas = state.stih.split("\n");
 
-  console.log('stihMas', stihMas);
+  console.log('stihMas', state.stihMas);
 
 
-  TitulStih = stihMas[0];
-  TitulStih = TitulStih.toUpperCase();
-  TitulStih = TitulStih.replace(/[.,:!?()-;]+$/gm, '') + "...";    // удалить знаки препинания в конце строки заголовка
+  state.TitulStih = state.stihMas[0];
+  state.TitulStih = state.TitulStih.toUpperCase();
+  state.TitulStih = state.TitulStih.replace(/[.,:!?()-;]+$/gm, '') + "...";    // удалить знаки препинания в конце строки заголовка
 
   // disclamer = '<a href="https://vpoezii.online" target="_blank" style="text-decoration: none; color: #0d6f9c; alink: #aaaaaa; vlink: #aaaaaa; link: #aaaaaa;">
   // * Мнение редакции альманаха «Венец поэзии» может отличаться от выводов интеллектуальной системы. Содержание текста требует отдельного анализа.
   // Не забудьте проверить правильность расстановки ударений</a>.';
 
-  let TitleComment = 'Структурный анализ стихотворения «' + TitulStih + '» подготовлен* интеллектуальной системой Fet.Online&nbsp;<a href="https://vpoezii.online/document/4502/" target="_blank" style="text-decoration: none; color: #0d6f9c!important;  alink: #aaaaaa!important; vlink: #aaaaaa!important; link: #aaaaaa!important;">&nbsp;(свидетельство Роспатента от 22.03.2021 №2021614295)</a>.';
-  document.title = 'Анализ стихотворения «' + TitulStih + '»';
+  let TitleComment = 'Структурный анализ стихотворения «' + state.TitulStih + '» подготовлен* интеллектуальной системой Fet.Online&nbsp;<a href="https://vpoezii.online/document/4502/" target="_blank" style="text-decoration: none; color: #0d6f9c!important;  alink: #aaaaaa!important; vlink: #aaaaaa!important; link: #aaaaaa!important;">&nbsp;(свидетельство Роспатента от 22.03.2021 №2021614295)</a>.';
+  document.title = 'Анализ стихотворения «' + state.TitulStih + '»';
 
 // НАЧАЛО АНАЛИЗА =========================================
 
@@ -191,48 +195,49 @@ export function FullAnaliz(state) {
   AnalizRazmera(state);
 // if (window.flagStrofaRazbita===0 && !LentaMode.checked) {document.getElementById('ContainerComment1').innerHTML ="Стихотворение не разбито на строфы. Нужно добавить пустую строку между строфами. "; document.getElementById('ContainerFlag1').innerHTML=krest+"Разбейте на строфы. "; document.getElementById('level-full').checked=true; epigramma=1;};
 
-  if (state.flagStrofaRazbita === 0 && !LentaMode.checked) {
+  if (state.flagStrofaRazbita === 0 && !state.LentaMode.checked) {
     state.ContainerComment1 = "Стихотворение не разбито на строфы. Нужно добавить пустую строку между строфами. ";
-    state.ContainerFlag1 = krest + "Разбейте на строфы. ";
+    state.ContainerFlag1 = state.krest + "Разбейте на строфы. ";
     document.getElementById('level-full').checked = true;
   }
   ;
 
 
-  if (LentaMode.checked) {
+  if (state.LentaMode.checked) {
     LentaPoiskStrof(state);
   }
 
-  if (!LentaMode.checked) {
+  if (!state.LentaMode.checked) {
     AnalizGroupStrof(state);
     CreateGroupStrof(state);
   }
 
 //если строфы разные, то добавляем исходный стих к массиву групп строф и делаем анализ отдельных групп строф
   if (state.GroupStrof.length > 1) {
-    state.GroupStrof.unshift(stih);
+    state.GroupStrof.unshift(state.stih);
   }
 
   if (state.UnicStrof === 1) {
-    FullRazmerComment = FullRazmerComment + ' Только одна строфа по размеру не согласована с другими строфами. ';
+    state.FullRazmerComment = state.FullRazmerComment
+      + ' Только одна строфа по размеру не согласована с другими строфами. ';
   }
-  ;
 
   if (state.UnicStrof === 2 || state.UnicStrof === 3 || state.UnicStrof === 4) {
-    FullRazmerComment = FullRazmerComment + state.UnicStrof + ' строфы по размеру вообще не согласованы с другими строфами, то есть они все написаны «вразнобой». Создаётся впечатление, что произведение состоит из фрагментов нескольких стихотворений, написанных в разное время и по разным поводам. ';
+    state.FullRazmerComment = state.FullRazmerComment
+      + state.UnicStrof
+      + ' строфы по размеру вообще не согласованы с другими строфами, то есть они все написаны «вразнобой». Создаётся впечатление, что произведение состоит из фрагментов нескольких стихотворений, написанных в разное время и по разным поводам. ';
   }
-  ;
 
   if (state.UnicStrof > 4) {
-    FullRazmerComment = FullRazmerComment + state.UnicStrof + ' строф имеют каждая свой размер, то есть они все написаны совершенно «вразнобой». Создаётся впечатление, что произведение состоит из фрагментов нескольких стихотворений, написанных в разное время и по разным поводам. ';
+    state.FullRazmerComment = state.FullRazmerComment
+      + state.UnicStrof
+      + ' строф имеют каждая свой размер, то есть они все написаны совершенно «вразнобой». Создаётся впечатление, что произведение состоит из фрагментов нескольких стихотворений, написанных в разное время и по разным поводам. ';
   }
-  ;
 
 
   if (state.GroupStrof.length > 2) {
-    Comment0 = TitleComment + "<br><br>" + FullRazmerComment + '<br><br>';
+    Comment0 = TitleComment + "<br><br>" + state.FullRazmerComment + '<br><br>';
   }
-  ;
 
 
   for (let FragmentNumber = state.GroupStrof.length - 1; FragmentNumber >= 0; FragmentNumber--) {
@@ -303,80 +308,81 @@ export function FullAnaliz(state) {
     TitulStih = TitulStih.replace(/[.,:!?()-;]+$/gm, '') + "...";    // удалить знаки препинания в конце строки заголовка
     let TitleComment = 'Структурный анализ ' + fragment + ' «' + TitulStih + '» подготовлен* интеллектуальной системой Fet.Online' + '<a href="https://vpoezii.online/document/4502/" target="_blank" style="text-decoration: none; color: #0d6f9c!important; ; alink: #aaaaaa!important; ; vlink: #aaaaaa!important; ; link: #aaaaaa!important; ;">&nbsp;(свидетельство Роспатента от 22.03.2021 №2021614295)</a>.';
     document.title = 'Анализ стихотворения «' + TitulStih + '»';
-    TitulStihReport = TitulStih; //заголовок
+    state.TitulStihReport = TitulStih; //заголовок
 // установка флагов -----------------------------------------------------------------------
 
 // ---уточнение процента серых гласных и балла за ритм -------------------------
     if (state.CountStrofaRitmEr > 0) {
-      flagCountStrofaRitmEr = krest + "Сбойных строф:" + state.CountStrofaRitmEr + " ";
+      flagCountStrofaRitmEr = state.krest + "Сбойных строф:" + state.CountStrofaRitmEr + " ";
     } else {
       flagCountStrofaRitmEr = "";
     }
-    ;
-    ProcentCountSlogSer = Math.round(state.CountSlogSer / state.CountSlog * 100);
+
+    state.ProcentCountSlogSer = Math.round(state.CountSlogSer / state.CountSlog * 100);
 // сумма серых гласных по фрагментам -------------------------
 
     if (FragmentNumber > 0 || state.GroupStrof.length === 1) {
-      SumSlogSer = SumSlogSer + LentaCountSlogSer
+      SumSlogSer = SumSlogSer + state.LentaCountSlogSer
     }
-    ;
+
 
 
 //rezumeProcentCountSlogSer=" Слабоударных (смешанных) гласных:"+ProcentCountSlogSer+"%  ";
-    if (ProcentCountSlogSer > 40) {
-      rezumeProcentCountSlogSer = ' Слишком много слабоударных (смешанных) гласных:<span style="color:#FF0000 ; font-weight: bold;">' + ProcentCountSlogSer + '%  &nbsp;</span>';
+    if (state.ProcentCountSlogSer > 40) {
+      rezumeProcentCountSlogSer = ' Слишком много слабоударных (смешанных) гласных:<span style="color:#FF0000 ; font-weight: bold;">'
+        + state.ProcentCountSlogSer + '%  &nbsp;</span>';
     }
-    ;
-    if (ProcentCountSlogSer <= 40) {
-      rezumeProcentCountSlogSer = ' Количество слабоударных (смешанных) гласных в норме:' + ProcentCountSlogSer + '%  &nbsp;</span>';
+
+    if (state.ProcentCountSlogSer <= 40) {
+      rezumeProcentCountSlogSer = ' Количество слабоударных (смешанных) гласных в норме:' + state.ProcentCountSlogSer + '%  &nbsp;</span>';
     }
-    ;
+
 
 
 // ---уточнение процента серых гласных и балла за ритм -------------------------
 
-    if (CrossOverMode == 1) {
-      RifmComment = "";
-      FlagRifm = "";
+    if (state.CrossOverMode === 1) {
+      state.RifmComment = "";
+      state.FlagRifm = "";
       FlagRifm1 = "";
       state.flagCountErrorRifma = 0;
-      flagErrorRifma = "";
+      state.flagErrorRifma = "";
       flagErrorRifma1 = "";
       state.flagRifmBall = 1;
     }
-    ; // в режиме кроссовера рифма не учитывается
+    // в режиме кроссовера рифма не учитывается
 
-    let UpFlag = flagStrofa + flagRazmer + flagAccent +
-      state.flagRitm + flagErrorRitm + state.flagRitmError + FlagRifm +
+    let UpFlag = state.flagStrofa + state.flagAccent + // + state.flagRazmer
+      state.flagRitm + state.flagRitmError + state.FlagRifm +
       rezumeProcentCountSlogSer + flagCountStrofaRitmEr;
     state.ContainerFlag1 = UpFlag;
-    if (flagAccent.length > 0) {
+    if (state.flagAccent.length > 0) {
       state.ResumeComment = "";
     }
-    ;
+
 
 // state.ClassicBall=state.flagCountStrofaPatternType+state.flagRitmBall+state.flagRifmBall;
     state.flagAccentBall = 1;
     if (state.GroupStrof.length === 1) {
-      state.flagGroupStrofaBall = Strof
+      state.flagGroupStrofaBall = state.Strof
     }
-    ;
+
 
 // проверка критериев  ФРАГМЕНТОВ стихотворения (FragmentNumber=1,2,3)
 
-    if (LentaMode.checked) {
+    if (state.LentaMode.checked) {
       state.UnicStrof = 0;
       state.flagStrofaRazbita = 1;
       state.flagGroupStrofaBall = 2;
       state.flagCountStrofaPatternType = 0;
-      flagStrofa = "";
+      state.flagStrofa = "";
     } // если ленточный режим, то анализируем каждую строфу - ошибки за разбивку строф не начисляем
 
 
     if (FragmentNumber > 0 || state.GroupStrof.length === 1) {
 // проверка критериев ФрАГМЕНТА стихотворения не совсем классического
 
-      if (ProcentCountSlogSer < 50) {
+      if (state.ProcentCountSlogSer < 50) {
         if (state.UnicStrof < 3) {
           if (state.flagStrofaRazbita > 0) {
             if (state.flagAccentBall > 0) {
@@ -396,7 +402,7 @@ export function FullAnaliz(state) {
         }
       }
 // проверка критериев практически классического ФрАГМЕНТА стихотворения
-      if (ProcentCountSlogSer < 40) {
+      if (state.ProcentCountSlogSer < 40) {
         if (state.UnicStrof < 2) {
           if (state.flagStrofaRazbita > 0) {
             if (state.flagAccentBall > 0) {
@@ -417,7 +423,7 @@ export function FullAnaliz(state) {
       }
 
 // проверка критериев строго классического ФрАГМЕНТА стихотворения
-      if (ProcentCountSlogSer < 30) {
+      if (state.ProcentCountSlogSer < 30) {
         if (state.UnicStrof === 0) {
           if (state.flagStrofaRazbita > 0) {
             if (state.flagAccentBall > 0) {
@@ -448,7 +454,7 @@ export function FullAnaliz(state) {
       if (state.flagRitmBall < 2) {
         FragmentResumeCommentRitmBall = "отсутствие чёткого ритма, ";
       }
-      if (ProcentCountSlogSer > 40) {
+      if (state.ProcentCountSlogSer > 40) {
         FragmentResumeCommentSlogSer = "смешение ударных гласных с безударными, ";
       }
       if (state.flagCountRitmError > 0) {
@@ -463,55 +469,55 @@ export function FullAnaliz(state) {
 
 // ================================================================
 
-      flagStrofaRazbitaMas[FragmentNumber] = state.flagStrofaRazbita; // строфа не разбита =0, разбита =1
-      flagAccentBallMas[FragmentNumber] = state.flagAccentBall; // Ударения в словах не расставлены. flagAccentBall=0
-      flagGroupStrofaBallMas[FragmentNumber] = state.flagGroupStrofaBall; // количество строф в одной группе
-      flagCountStrofaPatternTypeMas[FragmentNumber] = state.flagCountStrofaPatternType; // количество типов строф, если 1 - то все строфы одного размера
-      flagCountRitmErrorMas[FragmentNumber] = state.flagCountRitmError; // количество сбоев ритма
-      flagCountErrorRifmaMas[FragmentNumber] = state.flagCountErrorRifma; // количество нерифмованных строк (надо делить на два, у рифмы всегда есть пара)
+      state.flagStrofaRazbitaMas[FragmentNumber] = state.flagStrofaRazbita; // строфа не разбита =0, разбита =1
+      state.flagAccentBallMas[FragmentNumber] = state.flagAccentBall; // Ударения в словах не расставлены. flagAccentBall=0
+      state.flagGroupStrofaBallMas[FragmentNumber] = state.flagGroupStrofaBall; // количество строф в одной группе
+      state.flagCountStrofaPatternTypeMas[FragmentNumber] = state.flagCountStrofaPatternType; // количество типов строф, если 1 - то все строфы одного размера
+      state.flagCountRitmErrorMas[FragmentNumber] = state.flagCountRitmError; // количество сбоев ритма
+      state.flagCountErrorRifmaMas[FragmentNumber] = state.flagCountErrorRifma; // количество нерифмованных строк (надо делить на два, у рифмы всегда есть пара)
 
-      flagProcentCountSlogSerMas[FragmentNumber] = window.flagProcentCountSlogSer; // процент серых гласных
+      state.flagProcentCountSlogSerMas[FragmentNumber] = window.flagProcentCountSlogSer; // процент серых гласных
 
-      flagRitmBallMas[FragmentNumber] = state.flagRitmBall;// 1 - ритм найден, 2 - ритм явный, 3 -ритм чёткий.
-      flagRifmBallMas[FragmentNumber] = state.flagRifmBall;// Рифма точная - flagRifmBall=1 (реально используется количество нерифмованных строк)
+      state.flagRitmBallMas[FragmentNumber] = state.flagRitmBall;// 1 - ритм найден, 2 - ритм явный, 3 -ритм чёткий.
+      state.flagRifmBallMas[FragmentNumber] = state.flagRifmBall;// Рифма точная - flagRifmBall=1 (реально используется количество нерифмованных строк)
       state.ClassicBallMas[FragmentNumber] = state.ClassicBall;
 
 
 //интегральная оценка всех фрагментов - ищем максимумы (минимумы)
-      if (flagStrofaRazbitaMas[FragmentNumber] > GlobalflagStrofaRazbitaMas) {
-        GlobalflagStrofaRazbitaMas = flagStrofaRazbitaMas[FragmentNumber]
+      if (state.flagStrofaRazbitaMas[FragmentNumber] > state.GlobalflagStrofaRazbitaMas) {
+        state.GlobalflagStrofaRazbitaMas = state.flagStrofaRazbitaMas[FragmentNumber]
       }
-      ;// строфа не разбита =0, разбита =1
-      if (flagAccentBallMas[FragmentNumber] > GlobalflagAccentBallMas) {
-        GlobalflagAccentBallMas = flagAccentBallMas[FragmentNumber]
+      // строфа не разбита =0, разбита =1
+      if (state.flagAccentBallMas[FragmentNumber] > state.GlobalflagAccentBallMas) {
+        state.GlobalflagAccentBallMas = state.flagAccentBallMas[FragmentNumber]
       }
-      ;// Ударения в словах не расставлены. flagAccentBall=0
-      if (flagGroupStrofaBallMas[FragmentNumber] < GlobalflagGroupStrofaBallMas) {
-        GlobalflagGroupStrofaBallMas = flagGroupStrofaBallMas[FragmentNumber]
+      // Ударения в словах не расставлены. flagAccentBall=0
+      if (state.flagGroupStrofaBallMas[FragmentNumber] < GlobalflagGroupStrofaBallMas) {
+        GlobalflagGroupStrofaBallMas = state.flagGroupStrofaBallMas[FragmentNumber]
       }
       ;// количество строф в одной группе (минимум)
-      if (flagCountStrofaPatternTypeMas[FragmentNumber] > state.GlobalflagCountStrofaPatternTypeMas) {
-        state.GlobalflagCountStrofaPatternTypeMas = flagCountStrofaPatternTypeMas[FragmentNumber]
+      if (state.flagCountStrofaPatternTypeMas[FragmentNumber] > state.GlobalflagCountStrofaPatternTypeMas) {
+        state.GlobalflagCountStrofaPatternTypeMas = state.flagCountStrofaPatternTypeMas[FragmentNumber]
       }
       ;// количество типов строф, если 1 - то все строфы одного размера
-      if (flagRitmBallMas[FragmentNumber] < state.GlobalflagRitmBallMas) {
-        state.GlobalflagRitmBallMas = flagRitmBallMas[FragmentNumber]
+      if (state.flagRitmBallMas[FragmentNumber] < state.GlobalflagRitmBallMas) {
+        state.GlobalflagRitmBallMas = state.flagRitmBallMas[FragmentNumber]
       }
       ;// 1 - ритм найден, 2 - ритм явный, 3 -ритм чёткий. (ищем худший) базовый =3
-      if (flagRifmBallMas[FragmentNumber] > GlobalflagRifmBallMas) {
-        GlobalflagRifmBallMas = flagRifmBallMas[FragmentNumber]
+      if (state.flagRifmBallMas[FragmentNumber] > GlobalflagRifmBallMas) {
+        GlobalflagRifmBallMas = state.flagRifmBallMas[FragmentNumber]
       }
       ;// Рифма точная - flagRifmBall=1 (ищем худший)
-      GlobalflagCountRitmErrorMas = GlobalflagCountRitmErrorMas + flagCountRitmErrorMas[FragmentNumber];// количество сбоев ритма (сумма)
-      GlobalflagCountErrorRifmaMas = GlobalflagCountErrorRifmaMas + flagCountErrorRifmaMas[FragmentNumber];// количество нерифмованных строк (надо делить на два, у рифмы всегда есть пара) -сумма
-      if (flagStrofaBallMas[FragmentNumber] < GlobalflagStrofaBallMas) {
-        GlobalflagStrofaBallMas = flagStrofaBallMas[FragmentNumber]
+      GlobalflagCountRitmErrorMas = GlobalflagCountRitmErrorMas + state.flagCountRitmErrorMas[FragmentNumber];// количество сбоев ритма (сумма)
+      GlobalflagCountErrorRifmaMas = GlobalflagCountErrorRifmaMas + state.flagCountErrorRifmaMas[FragmentNumber];// количество нерифмованных строк (надо делить на два, у рифмы всегда есть пара) -сумма
+      if (state.flagStrofaBallMas[FragmentNumber] < GlobalflagStrofaBallMas) {
+        GlobalflagStrofaBallMas = state.flagStrofaBallMas[FragmentNumber]
       }
       ;// количество типов строф (в группе), если 1 - то все строфы одного размера
 
 // надо добавить вычисление максимального количества серых гласных
-      if (flagProcentCountSlogSerMas[FragmentNumber] > GlobalflagProcentCountSlogSer) {
-        GlobalflagProcentCountSlogSer = flagProcentCountSlogSerMas[FragmentNumber]
+      if (state.flagProcentCountSlogSerMas[FragmentNumber] > GlobalflagProcentCountSlogSer) {
+        GlobalflagProcentCountSlogSer = state.flagProcentCountSlogSerMas[FragmentNumber]
       }
       ;// процент серых гласных - ищем максимум
 
@@ -527,8 +533,8 @@ export function FullAnaliz(state) {
 
       if (GlobalflagProcentCountSlogSer < 50) {
         if (state.UnicStrof < 3) {
-          if (GlobalflagStrofaRazbitaMas > 0) {
-            if (GlobalflagAccentBallMas > 0) {
+          if (state.GlobalflagStrofaRazbitaMas > 0) {
+            if (state.GlobalflagAccentBallMas > 0) {
               if (state.GlobalflagCountStrofaPatternTypeMas < 4) {
                 if (state.GlobalflagRitmBallMas > 0) {
                   if (GlobalflagCountRitmErrorMas < 5) {
@@ -546,8 +552,8 @@ export function FullAnaliz(state) {
 
       if (GlobalflagProcentCountSlogSer < 40) {
         if (state.UnicStrof < 2) {
-          if (GlobalflagStrofaRazbitaMas > 0) {
-            if (GlobalflagAccentBallMas > 0) {
+          if (state.GlobalflagStrofaRazbitaMas > 0) {
+            if (state.GlobalflagAccentBallMas > 0) {
               if (state.GlobalflagCountStrofaPatternTypeMas < 4) {
                 if (state.GlobalflagRitmBallMas > 1) {
                   if (GlobalflagCountRitmErrorMas < 2) {
@@ -565,8 +571,8 @@ export function FullAnaliz(state) {
 
       if (GlobalflagProcentCountSlogSer < 30) {
         if (state.UnicStrof === 0) {
-          if (GlobalflagStrofaRazbitaMas > 0) {
-            if (GlobalflagAccentBallMas > 0) {
+          if (state.GlobalflagStrofaRazbitaMas > 0) {
+            if (state.GlobalflagAccentBallMas > 0) {
               if (state.GlobalflagCountStrofaPatternTypeMas < 3) {
                 if (state.GlobalflagRitmBallMas === 3) {
                   if (GlobalflagCountRitmErrorMas === 0) {
@@ -582,38 +588,40 @@ export function FullAnaliz(state) {
       }
 // завершение проверки критериев  ВСЕГО стихотворения (FragmentNumber=1,2,3)
 
-      if (LentaMode.checked) {
+      if (state.LentaMode.checked) {
         GlobalClassicBall = 0
       }
       ; // в режиме ленты - только неклассические
 
 
 // комментарии в кроссрежиме не нужны alex
-      if (CrossOverMode == 0 && !state.levelStrokCb) {
+      if (state.CrossOverMode === 0 && !state.levelStrokCb) {
 
 
 // обратное восстановление комментариев СТРОФА-ТИП для глобальной оценки
 
         if (state.GlobalflagCountStrofaPatternTypeMas === 1) {
-          ResumeStrofaPatternType = "Все строфы имеют регулярный размер. ";
-          flagStrofa1 = galka + "Размер регулярный!  ";
+          state.ResumeStrofaPatternType = "Все строфы имеют регулярный размер. ";
+          flagStrofa1 = state.galka + "Размер регулярный!  ";
         }
         if (state.GlobalflagCountStrofaPatternTypeMas === 2) {
-          ResumeStrofaPatternType = "Обнаружено 2 разных типа строф. Такое строение иногда используется в классических стихотворениях, но чаще всего в песнях с куплетами и припевами. ";
+          state.ResumeStrofaPatternType = "Обнаружено 2 разных типа строф. Такое строение иногда используется в классических стихотворениях, но чаще всего в песнях с куплетами и припевами. ";
           flagStrofa1 = "* Два разных типа строфы! ";
         }
         if (state.GlobalflagCountStrofaPatternTypeMas === 3) {
-          ResumeStrofaPatternType = "Обнаружено 3 разных типа строф. Такое строение редко используется в классических стихотворениях. ";
+          state.ResumeStrofaPatternType = "Обнаружено 3 разных типа строф. Такое строение редко используется в классических стихотворениях. ";
           flagStrofa1 = "* Три разных типа строфы! ";
         }
         if (state.GlobalflagCountStrofaPatternTypeMas === 4) {
-          ResumeStrofaPatternType = "Обнаружено 4 разных типа строф с размерами. Такая несогласованность размеров не характерна для классических стихотворений. ";
-          flagStrofa1 = krest + "Строфы не имеют регулярного размера! ";
+          state.ResumeStrofaPatternType = "Обнаружено 4 разных типа строф с размерами. Такая несогласованность размеров не характерна для классических стихотворений. ";
+          flagStrofa1 = state.krest + "Строфы не имеют регулярного размера! ";
           GlobalResumeCommentCountStrofaPatternTypeMas0 = "несогласованность размеров,";
         }
         if (state.GlobalflagCountStrofaPatternTypeMas > 4) {
-          ResumeStrofaPatternType = "Обнаружено " + state.GlobalflagCountStrofaPatternTypeMas + " разных типов строф. Такая несогласованность размеров не характерна для классических стихотворений. ";
-          flagStrofa1 = krest + "Строфы не имеют регулярного размера! ";
+          state.ResumeStrofaPatternType = "Обнаружено "
+            + state.GlobalflagCountStrofaPatternTypeMas
+            + " разных типов строф. Такая несогласованность размеров не характерна для классических стихотворений. ";
+          flagStrofa1 = state.krest + "Строфы не имеют регулярного размера! ";
           GlobalResumeCommentCountStrofaPatternTypeMas0 = "несогласованность размеров,";
         }
 
@@ -625,31 +633,31 @@ export function FullAnaliz(state) {
 
         if (state.GlobalflagRitmBallMas === 0) {
           CommentStopa = "В тексте не обнаружен ритм. ";
-          flagRitm1 = krest + "Ритм не найден! ";
+          flagRitm1 = state.krest + "Ритм не найден! ";
           GlobalResumeCommentRitmBallMas0 = "разнобой в ритме,";
         }
         if (state.GlobalflagRitmBallMas === 1) {
           CommentStopa = "Текст имеет слабые признаки ритма. ";
-          flagRitm1 = galka + "Ритм слабый! ";
+          flagRitm1 = state.galka + "Ритм слабый! ";
         }
         if (state.GlobalflagRitmBallMas === 2) {
           CommentStopa = "Строфы имеют явный ритмический рисунок, повторяющийся в каждой строке. ";
-          flagRitm1 = galka + "Ритм явный! ";
+          flagRitm1 = state.galka + "Ритм явный! ";
         }
         if (state.GlobalflagRitmBallMas === 3) {
           CommentStopa = "Строфы имеют очень чёткий ритмический рисунок, повторяющийся в каждой строке. ";
-          flagRitm1 = galka + "Ритм чёткий! ";
+          flagRitm1 = state.galka + "Ритм чёткий! ";
         }
 
         // === ВРЕМЕННЫЙ КОСТЫЛЬ ДЛЯ АДАПТЕРА (TODO: refactor) ===
-        _TempCommentStopa = CommentStopa;
+        state._TempCommentStopa = CommentStopa;
 
 
 
 
 // обратное восстановление комментариев РИТМ-СБОИ для глобальной оценки
         if (GlobalflagCountRitmErrorMas > 0) {
-          flagRitmError1 = krest + "Есть сбои ритма: " + GlobalflagCountRitmErrorMas + ". ";
+          flagRitmError1 = state.krest + "Есть сбои ритма: " + GlobalflagCountRitmErrorMas + ". ";
           GlobalResumeCommentRitmErrorMas0 = "отдельные сбои ритма,";
         } else {
           flagRitmError1 = "";
@@ -658,12 +666,12 @@ export function FullAnaliz(state) {
 // обратное восстановление комментариев РИФМА для глобальной оценки
 
         if (GlobalflagCountErrorRifmaMas > 0) {
-          flagErrorRifma1 = krest + "Есть сбои рифмы: " + GlobalflagCountErrorRifmaMas + ". ";
+          flagErrorRifma1 = state.krest + "Есть сбои рифмы: " + GlobalflagCountErrorRifmaMas + ". ";
           FlagRifm1 = "";
           GlobalResumeCommentCountErrorRifmaMas0 = "отсутствие рифмы в некоторых строках,";
         }
         if (GlobalflagCountErrorRifmaMas === 0) {
-          FlagRifm1 = galka + "Рифма точная! ";
+          FlagRifm1 = state.galka + "Рифма точная! ";
           flagErrorRifma1 = "";
         }
 
@@ -671,29 +679,29 @@ export function FullAnaliz(state) {
 
         if (GlobalClassicBall === 3) {
           GlobalResumeComment = 'Cтруктура ' + fragment + ' вполне соответствует канонам русского классического стихосложения. Такая форма ' + fragment + ' сравнительно легко читается и быстро запоминается. А ритмически согласованные строки естественным образом ложатся на музыку. ' + '<br><br>';
-          GlobalResumeCommentMini = greengalka + 'Структура стихотворения вполне соответствует стандартам русского классического стихосложения. ' + mobilenavigator;
+          GlobalResumeCommentMini = state.greengalka + 'Структура стихотворения вполне соответствует стандартам русского классического стихосложения. ' + mobilenavigator;
         }
 
 
         if (GlobalClassicBall === 2) {
           GlobalResumeComment = 'В целом, структура ' + fragment + ' практически соответствует канонам русского классического стихосложения. Такая форма ' + fragment + ' сравнительно легко читается и быстро запоминается. А ритмически согласованные строки естественным образом ложатся на музыку. ' + '<br><br>';
-          GlobalResumeCommentMini = greengalka + ' Структура стихотворения практически соответствует стандартам русского классического стихосложения. ' + mobilenavigator;
+          GlobalResumeCommentMini = state.greengalka + ' Структура стихотворения практически соответствует стандартам русского классического стихосложения. ' + mobilenavigator;
         }
 
         if (GlobalClassicBall === 1) {
           GlobalResumeComment = 'В целом, структура ' + fragment + ' не совсем классическая. Некоторая доработка ' + fragment + ' позволит повысить лёгкость его чтения и запоминания. А ритмически согласованные строки можно попробовать положить на музыку. ' + '<br><br>';
-          GlobalResumeCommentMini = redkrest + ' Структура стихотворения не совсем классическая. ' + mobilenavigator;
+          GlobalResumeCommentMini = state.redkrest + ' Структура стихотворения не совсем классическая. ' + mobilenavigator;
         }
 
 
-        if (GlobalClassicBall === 0 && epigramma != 1) {
+        if (GlobalClassicBall === 0 && state.epigramma !== 1) {
           state.ResumeComment = 'В целом, структура «произведения» не соответствует канонам русского классического стихосложения. Автор допустил ' + GlobalResumeCommentRitmBallMas0 + GlobalResumeCommentRitmErrorMas0 + GlobalResumeCommentCountErrorRifmaMas0 + GlobalResumeCommentCountStrofaPatternTypeMas0 + ' что в результате усложняет задачу читателям, затрудняет восприятие содержания, негативно отражается на запоминании. А попытка положить такие слова на музыку, наверняка приведёт к искажению естественных ударений в словах. ' + '<br><br>';
-          GlobalResumeCommentMini = redkrest + ' Структура стихотворения не соответствует стандартам русского классического стихосложения. ' + mobilenavigator;
+          GlobalResumeCommentMini = state.redkrest + ' Структура стихотворения не соответствует стандартам русского классического стихосложения. ' + mobilenavigator;
         }
 
-        if (GlobalflagStrofaRazbitaMas === 0 && !LentaMode.checked) {
+        if (state.GlobalflagStrofaRazbitaMas === 0 && !state.LentaMode.checked) {
           state.ResumeComment = 'Одной строфы недостаточно, чтобы считать данный текст стихотворением. ' + '<br><br>';
-          GlobalResumeCommentMini = krest + 'Одной строфы недостаточно, чтобы считать данный текст стихотворением. ' + '<br><br>';
+          GlobalResumeCommentMini = state.krest + 'Одной строфы недостаточно, чтобы считать данный текст стихотворением. ' + '<br><br>';
         }
 
 
@@ -705,35 +713,35 @@ export function FullAnaliz(state) {
 
     if (state.ClassicBall === 3) {
       state.ResumeComment = 'Cтруктура ' + fragment + ' вполне соответствует канонам русского классического стихосложения. Такая форма ' + fragment + ' сравнительно легко читается и быстро запоминается. А ритмически согласованные строки естественным образом ложатся на музыку. ' + '<br><br>';
-      state.ResumeCommentMini = greengalka + ' Структура ' + fragment + ' вполне соответствует стандартам русского классического стихосложения. ';
+      state.ResumeCommentMini = state.greengalka + ' Структура ' + fragment + ' вполне соответствует стандартам русского классического стихосложения. ';
     }
 
 
     if (state.ClassicBall === 2) {
       state.ResumeComment = 'В целом, структура ' + fragment + ' практически соответствует канонам русского классического стихосложения. Такая форма ' + fragment + ' сравнительно легко читается и быстро запоминается. А ритмически согласованные строки естественным образом ложатся на музыку. ' + '<br><br>';
-      state.ResumeCommentMini = greengalka + ' Структура ' + fragment + ' практически соответствует стандартам русского классического стихосложения. ';
+      state.ResumeCommentMini = state.greengalka + ' Структура ' + fragment + ' практически соответствует стандартам русского классического стихосложения. ';
     }
 
     if (state.ClassicBall === 1) {
       state.ResumeComment = 'В целом, структура ' + fragment + ' не совсем классическая. Некоторая доработка ' + fragment + ' позволит повысить лёгкость его чтения и запоминания. А ритмически согласованные строки можно попробовать положить на музыку. <br><br>Только после этого можно рассматривать возможность публикации стихотворения в альманахе «Венец поэзии». ' + '<br><br>';
-      state.ResumeCommentMini = redkrest + ' Структура ' + fragment + ' не совсем классическая. ';
-      state.ResumeCommentMini = redkrest + ' Структура ' + fragment + ' не совсем классическая. ';
+      state.ResumeCommentMini = state.redkrest + ' Структура ' + fragment + ' не совсем классическая. ';
+      state.ResumeCommentMini = state.redkrest + ' Структура ' + fragment + ' не совсем классическая. ';
     }
 
-    if (state.ClassicBall === 0 && epigramma != 1) {
+    if (state.ClassicBall === 0 && state.epigramma !== 1) {
       state.ResumeComment = 'В целом, структура «произведения» не соответствует канонам русского классического стихосложения. Автор допустил ' + FragmentResumeComment + ' что усложняет задачу читателю, затрудняет ему восприятие содержания. Такой текст труднее запомнить и воспроизвести. А попытка положить такие слова на музыку, наверняка приведёт к искажению естественных ударений в словах. <br><br>Такие произведения не подлежат  публикации в  альманахе «Венец поэзии». ' + '<br><br>';
-      state.ResumeCommentMini = redkrest + ' Структура ' + fragment + ' не соответствует стандартам русского классического стихосложения. ';
+      state.ResumeCommentMini = state.redkrest + ' Структура ' + fragment + ' не соответствует стандартам русского классического стихосложения. ';
     }
 
-    if (GlobalflagStrofaRazbitaMas === 0 && !LentaMode.checked) {
+    if (state.GlobalflagStrofaRazbitaMas === 0 && !state.LentaMode.checked) {
       state.ResumeComment = 'Одной строфы недостаточно, чтобы считать данный текст стихотворением. ' + '<br>';
-      state.ResumeCommentMini = krest + 'Одной строфы недостаточно, чтобы считать данный текст стихотворением. ' + '<br>';
+      state.ResumeCommentMini = state.krest + 'Одной строфы недостаточно, чтобы считать данный текст стихотворением. ' + '<br>';
     }
 
 
     state.ContainerAnaliz1 = TitleComment + "<br><br>"
       + state.razmerComment + state.RitmComment
-      + RifmComment + state.ResumeComment;
+      + state.RifmComment + state.ResumeComment;
 
 
 // запомним комментарий по всему стихотворению, чтобы вернуть его после обработки ленты
@@ -755,7 +763,7 @@ export function FullAnaliz(state) {
     // если текст короткий - заменить на пустой и очистить комментарии ???
     let nexttext = state.OriginalTextInput;
     GroupStrofMas = nexttext.split("\n");
-    if (GroupStrofMas.length < 4 && CrossOverMode == 0) {
+    if (GroupStrofMas.length < 4 && state.CrossOverMode === 0) {
       state.OriginalTextInput = "";
       state.ContainerComment1 = "";
       state.ContainerFlag1 = "";
@@ -772,7 +780,7 @@ export function FullAnaliz(state) {
     if (state.GroupStrof.length > 1 && FragmentNumber > 0) {
       // todo - ! REFACTOR
 
-      lenta = lenta + 1;
+      state.lenta = state.lenta + 1;
 
       tableRef = document.getElementById('global-table1'); // находим таблицу
 
@@ -790,56 +798,56 @@ export function FullAnaliz(state) {
       nextrow.classList.add("lenta");
 
       elem = nextrow.innerHTML;
-      elem = elem.replace(/ContainerFlag1/g, 'ContainerFlag' + lenta); // id-метку надо переименовать (извлекаем html, делаем текстовую замену и возвращаем)
+      elem = elem.replace(/ContainerFlag1/g, 'ContainerFlag' + state.lenta); // id-метку надо переименовать (извлекаем html, делаем текстовую замену и возвращаем)
       nextrow.innerHTML = elem;
       nextrow1.innerHTML = elem;
-      nextrow1.id = 'lenta1-' + lenta;  // новое имя всему блоку
+      nextrow1.id = 'lenta1-' + state.lenta;  // новое имя всему блоку
 
       nextrow2 = row2.cloneNode(true); // клонируем
       nextrow = tableRef.appendChild(nextrow2); // добавляем в конец таблицы
       nextrow.classList.add("lenta");
 
       elem = nextrow.innerHTML;
-      elem = elem.replace(/ContainerComment1/g, 'ContainerComment' + lenta); // id-метку надо переименовать
+      elem = elem.replace(/ContainerComment1/g, 'ContainerComment' + state.lenta); // id-метку надо переименовать
       nextrow.innerHTML = elem;
       nextrow2.innerHTML = elem;
-      nextrow2.id = 'lenta2-' + lenta;
+      nextrow2.id = 'lenta2-' + state.lenta;
 
       nextrow3 = row3.cloneNode(true); // клонируем, в этом блоке три id-метки, их надо переименовать
       nextrow = tableRef.appendChild(nextrow3); // добавляем в конец таблицы
       nextrow.classList.add("lenta");
 
       elem = nextrow.innerHTML;
-      elem = elem.replace(/ContainerTemplate1/g, 'ContainerTemplate' + lenta);// id-метку надо переименовать
+      elem = elem.replace(/ContainerTemplate1/g, 'ContainerTemplate' + state.lenta);// id-метку надо переименовать
       nextrow.innerHTML = elem;
       nextrow3.innerHTML = elem;
-      nextrow3.id = 'lenta3-' + lenta;
+      nextrow3.id = 'lenta3-' + state.lenta;
 
 
       elem = nextrow.innerHTML;
-      elem = elem.replace(/ContainerAnaliz1/g, 'ContainerAnaliz' + lenta);// id-метку надо переименовать
+      elem = elem.replace(/ContainerAnaliz1/g, 'ContainerAnaliz' + state.lenta);// id-метку надо переименовать
       nextrow.innerHTML = elem;
       nextrow3.innerHTML = elem;
 
       elem = nextrow.innerHTML;
-      elem = elem.replace(/ContainerAnaliz1f/g, 'ContainerAnaliz' + lenta + 'f');// id-метку надо переименовать
+      elem = elem.replace(/ContainerAnaliz1f/g, 'ContainerAnaliz' + state.lenta + 'f');// id-метку надо переименовать
       nextrow.innerHTML = elem;
       nextrow3.innerHTML = elem;
 
 // тест переносим последним =============
 
       elem = nextrow.innerHTML;
-      elem = elem.replace(/formStih1/g, 'formStih' + lenta);// name-метку  надо переименовать
+      elem = elem.replace(/formStih1/g, 'formStih' + state.lenta);// name-метку  надо переименовать
       nextrow.innerHTML = elem;
       nextrow3.innerHTML = elem;
 
       elem = nextrow.innerHTML;
-      elem = elem.replace(/TextStih1/g, 'TextStih' + lenta);// name-метку  надо переименовать
+      elem = elem.replace(/TextStih1/g, 'TextStih' + state.lenta);// name-метку  надо переименовать
       nextrow.innerHTML = elem;
       nextrow3.innerHTML = elem;
 
-      elem = document.getElementsByName('formStih' + lenta)[0];// ищем name-метку
-      console.log('!elem', 'formStih' + lenta, elem);
+      elem = document.getElementsByName('formStih' + state.lenta)[0];// ищем name-метку
+      console.log('!elem', 'formStih' + state.lenta, elem);
       if (elem) {
         textfragment = state.OriginalTextInput; // переносим текст из первого блока
         const target = elem.TextStih;
@@ -847,32 +855,32 @@ export function FullAnaliz(state) {
         // elem.TextStih.value = textfragment;
       }
 
-      lentacount = lenta;
+      state.lentacount = state.lenta;
 // потом искать будем по номерам строк tableRef.rows[1] с шагом 3 или по новым id (второй способ пригодился для очистки форм)
 
 
 // заодно перенесём очередной ContainerTemplate из текущей позиции ленты в первый блок вместе с легендой  (если режим ленты)
-      if (LentaMode.checked) {
-        NextID = 'ContainerTemplate' + lenta;
+      if (state.LentaMode.checked) {
+        NextID = 'ContainerTemplate' + state.lenta;
         elem = document.getElementById(NextID).innerHTML;
         elem2 = elem.replace(/NextID/g, '');// id-метку надо убрать
         FullContainerTemplate = FullContainerTemplate + elem2 + '<br>';
       }
 
 //--------------------- блоку шаблона присваиваем класс (даже не в режиме ленты)
-      NextID = 'ContainerTemplate' + lenta;
+      NextID = 'ContainerTemplate' + state.lenta;
       elem = document.getElementById(NextID);
-      elem.classList.add("ContainerTemplate" + lenta);
+      elem.classList.add("ContainerTemplate" + state.lenta);
 
 //--------------------- заодно запомним ритм блока ??? это для кросс-анализа
       console.log("Ritm ================================================================================");
-      console.log(lenta);
+      console.log(state.lenta);
       console.log(state.Ritm);
-      console.log(CrossRitm);
+      console.log(state.CrossRitm);
 //--------------------- сформировать массив числового ритма в виде текстовых значений чисел, разделённых запятыми. Одна строФА стиха - одна строка ритма.
 
-      CrossLentaRitm[lenta] = CrossRitm.join(',');
-      console.log(CrossLentaRitm[lenta]);
+      state.CrossLentaRitm[state.lenta] = state.CrossRitm.join(',');
+      console.log(state.CrossLentaRitm[state.lenta]);
 
 //формируем массив числового ритма в виде текстовых значений чисел, разделённых запятыми. Одна строка стиха - одна строка ритма.
 //считаем количество строк в строфе
@@ -884,15 +892,15 @@ export function FullAnaliz(state) {
 
       for (let q = 0; q < kolStrokTemplateGlasn; q++) {
         countStrokTemplateGlasn = countStrokTemplateGlasn + 1;
-        CrossRitmStrofa[countStrokTemplateGlasn] = CrossLentaRitm[lenta];
+        state.CrossRitmStrofa[countStrokTemplateGlasn] = state.CrossLentaRitm[state.lenta];
       }
 
 
 //--------------------- заодно запомним шаблон гласных  ??? TemplateGlasn -- CrossTemplateGlasn
-      CrossTemplateGlasn[lenta] = state.TemplateGlasn;
-      console.log(CrossTemplateGlasn[lenta]);
+      state.CrossTemplateGlasn[state.lenta] = state.TemplateGlasn;
+      console.log(state.CrossTemplateGlasn[state.lenta]);
 //--------------------- заодно запомним в NewAccentLentaText сам текст стихотворения с расставленными построфно ударениями textfragment
-      NewAccentLentaText = NewAccentLentaText + textfragment;
+      state.NewAccentLentaText = state.NewAccentLentaText + textfragment;
 
     }
 
@@ -902,57 +910,59 @@ export function FullAnaliz(state) {
 
 // выводим глобальную интегрированную оценку==============================================================================================
 
-  ProcentCountSlogSer = Math.round(state.CountSlogSer / state.CountSlog * 100);
+  state.ProcentCountSlogSer = Math.round(state.CountSlogSer / state.CountSlog * 100);
 
 // процент серых гласных как сумма серых по фрагментам от отобщего количества гласных (кроме первого фрагмента)
   if (state.GroupStrof.length > 2) {
-    ProcentCountSlogSer = Math.round(SumSlogSer / state.CountSlog * 100);
+    state.ProcentCountSlogSer = Math.round(SumSlogSer / state.CountSlog * 100);
   }
 
-  window.ProcentCountSlogSer = ProcentCountSlogSer;
-  rezumeProcentCountSlogSer = "Слабоударных (смешанных) гласных:" + ProcentCountSlogSer + "%  ";
+  // state.ProcentCountSlogSer = state.ProcentCountSlogSer; // todo - check logic
+  rezumeProcentCountSlogSer = "Слабоударных (смешанных) гласных:" + state.ProcentCountSlogSer + "%  ";
 
-  if (ProcentCountSlogSer > 40) {
-    rezumeProcentCountSlogSer = ' Слишком много слабоударных (смешанных) гласных:<span style="color:#FF0000 ; font-weight: bold;">' + ProcentCountSlogSer + '%  &nbsp;</span>';
+  if (state.ProcentCountSlogSer > 40) {
+    rezumeProcentCountSlogSer = ' Слишком много слабоударных (смешанных) гласных:<span style="color:#FF0000 ; font-weight: bold;">'
+      + state.ProcentCountSlogSer + '%  &nbsp;</span>';
   }
-  ;
-  if (ProcentCountSlogSer <= 40) {
-    rezumeProcentCountSlogSer = ' Количество слабоударных (смешанных) гласных в норме:<span style="color:#FF0000 ; font-weight: bold;">' + ProcentCountSlogSer + '%  &nbsp;</span>';
+
+  if (state.ProcentCountSlogSer <= 40) {
+    rezumeProcentCountSlogSer = ' Количество слабоударных (смешанных) гласных в норме:<span style="color:#FF0000 ; font-weight: bold;">'
+      + state.ProcentCountSlogSer + '%  &nbsp;</span>';
   }
   ;
 
   if (state.CountStrofaRitmEr > 0) {
-    flagCountStrofaRitmEr = krest + "Сбойных строф:" + state.CountStrofaRitmEr + " ";
+    flagCountStrofaRitmEr = state.krest + "Сбойных строф:" + state.CountStrofaRitmEr + " ";
   } else {
     flagCountStrofaRitmEr = "";
   }
   ;
 
 
-  if (CrossOverMode == 1) {
-    RifmComment = "";
-    FlagRifm = "";
+  if (state.CrossOverMode === 1) {
+    state.RifmComment = "";
+    state.FlagRifm = "";
     FlagRifm1 = "";
     state.flagCountErrorRifma = 0;
-    flagErrorRifma = "";
+    state.flagErrorRifma = "";
     flagErrorRifma1 = "";
     state.flagRifmBall = 1;
   }
   ; // в режиме кроссовера рифма не учитывается
 
-  if (CrossOverMode == 1 && !state.levelStrokCb) {
-    GlobalResumeCommentMini = krest + "Не классическое произведение. Каждая строка в строфе имеет свой ритм. ";
-    flagRitm1 = krest + "Единого ритма нет! ";
+  if (state.CrossOverMode === 1 && !state.levelStrokCb) {
+    GlobalResumeCommentMini = state.krest + "Не классическое произведение. Каждая строка в строфе имеет свой ритм. ";
+    flagRitm1 = state.krest + "Единого ритма нет! ";
   }
   ;
 
   if (state.levelStrokCb) {
-    GlobalResumeCommentMini = galka + "Вы выбрали анализ на уровне отдельных строк. Другие варианты анализа могут дать другие результаты. Не забудьте проверить правильность расстановки ударений.";
+    GlobalResumeCommentMini = state.galka + "Вы выбрали анализ на уровне отдельных строк. Другие варианты анализа могут дать другие результаты. Не забудьте проверить правильность расстановки ударений.";
     flagRitm1 = "";
   }
   ;
   if (document.getElementById('level-strof').checked) {
-    GlobalResumeCommentMini = galka + "Вы выбрали анализ на уровне отдельных строф. Другие варианты анализа могут дать другие результаты. Не забудьте проверить правильность расстановки ударений.";
+    GlobalResumeCommentMini = state.galka + "Вы выбрали анализ на уровне отдельных строф. Другие варианты анализа могут дать другие результаты. Не забудьте проверить правильность расстановки ударений.";
     flagRitm1 = "";
   }
   ;
@@ -961,20 +971,28 @@ export function FullAnaliz(state) {
 
 
   if (state.levelStrokCb) {
-    state.ContainerAnaliz1 = "Структурный анализ стихотворения «" + TitulStihReport + "» подготовлен интеллектуальной системой Fet.Online&nbsp; (свидетельство Роспатента от 22.03.2021 №2021614295).<br><br>Анализ ритма проводился на уровне отдельных строк. Ниже приводится анализ строк, имеющих схожий размер и ритм.";
+    state.ContainerAnaliz1 = "Структурный анализ стихотворения «"
+      + state.TitulStihReport
+      + "» подготовлен интеллектуальной системой Fet.Online&nbsp; (свидетельство Роспатента от 22.03.2021 №2021614295).<br><br>Анализ ритма проводился на уровне отдельных строк. Ниже приводится анализ строк, имеющих схожий размер и ритм.";
   }
-  ;
-  if (!state.levelStrokCb && CrossOverMode == 1) {
-    state.ContainerAnaliz1 = "Структурный анализ стихотворения «" + TitulStihReport + "» подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295).<br><br>Каждая строка в строфе имеет свой ритм, что характерно для неклассических произведений. Ниже приводится анализ строк, имеющих схожий размер и ритм. ";
-  }
-  ;
 
-  if (LentaMode.checked && CrossOverMode == 0) {
-    state.ContainerAnaliz1 = "Структурный анализ стихотворения «" + TitulStihReport + "» подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295).<br><br>Не удалось определить единый ритм для всего стихотворения. Ниже приводится анализ каждой строфы по-отдельности. ";
+  if (!state.levelStrokCb && state.CrossOverMode === 1) {
+    state.ContainerAnaliz1 = "Структурный анализ стихотворения «"
+      + state.TitulStihReport
+      + "» подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295).<br><br>Каждая строка в строфе имеет свой ритм, что характерно для неклассических произведений. Ниже приводится анализ строк, имеющих схожий размер и ритм. ";
   }
-  ;
+
+
+  if (state.LentaMode.checked && state.CrossOverMode === 0) {
+    state.ContainerAnaliz1 = "Структурный анализ стихотворения «"
+      + state.TitulStihReport
+      + "» подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295).<br><br>Не удалось определить единый ритм для всего стихотворения. Ниже приводится анализ каждой строфы по-отдельности. ";
+  }
+
   if (document.getElementById('level-strof').checked) {
-    state.ContainerAnaliz1 = "Структурный анализ стихотворения «" + TitulStihReport + "» подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295).<br><br>Анализ ритма проводился на уровне отдельных строф. Ниже приводится анализ каждой строфы по-отдельности. ";
+    state.ContainerAnaliz1 = "Структурный анализ стихотворения «" +
+      state.TitulStihReport
+      + "» подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295).<br><br>Анализ ритма проводился на уровне отдельных строф. Ниже приводится анализ каждой строфы по-отдельности. ";
   }
   ;
 
@@ -991,16 +1009,17 @@ export function FullAnaliz(state) {
 
 
 //if (FlagStrofaMultiPatternType===1 && !LentaMode.checked) {
-  if (FlagStrofaMultiPatternType === 1) {
+  if (state.FlagStrofaMultiPatternType === 1) {
 
 // NoLentaComment=TitleComment+"<br><br>"+razmerComment+CommentGroupStrof+ResumeLentaMode;}
     NoLentaComment = Comment0;
 
     state.ContainerAnaliz1 = Comment0;
     Comment0 = "";
-    state.ContainerAnaliz1 = state.ContainerAnaliz1 + GlobalResumeCommentMini + "<br><br>" + ResumeLentaMode + "<br><br>";
+    state.ContainerAnaliz1 = state.ContainerAnaliz1 + GlobalResumeCommentMini + "<br><br>"
+      + state.ResumeLentaMode + "<br><br>";
   }
-  ;
+
 
 // выводим в отчёт базовые характеристики стиха====================================================================================================
 
@@ -1016,20 +1035,20 @@ export function FullAnaliz(state) {
 // document.getElementById('openrecordstih1').style.display='none';
 // }
 
-  if (window.project != 'epigramma' && epigramma == 1) {
+  if (project !== 'epigramma' && state.epigramma === 1) {
     state.ClassicBall = 0;
     GlobalClassicBall = 0;
-    flagErrorRifma = "";
-    GlobalflagStrofaRazbitaMas = 0;
+    state.flagErrorRifma = "";
+    state.GlobalflagStrofaRazbitaMas = 0;
     state.ContainerComment1 = "Редакция альманаха «Венец поэзии» принимает стихи такого размера только в рамках специальных проектов.";
     state.ContainerAnaliz1f = "Редакция альманаха «Венец поэзии» принимает стихи такого размера только в рамках специальных проектов.";
     // document.getElementById('openrecordstih1').style.display = 'none';
   }
 
-  if (window.project == "epigramma" && epigrammatype == "") {
+  if (project === "epigramma" && state.epigrammatype === "") {
     state.ClassicBall = 0;
     GlobalClassicBall = 0;
-    flagErrorRifma = "";
+    state.flagErrorRifma = "";
     state.ContainerAnaliz1 = "В режиме поэтических миниатюр принимаются только четверостишия определённого формата.  Для просмотра форматов нажмите кнопку «Пример».";
     state.ContainerComment1 = "В режиме поэтических миниатюр принимаются только четверостишия определённого формата. ";
     state.ContainerAnaliz1f = "";
@@ -1037,17 +1056,17 @@ export function FullAnaliz(state) {
   }
 
 
-  if (GlobalClassicBall === 3 && window.project != 'zadanie') {
+  if (GlobalClassicBall === 3 && project !== 'zadanie') {
     // document.getElementById('openrecordstih1').style.display = '';
   }
-  if (GlobalClassicBall === 2 && window.project != 'zadanie') {
+  if (GlobalClassicBall === 2 && project !== 'zadanie') {
     // document.getElementById('openrecordstih1').style.display = '';
   }
-  if (GlobalClassicBall === 3 && window.project != 'zadanie') {
+  if (GlobalClassicBall === 3 && project !== 'zadanie') {
     // document.getElementById('openrecordstih2').style.display = '';
     // document.getElementById('TextStih1').readOnly = 'true';
   }
-  if (GlobalClassicBall === 2 && window.project != 'zadanie') {
+  if (GlobalClassicBall === 2 && project !== 'zadanie') {
     // document.getElementById('openrecordstih2').style.display = '';
     // document.getElementById('TextStih1').readOnly = 'true';
   }
@@ -1081,26 +1100,30 @@ export function FullAnaliz(state) {
   let separ = "\n=\n";
 
 // контакты автора var FIOAuthorReport;var GodAuthorReport;var AdresAuthorReport;var EmailAuthorReport;
-  stihReport = stih; // исходный стих
-  StrofaPatternReport = state.StrofaPatternTypeMas[0]; //размер
+  const stihReport = state.stih; // исходный стих
+  state.StrofaPatternReport = state.StrofaPatternTypeMas[0]; //размер
   state.RitmReport = state.Ritm.join(); // массив в виде строки
   state.RitmReportInt = state.RitmReport.replace(/,/g, '');
-  ResumeCommentMiniReport = state.ContainerComment1; // резюме
-  ContainerFlag1Report = state.ContainerFlag1; // флаги
-  ContainerAnaliz1Report = state.ContainerAnaliz1; // Полный анализ
+  const ResumeCommentMiniReport = state.ContainerComment1; // резюме
+  const ContainerFlag1Report = state.ContainerFlag1; // флаги
+  const ContainerAnaliz1Report = state.ContainerAnaliz1; // Полный анализ
 
 // формируем отчёт для сборника стихов с фамилиями, баллами и анализом
-  Report = TitulStihReport + tab + StrofaPatternReport + tab + state.RitmReport + tab + state.flagCountStrofaPatternType + tab
+  const Report = state.TitulStihReport + tab + state.StrofaPatternReport + tab + state.RitmReport
+    + tab + state.flagCountStrofaPatternType + tab
     + state.flagRitmBall
-    + tab + state.flagRifmBall + tab + state.UnicStrof + tab + FIOAuthorReport + tab + AdresAuthorReport + tab + EmailAuthorReport;
+    + tab + state.flagRifmBall + tab + state.UnicStrof
+    // + tab + FIOAuthorReport + tab + AdresAuthorReport + tab + EmailAuthorReport
+  ;
 
 // формируем отчёт для сборника стихов с фамилиями, баллами без анализа
-  Report2 = StrofaPatternReport + separ + state.RitmReport + separ + state.flagCountStrofaPatternType + separ
-    + state.flagRitmBall + separ + state.flagRifmBall + separ + state.UnicStrof + separ + FIOAuthorReport + separ
-    + AdresAuthorReport + separ + EmailAuthorReport + separ;
+  const Report2 = state.StrofaPatternReport + separ + state.RitmReport + separ + state.flagCountStrofaPatternType + separ
+    + state.flagRitmBall + separ + state.flagRifmBall + separ + state.UnicStrof
+    // + separ + FIOAuthorReport + separ + AdresAuthorReport + separ + EmailAuthorReport + separ
+  ;
 
 // если запись не отключена - вносим блок во все отчёты ----------------------------------------------------------------------------------------
-  let SaveRecord = document.getElementById("SaveRecord").checked;
+  let SaveRecord = state.SaveRecord.checked;
   if (SaveRecord) {
 
 // формируем отчёт для сборника стихов с акцентами без анализа ----- lenta
@@ -1114,33 +1137,33 @@ export function FullAnaliz(state) {
 
 // формируем отчёт по сборнику в виде csv для последующей загрузки в базу
     if (GlobalClassicBall > 1) {
-      ReportTab = ReportTab + "'';'';'" + window.lastnameReport + "';'" + window.firstnameReport + "';'" + window.middlenameReport +
+      state.ReportTab = state.ReportTab + "'';'';'" + window.lastnameReport + "';'" + window.firstnameReport + "';'" + window.middlenameReport +
         "';'" + window.regionReport + "';'" + window.sityReport + "';'" + window.phoneReport + "';'" + window.emailReport + "';'" +
-        window.rubrikaReport + "';'" + TitulStihReport + "';'" + state.OriginalTextInput + "';'" + window.targetReport +
-        "';'" + state.flagCountStrofaPatternType + "';'" + Strof + "';'" + StrofaPatternReport + "';'" + state.RitmReport.replace(/,/g, '') +
+        window.rubrikaReport + "';'" + state.TitulStihReport + "';'" + state.OriginalTextInput + "';'" + window.targetReport +
+        "';'" + state.flagCountStrofaPatternType + "';'" + state.Strof + "';'" + state.StrofaPatternReport + "';'" + state.RitmReport.replace(/,/g, '') +
         "';'" + state.flagCountRitmError + "';'" + state.flagRitmBall + "';'" + state.flagRifmBall + "';'" + GlobalClassicBall +
-        "';'" + window.ProcentCountSlogSer + "';'" + window.BallContentManual + "';'" + window.urlReport + "';'" + window.styleReport +
+        "';'" + state.ProcentCountSlogSer + "';'" + window.BallContentManual + "';'" + window.urlReport + "';'" + window.styleReport +
         "';'" + window.sourceReport + "';'" + window.accordsReport + "'" + "\n";
     }
 
 
 // сохраняем файл сборника стихов с акцентами без анализа
-    ReportAccent = ReportAccent + state.OriginalTextInput + separ;
+    state.ReportAccent = state.ReportAccent + state.OriginalTextInput + separ;
 // сохраняем файл сборника стихов с акцентами без анализа раздельно, в зависимости от балла-классики (3-классика)
     if (GlobalClassicBall === 0) {
-      ReportAccentBall0 = ReportAccentBall0 + state.OriginalTextInput + BallContentManualText + separ;
+      state.ReportAccentBall0 = state.ReportAccentBall0 + state.OriginalTextInput + BallContentManualText + separ;
     }
 
     if (GlobalClassicBall === 1) {
-      ReportAccentBall1 = ReportAccentBall1 + state.OriginalTextInput + BallContentManualText + separ;
+      state.ReportAccentBall1 = state.ReportAccentBall1 + state.OriginalTextInput + BallContentManualText + separ;
     }
 
     if (GlobalClassicBall === 2) {
-      ReportAccentBall2 = ReportAccentBall2 + state.OriginalTextInput + BallContentManualText + separ;
+      state.ReportAccentBall2 = state.ReportAccentBall2 + state.OriginalTextInput + BallContentManualText + separ;
     }
 
     if (GlobalClassicBall === 3) {
-      ReportAccentBall3 = ReportAccentBall3 + state.OriginalTextInput + BallContentManualText + separ;
+      state.ReportAccentBall3 = state.ReportAccentBall3 + state.OriginalTextInput + BallContentManualText + separ;
     }
 
 
@@ -1149,19 +1172,19 @@ export function FullAnaliz(state) {
 
 // сохраняем файл сборника стихов с акцентами и анализом раздельно, в зависимости от балла-классики (3-классика)
     if (GlobalClassicBall === 0) {
-      ReportMasBall0 = ReportMasBall0 + FragmentReports + separ + "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+      state.ReportMasBall0 = state.ReportMasBall0 + FragmentReports + separ + "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
     }
 
     if (GlobalClassicBall === 1) {
-      ReportMasBall1 = ReportMasBall1 + FragmentReports + separ + "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+      state.ReportMasBall1 = state.ReportMasBall1 + FragmentReports + separ + "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
     }
 
     if (GlobalClassicBall === 2) {
-      ReportMasBall2 = ReportMasBall2 + FragmentReports + separ + "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+      state.ReportMasBall2 = state.ReportMasBall2 + FragmentReports + separ + "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
     }
 
     if (GlobalClassicBall === 3) {
-      ReportMasBall3 = ReportMasBall3 + FragmentReports + separ + "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+      state.ReportMasBall3 = state.ReportMasBall3 + FragmentReports + separ + "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
     }
 
 
@@ -1175,7 +1198,9 @@ export function FullAnaliz(state) {
 
 // сохранение отчёта в файл // todo -- check state usage in report text
   const reportText = '<div  style="line-height: 2;"><br>Ещё вы можете:<br>' +
-    '<a href="https://fet.vpoezii.online/findritm.php?razmer=' + StrofaPatternReport + '&ritm=' + state.RitmReportInt + '&ritmkontrastplus=' + ritmkontrastplus + '&ritmkontrastminus=' + ritmkontrastminus + '' +
+    '<a href="https://fet.vpoezii.online/findritm.php?razmer=' + state.StrofaPatternReport + '&ritm=' + state.RitmReportInt
+    + '&ritmkontrastplus=' + state.ritmkontrastplus
+    + '&ritmkontrastminus=' + state.ritmkontrastminus + '' +
     '"  target="_blank">Найти стихи или песни с аналогичным ритмом и размером</a><br>' +
     `<a href="#" onClick="grekinsert(state); return false;">Узнать греческое название этого размера</a><br>` +
     '<a href="#" onClick="atoprint(\'shema\'); return false;">Напечатать схему ритма стихотворения</a><br>' +
@@ -1185,7 +1210,7 @@ export function FullAnaliz(state) {
 
 //==================================================================================
 // если режим ленты, то перенесём FullContainerTemplate в первый блок и уберём легенду
-  if (LentaMode.checked && 1 == 2) {
+  if (state.LentaMode.checked && false) { // todo - fix if
     state.ContainerTemplate1 = FullContainerTemplate;
 
     /*
@@ -1198,23 +1223,23 @@ export function FullAnaliz(state) {
   // перенесли FullContainerTemplate в первый блок и убрали легенду
   // вернём комментарий по всему стихотворению в первое поле после обработки ленты
 
-    ResumeLentaMode = krest + ' Структура стихотворения не соответствует стандартам русского классического стихосложения. Нет единого ритма для всего стихотворения. Одинаковые по размеру строфы имеют разный ритм. Ниже приводится анализ каждой строфы по отдельности.';
+    state.ResumeLentaMode = state.krest + ' Структура стихотворения не соответствует стандартам русского классического стихосложения. Нет единого ритма для всего стихотворения. Одинаковые по размеру строфы имеют разный ритм. Ниже приводится анализ каждой строфы по отдельности.';
 
-    if (CrossOverMode == 1) {
-      ResumeLentaMode = krest + ' Структура стихотворения не соответствует стандартам русского классического стихосложения. Нет единого ритма для всего стихотворения. Каждая строка в строфе имеет свой ритм. Обнаружено некоторое повторение ритма только между строфами. Ниже приводится анализ сгруппированных строк, имеющих схожий ритм и размер.';
+    if (state.CrossOverMode === 1) {
+      state.ResumeLentaMode = state.krest + ' Структура стихотворения не соответствует стандартам русского классического стихосложения. Нет единого ритма для всего стихотворения. Каждая строка в строфе имеет свой ритм. Обнаружено некоторое повторение ритма только между строфами. Ниже приводится анализ сгруппированных строк, имеющих схожий ритм и размер.';
     }
 
     if (state.levelStrokCb) {
-      ResumeLentaMode = krest + "Анализ проводился на уровне отдельных строк. Другие варианты анализа могут дать другие результаты.";
+      state.ResumeLentaMode = state.krest + "Анализ проводился на уровне отдельных строк. Другие варианты анализа могут дать другие результаты.";
     }
 
     if (document.getElementById('level-strof').checked) {
-      ResumeLentaMode = krest + "Анализ проводился на уровне отдельных строф. Другие варианты анализа могут дать другие результаты.";
+      state.ResumeLentaMode = state.krest + "Анализ проводился на уровне отдельных строф. Другие варианты анализа могут дать другие результаты.";
     }
 
 
 
-    state.ContainerAnaliz1 = NoLentaComment + ResumeLentaMode + "<br><br>";
+    state.ContainerAnaliz1 = NoLentaComment + state.ResumeLentaMode + "<br><br>";
 
   }
 

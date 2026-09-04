@@ -1,9 +1,9 @@
 export function CrossAnaliz(state) {
 // проводим ленточный анализ - каждая строфа отдельно
   console.log('проводим перекрестный анализ');
-  CrossOverMode = 1;
-  LentaMode.checked = true; // ленточный режим
-  SaveRecord.checked = false; // запись не нужна
+  state.CrossOverMode = 1;
+  state.LentaMode.checked = true; // ленточный режим
+  state.SaveRecord.checked = false; // запись не нужна
 // удаляем ленту-элементы с классом lenta
   document.querySelectorAll('.lenta').forEach(function (a) {
     a.remove()
@@ -20,7 +20,7 @@ export function CrossAnaliz(state) {
   }
   FullAnaliz(state);
   CreateCrossOverStrof(state);
-  LentaMode.checked = true;
+  state.LentaMode.checked = true;
   FullAnaliz(state);
   ReturnCrossOverStrof(state);
   /*
@@ -28,5 +28,5 @@ export function CrossAnaliz(state) {
     window.scroll({top: 110, left: 0, behavior: 'smooth'})
   }
   */
-  TriCodCount();
+  TriCodCount(state);
 }

@@ -1,6 +1,6 @@
 /** @param state {FetoState} */
 export function grekinsert(state) {
-  if (CountStrofaPatternType > 1) {
+  if (state.CountStrofaPatternType > 1) {
     return;
   }
   let grektextinsert = grek(state);

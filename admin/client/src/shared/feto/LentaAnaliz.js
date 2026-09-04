@@ -2,9 +2,9 @@
 export function LentaAnaliz(state) {
 // проводим ленточный анализ - каждая строфа отдельно
   console.log('проводим ленточный анализ');
-  CrossOverMode = 0;
-  LentaMode.checked = true; // ленточный режим
-  SaveRecord.checked = false; // запись не нужна
+  state.CrossOverMode = 0;
+  state.LentaMode.checked = true; // ленточный режим
+  state.SaveRecord.checked = false; // запись не нужна
 // удаляем ленту-элементы с классом lenta
   document.querySelectorAll('.lenta').forEach(function (a) {
     a.remove()
@@ -25,5 +25,5 @@ export function LentaAnaliz(state) {
   }
    */
 
-  TriCodCount();
+  TriCodCount(state);
 }

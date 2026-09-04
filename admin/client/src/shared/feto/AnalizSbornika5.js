@@ -1,14 +1,14 @@
 /** @param state {FetoState} */
 export function AnalizSbornika5(state) {
-  SbornikCount = Number(document.getElementById("SbornikCount").value);
+  // SbornikCount = Number(document.getElementById("SbornikCount").value);
   LentaClearFormStih();
   state.flagSetAccent = 0;
-  state.OriginalTextInput = SbornikMas[SbornikCount];
+  state.OriginalTextInput = state.SbornikMas[state.SbornikCount];
 
-  FIOAuthorReport = SbornikMas[SbornikCount + 1];
-  GodAuthorReport = SbornikMas[SbornikCount + 2];
-  AdresAuthorReport = SbornikMas[SbornikCount + 3];
-  EmailAuthorReport = SbornikMas[SbornikCount + 4];
+  let FIOAuthorReport = state.SbornikMas[state.SbornikCount + 1];
+  let GodAuthorReport = state.SbornikMas[state.SbornikCount + 2];
+  let AdresAuthorReport = state.SbornikMas[state.SbornikCount + 3];
+  let EmailAuthorReport = state.SbornikMas[state.SbornikCount + 4];
 
   FIOAuthorReport = FIOAuthorReport.replace(/[\n\v\f\r]/g, ''); // удалить \n
   GodAuthorReport = GodAuthorReport.replace(/[\n\v\f\r]/g, ''); // удалить \n
@@ -20,7 +20,7 @@ export function AnalizSbornika5(state) {
   if (AuthorReport.length < 200) {
     document.getElementById('postscriptum').innerHTML = AuthorReport;
   }
-  ;
-  SbornikCount = SbornikCount + 5;
-  document.getElementById("SbornikCount").value = SbornikCount;
+
+  state.SbornikCount = state.SbornikCount + 5;
+  // document.getElementById("SbornikCount").value = state.SbornikCount;
 }

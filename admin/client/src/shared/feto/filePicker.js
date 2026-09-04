@@ -1,5 +1,5 @@
-// загружаем файл
-
+// загружаем файл // todo - exclude
+/*
 const filePicker$ = document.querySelector('.file-picker');
 
 if (filePicker$) {
@@ -16,3 +16,4 @@ if (filePicker$) {
     LoadSbornik(state);
   })
 }
+*/

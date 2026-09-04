@@ -1,4 +1,5 @@
-export function TriCodCount()
+/** @param state {FetoState} */
+export function TriCodCount(state)
 {
   // console.log
 
@@ -10,7 +11,7 @@ export function TriCodCount()
   var slog='<span class="border1">';
   var mySlog = document.getElementById("slog");
 // создаём строку нумерации слогов - с учётом интервалов между символами -------------------
-  for (var i = 1; i < TriCodRitm.length+1; i++)
+  for (var i = 1; i < state.TriCodRitm.length+1; i++)
   {
     s=i+" ";
     console.log ('s');
@@ -27,9 +28,9 @@ export function TriCodCount()
   var slog='<span class="border1">';
   var s=0;
 
-  for (var i = 0; i < TriCodRitm.length; i++)
+  for (var i = 0; i < state.TriCodRitm.length; i++)
   {
-    s=TriCodRitm[i];
+    s = state.TriCodRitm[i];
     slog = slog+'<span class="slog">'+s+'</span>';
   }
   slog = slog+'</span>';

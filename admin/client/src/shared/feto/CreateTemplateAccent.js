@@ -18,7 +18,7 @@ function CreateTemplateAccent(state) {
   let Countgl = 0;
   let onlycaps = "";
   let OneGlasny = "";
-  flagAccent = "";
+  state.flagAccent = "";
   let onlyGlasny = "";
 
   let glasny = "аоиеёэыуюяАОИЕЁЭЫУЮЯ";
@@ -53,7 +53,7 @@ function CreateTemplateAccent(state) {
         // если в слове нет заглавных гласных и слово не односложное, то слово не размечено ударением
         if (onlyGlasny.length > 1) {
           if (onlycaps.length === 0) {
-            flagAccent = krest + "Не во всех словах расставлены ударения! ";
+            state.flagAccent = state.krest + "Не во всех словах расставлены ударения! ";
             state.flagAccentBall = 0;
           }
         }
