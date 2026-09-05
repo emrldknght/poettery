@@ -13,7 +13,7 @@ export function Layout({ sidebar, main, preview, header }: LayoutProps) {
       style={{
         display: 'grid',
         gridTemplateRows: 'auto 1fr',
-        gridTemplateColumns: '260px 1fr 380px',
+        gridTemplateColumns: '260px 260px 1fr',
         gridTemplateAreas: `
           "header header header"
           "sidebar main preview"
