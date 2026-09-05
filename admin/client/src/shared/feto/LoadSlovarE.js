@@ -23,7 +23,7 @@ export async function LoadSlovarE(state) {
     }
     */
 
-    return;
+    // return;
   } else {
     alert("slovar_Yo.txt Ошибка HTTP: " + response.status);
   }

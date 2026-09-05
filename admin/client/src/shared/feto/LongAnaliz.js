@@ -1,3 +1,6 @@
+import {TextStihResize} from './TextStihResize.js';
+import {TriCodCount} from './TriCodCount.js';
+
 /** @param state {FetoState} */
 export function LongAnaliz(state) {
 // проводим длинный анализ - каждая строфа вытянута в строку

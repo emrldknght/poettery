@@ -1,3 +1,8 @@
+import {ClearForm2} from "./ClearForm2.js";
+import {AccentTonic} from "./AccentTonic.js";
+import {CountSimvol} from "./CountSimvol.js";
+import {startAnalyzePoem} from "./start.js";
+
 /** @param state {FetoState} */
 export function TonicAnaliz(state) {
   console.log('[DEBUG] TonicAnaliz');
@@ -19,7 +24,7 @@ export function TonicAnaliz(state) {
   console.log('SimvolCount=' + state.SimvolCount);
   if (Math.abs(state.SimvolCount - state.AccentCountSimvol) > 7) {
     state.FileAccent.checked = false;
-    AccentTonic();
+    AccentTonic(state);
   } else {
     state.FileAccent.checked = true;
     startAnalyzePoem(state);

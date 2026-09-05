@@ -18,7 +18,7 @@ export async function Load_slovar_full_accent(state) {
 //if (slovar_accent_Mas.length<2870000) {document.getElementById('ContainerComment1').innerHTML="Количество слов в словаре: " + slovar_accent_Mas.length+"."};
 //if (slovar_accent_Mas.length>2870000) {document.getElementById('ContainerComment1').innerHTML="Словарь полностью загружен."} ;
 
-    return;
+    // return;
   } else {
     alert("slovar_full_accent.txt Ошибка HTTP: " + response.status);
   }
@@ -38,7 +38,7 @@ export async function Load_slovar_narod_accent(state) {
 
     let slovar_noaccent_narod = slovar_narod.toLowerCase();
     state.slovar_noaccent_narod_Mas = slovar_noaccent_narod.split(",");
-    return;
+    // return;
   } else {
     alert("slovar_narod_accent.txt Ошибка HTTP: " + response.status);
   }
@@ -78,7 +78,7 @@ export async function Load_slovar_neoclassic_accent(state) {
 
     let slovar_noaccent_neoclassic = slovar_neoclassic.toLowerCase();
     state.slovar_noaccent_neoclassic_Mas = slovar_noaccent_neoclassic.split(",");
-    return;
+    // return;
   } else {
     alert("slovar_neoclassic_accent.txt Ошибка HTTP: " + response.status);
   }

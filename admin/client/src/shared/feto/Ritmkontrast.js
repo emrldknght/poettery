@@ -1,13 +1,13 @@
 /** @param state {FetoState} */
 export function Ritmkontrast(state) {
-// alex если ритм явный, то формируем контрастный ритм (без смешанных)  ritmkontrast - сверточный слой ==========================================
+// alex если ритм явный, то формируем контрастный ритм (без смешанных) ritmkontrast - сверточный слой ==========================================
 
   state.RitmkontrastMas = [];
   let kontrast0 = "";
   let kontrast1 = "";
   let kontrast2 = "";
-  let kontrast3 = "";
-  let Ritmstring = "";
+  // let kontrast3 = "";
+  // let Ritmstring;
 
   console.log('Ritm');
   console.log(state.Ritm);
@@ -15,7 +15,7 @@ export function Ritmkontrast(state) {
   // создаём копию массива Ritm массив RitmkontrastMas
 
 
-  Ritmstring = state.Ritm.join(',');
+  let Ritmstring = state.Ritm.join(',');
 
   // === ВРЕМЕННЫЙ КОСТЫЛЬ ДЛЯ АДАПТЕРА (TODO: refactor) ===
   state._TempRitmstring = Ritmstring;
@@ -27,7 +27,7 @@ export function Ritmkontrast(state) {
   console.log(Ritmstring);
 
   state.RitmkontrastMas[0] = '2'; // добавляем признак смешанной гласной в начало
-  state.RitmkontrastMas.push('2'); // добавляем  признак смешанной  гласной в конец
+  state.RitmkontrastMas.push('2'); // добавляем признак смешанной гласной в конец
 
   console.log('RitmkontrastMas1');
   console.log(state.RitmkontrastMas);
@@ -39,7 +39,7 @@ export function Ritmkontrast(state) {
       kontrast1 = Number(state.RitmkontrastMas[kk]);
       kontrast2 = Number(state.RitmkontrastMas[kk + 1]);
 
-      if (kontrast1 == 2 && kontrast2 == 3) {
+      if (kontrast1 === 2 && kontrast2 === 3) {
         state.RitmkontrastMas[kk] = 1;
       } else {
         state.RitmkontrastMas[kk] = kontrast1;
@@ -49,7 +49,7 @@ export function Ritmkontrast(state) {
       kontrast1 = Number(state.RitmkontrastMas[kk]);
       kontrast2 = Number(state.RitmkontrastMas[kk + 1]);
 
-      if (kontrast1 == 2 && kontrast0 == 3) {
+      if (kontrast1 === 2 && kontrast0 === 3) {
         state.RitmkontrastMas[kk] = 1;
       } else {
         state.RitmkontrastMas[kk] = kontrast1;
@@ -59,7 +59,7 @@ export function Ritmkontrast(state) {
       kontrast1 = Number(state.RitmkontrastMas[kk]);
       kontrast2 = Number(state.RitmkontrastMas[kk + 1]);
 
-      if (kontrast1 == 2 && kontrast0 == 1 && kontrast2 == 1) {
+      if (kontrast1 === 2 && kontrast0 === 1 && kontrast2 === 1) {
         state.RitmkontrastMas[kk] = 3;
       } // если слева и справа безударные, то текущий ударный (контраст+)
 
@@ -81,9 +81,9 @@ export function Ritmkontrast(state) {
   console.log('ritmkontrastplus');
   console.log(state.ritmkontrastplus);
 
-// ищем ritmkontrastminus - сверточный слой с усиленными безударными - заменяем в переменной Ritmstring смешанные на безударные  =====================================
+// ищем ritmkontrastminus - сверточный слой с усиленными безударными - заменяем в переменной Ritmstring смешанные на безударные =====================================
   Ritmstring = state.Ritm.join('');
-  state.ritmkontrastminus = Ritmstring.replace(/[2]/g, '1'); // меняем везде 2 на 1
+  state.ritmkontrastminus = Ritmstring.replace(/2/g, '1'); // меняем везде 2 на 1
 
   console.log('ritmkontrastminus');
   console.log(state.ritmkontrastminus);

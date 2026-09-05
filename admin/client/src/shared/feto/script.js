@@ -385,11 +385,11 @@ if (isMobile != null) {
 // конец объявления глобальных переменных ======================================================
 
 // temp globals
-var _TempFullRifmMas = [];
-var _TempRitmstring = '';
-var _TempFlagRitmBall = 0;
-var _TempCommentStopa = ''
-var _TempTriCodeRitm = ''
+// var _TempFullRifmMas = [];
+// var _TempRitmstring = '';
+// var _TempFlagRitmBall = 0;
+// var _TempCommentStopa = ''
+// var _TempTriCodeRitm = ''
 
 
 

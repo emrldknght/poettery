@@ -3,7 +3,7 @@
 export function PoiskSlovClassic(NextSlovo, state) {
 
   let slovoAccent = "";
-  if (NextSlovo.length < 3 || NextSlovo === undefined) {
+  if (NextSlovo.length < 3) {
     slovoAccent = "";
     return slovoAccent;
   }
@@ -14,7 +14,6 @@ export function PoiskSlovClassic(NextSlovo, state) {
       slovoAccent = state.slovar_classic_Mas[j];
       j = state.slovar_noaccent_classic_Mas.length;
       return slovoAccent;
-      break;
     }
   }
   slovoAccent = NextSlovo;

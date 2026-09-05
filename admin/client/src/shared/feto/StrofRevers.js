@@ -1,3 +1,5 @@
+import {DelSpace} from "./DelSpace.js";
+
 /** @param state {FetoState} */
 export function StrofRevers(state) { // used in #adminPanel
   DelSpace(state);
@@ -27,7 +29,7 @@ export function StrofRevers(state) { // used in #adminPanel
       console.log("i=", i);
       console.log("istr=" + istr);
       console.log("kstr=" + kstr);
-      if (istr == kstr) {
+      if (istr === kstr) {
         ++CountPattern;
         BeginPattern[CountPattern] = (k - 1) / 3;
         console.log("------------BeginPattern=", (k - 1) / 3);

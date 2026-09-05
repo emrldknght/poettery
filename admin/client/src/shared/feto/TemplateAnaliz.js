@@ -9,13 +9,13 @@ export function TemplateAnaliz(state) {
   Ritm.length = 0;
   state.RitmErr.length = 0;
 // обнуляем массив базового ритмического рисунка
-  let k = 0;
+  // let k = 0;
   let max = 0;
 
-// Accent3 - подсчёт ударений, обозначенных О
-  let Accent3 = 0;
-  let Accent2 = 0;
-  let Accent1 = 0;
+  // Accent3 - подсчёт ударений, обозначенных О
+  // let Accent3 = 0;
+  // let Accent2 = 0;
+  // let Accent1 = 0;
   let Accent12 = 0;
   let Accent23 = 0;
   let KolSpace = 0;
@@ -44,33 +44,33 @@ export function TemplateAnaliz(state) {
       if (max < nextStr.length) {
         max = nextStr.length
       }
-      ;
+
 // уточняем количество пробелов (строф)
       let nextB = nextStr[k];
       if (nextStr === "" || nextB === undefined) {
         ++KolSpace;
       }
-      ;
+
 //if (nextB=== undefined) {++KolSpace;}; // если буквы нет (строка короткая) то подсчёт как пустой сторки
 
       if (nextB === "О") {
         ++Accent3;
       }
-      ; // подсчёт ударных
+      // подсчёт ударных
       if (nextB === ":") {
         ++Accent2;
       }
-      ; // подсчёт слабоударных
+      // подсчёт слабоударных
       if (nextB === ".") {
         ++Accent1;
       }
-      ; // подсчёт безударных
+      // подсчёт безударных
     }
     if (k === max) {
-      let k = 1000;
+      // let k = 1000;
       break
     }
-    ;
+
 
     RealKolStrok = KolStrok - KolSpace;
 

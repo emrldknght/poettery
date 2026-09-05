@@ -8,33 +8,33 @@ export function AnalizRifm(tryRifma, state)
 // Ищем рифмы - последние ударные гласные. Заменяем на фонетические аналоги. Заодно записываем рифмующиеся слова в массив. Ёфицируем рифмующееся слово. Если ёфикация была лишней, то не учитываем ёфикацию.
 
 {
-  let AccentRifmPos = 0;
+  // let AccentRifmPos = 0;
   let AccentRifm = "";
   let Strofa = 0;
   let strok = 0;
   let RifmTypeMas = [];
   let CountRifmType = 0;
-  let CountGlasnZ = 0;
-  let UnicRifmMas = [];
-  let UnicRifm = 0;
+  // let CountGlasnZ = 0;
+  // let UnicRifmMas = [];
+  // let UnicRifm = 0;
   let RealRifmMas = [];
   state.SlovaRifmMas = [];
   let RealRifm = 0;
   let PosNoUnicRifm = 0;
   let FullRifmMas = []; // рифмы c фонетической заменой
 
-  let FullRifmMasLatin = []; // рифмы c заменой на ABCDE
-  let Foneticrifmrus = "АИУОЭ";
-  let Foneticrifmlatin = "ABCDE";
-  let Firstrifm = "";
+  // let FullRifmMasLatin = []; // рифмы c заменой на ABCDE
+  // let Foneticrifmrus = "АИУОЭ";
+  // let Foneticrifmlatin = "ABCDE";
+  // let Firstrifm = "";
 
   let NumStrofaRifm = 0;
   let NumStrokaRifm = 0;
   let Rifmovkaflag = 0;
 
-  let StrokaFullRifm = "";
+  // let StrokaFullRifm = "";
   let Findrifm = "";
-  let Numberrifm = 0;
+  // let Numberrifm = 0;
   let RifmGlasn = "ОАЭИУ";
   let cntrifm = 0;
 
@@ -259,31 +259,50 @@ export function AnalizRifm(tryRifma, state)
     if (NextRifm === "#") {
       NumStrofaRifm = NumStrofaRifm + 1;
       if (NumStrokaRifm === 5) {
+        const sm1 = FullRifmMas[s - 1];
+        const sm2 = FullRifmMas[s - 2];
+        const sm3 = FullRifmMas[s - 3];
+        const sm4 = FullRifmMas[s - 4];
         //четверостишие
-        if (FullRifmMas[s - 4] == FullRifmMas[s - 3] && FullRifmMas[s - 4] == FullRifmMas[s - 2] && FullRifmMas[s - 4] == FullRifmMas[s - 1]) {
+        // if (FullRifmMas[s - 4] == FullRifmMas[s - 3]
+        // && FullRifmMas[s - 4] == FullRifmMas[s - 2]
+        // && FullRifmMas[s - 4] == FullRifmMas[s - 1]) {
+        if (sm4 === sm3 && sm4 === sm2 && sm4 === sm1) {
           console.log("полная");
           state.rifmovkatext = "полная";
           state.rifmovkatype = state.rifmovkatype + "1";
           Rifmovkaflag = 1;
         }
-        if (FullRifmMas[s - 4] == FullRifmMas[s - 3] && FullRifmMas[s - 2] == FullRifmMas[s - 1] && Rifmovkaflag != 1) {
-          console.log("смежная");
-          state.rifmovkatext = "смежная";
-          state.rifmovkatype = state.rifmovkatype + "2";
+        // if (FullRifmMas[s - 4] == FullRifmMas[s - 3]
+        // && FullRifmMas[s - 2] == FullRifmMas[s - 1]
+        // && Rifmovkaflag != 1) {
+        if (sm4 === sm3 && sm2 === sm1 && Rifmovkaflag !== 1) {
+            console.log("смежная");
+            state.rifmovkatext = "смежная";
+            state.rifmovkatype = state.rifmovkatype + "2";
         }
-        if (FullRifmMas[s - 4] == FullRifmMas[s - 2] && FullRifmMas[s - 3] == FullRifmMas[s - 1] && Rifmovkaflag != 1) {
+        // if (FullRifmMas[s - 4] == FullRifmMas[s - 2]
+        // && FullRifmMas[s - 3] == FullRifmMas[s - 1]
+        // && Rifmovkaflag != 1) {
+        if (sm4 === sm2 && sm3 === sm1 && Rifmovkaflag !== 1) {
           console.log("перекрёстная");
           state.rifmovkatext = "перекрёстная";
           state.rifmovkatype = state.rifmovkatype + "3";
         }
 
-        if (FullRifmMas[s - 4] != FullRifmMas[s - 2] && FullRifmMas[s - 3] == FullRifmMas[s - 1] && Rifmovkaflag != 1) {
+        // if (FullRifmMas[s - 4] != FullRifmMas[s - 2]
+        // && FullRifmMas[s - 3] == FullRifmMas[s - 1]
+        // && Rifmovkaflag != 1) {
+        if (sm4 !== sm2 && sm3 === sm1 && Rifmovkaflag !== 1) {
           console.log("полуперекрёстная");
           state.rifmovkatext = "полуперекрёстная";
           state.rifmovkatype = state.rifmovkatype + "6";
         }
 
-        if (FullRifmMas[s - 4] == FullRifmMas[s - 1] && FullRifmMas[s - 3] == FullRifmMas[s - 2] && Rifmovkaflag != 1) {
+        // if (FullRifmMas[s - 4] == FullRifmMas[s - 1]
+        // && FullRifmMas[s - 3] == FullRifmMas[s - 2]
+        // && Rifmovkaflag != 1) {
+        if (sm4 === sm1 && sm3 === sm2 && Rifmovkaflag !== 1) {
           console.log("кольцевая");
           state.rifmovkatext = "кольцевая";
           state.rifmovkatype = state.rifmovkatype + "4";
@@ -306,7 +325,7 @@ export function AnalizRifm(tryRifma, state)
 
 
 // строку рифм FullRifmMas переводим в формат 123456
-  Numberrifm = 0;
+  // Numberrifm = 0;
   RifmGlasn = "ОАЭИУ";
   cntrifm = 0;
   for (let i = 0; i < FullRifmMas.length; i++) {
@@ -316,7 +335,7 @@ export function AnalizRifm(tryRifma, state)
 
       for (let s = 0; s < FullRifmMas.length; s++) {
         NextRifm = FullRifmMas[s];
-        if (NextRifm == Findrifm && RifmGlasn.includes(NextRifm)) {
+        if (NextRifm === Findrifm && RifmGlasn.includes(NextRifm)) {
           FullRifmMas[s] = cntrifm;
         }
 

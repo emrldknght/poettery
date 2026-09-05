@@ -55,18 +55,18 @@ export function AnalizRazmera(state)
   state.epigramma = 0;
   let k = 0;
   let CountStrok = 0;
-  let CountBukv = 0;
+  // let CountBukv = 0;
   let ProbelPos = 0; // позиция пробела, чтобы соотносить гласную с конкретным словом.
   let CountSlog = 0;
   let CountZnak = 0;
-  let CountProbel = 0;
+  // let CountProbel = 0;
   state.ProbelPositionMas = []; // позиция пробела, чтобы соотносить гласную с конкретным словом.
   state.ProbelPositionMas[0] = []; // массив массивов
 
   let CountStrofa = 0;
   let ResText = "";
-  let NextZnak = "";
-  var NextSlovo = "";
+  // let NextZnak = "";
+  // var NextSlovo = "";
   let StrofaPattern = "";
 
   let ResumeStrofaCount = "";
@@ -74,7 +74,7 @@ export function AnalizRazmera(state)
 
 
   let TextCountSlog = "";
-  let StrofaRepeat = 0;
+  // let StrofaRepeat = 0;
   state.CountStrofaPatternType = 1;
   state.ResumeStrofaPatternType = "";
   state.StrofaPositionMas = [];
@@ -89,14 +89,14 @@ export function AnalizRazmera(state)
   state.StrofaPositionMas[1] = 0;
   let glasny = "аоиеёэыуюяАОИЕЁЭЫУЮЯ";
   state.stih = state.OriginalTextInput + "\n";
-  CountBukv = state.stih.length;
+  // CountBukv = state.stih.length;
 
   for (let i = 0; i < state.stih.length; i++) {
     let NextZnak = state.stih[i];
     ++CountZnak;
     // ИЩЕМ ГЛАСНУЮ
     let gl = glasny.includes(NextZnak);
-    if (NextZnak == " ") {
+    if (NextZnak === " ") {
       ProbelPos = CountZnak;
     } // запоминаем позицию пробела
 

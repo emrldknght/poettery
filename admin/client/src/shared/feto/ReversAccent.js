@@ -3,21 +3,21 @@ export function ReversAccent(state)
 // Находим неразмеченные слова и размечаем по шаблону Ritm[]. Если не помогло, то предлагаем несколько ударений на выбор.
 {
   let flagAccentSlovo = 0;
-  let NextZnak = "";
+  // let NextZnak = "";
   let CountNextZnak = 0;
   let NextSlovo = "";
   let CaseSlovo = "";
   let CountCase = 0;
-  let NoAccentSlovo = "";
-  let LowGlasny = "";
+  // let NoAccentSlovo = "";
+  // let LowGlasny = "";
   let NextStrStihMas = "";
   let newStrStih = "";
   let Countgl = 0;
   let CountglSlovo = 0;
   let glasny = "аоиеёэыуюяАОИЕЁЭЫУЮЯ";
   let glasnyLow = "аоиеёэыуюя";
-  let glasnyCaps = "АОИЕЁЭЫУЮЯ";
-  let kirill = /[а-яА-ЯёЁ]/;
+  // let glasnyCaps = "АОИЕЁЭЫУЮЯ";
+  let kirill = /[А-яёЁ]/;
   let StrStih = state.OriginalTextInput + "\n";
   let StrStihMas = StrStih.split("\n");
   let CaseAccent = [];
@@ -33,7 +33,7 @@ export function ReversAccent(state)
   if (nexttext.length === 0) {
     return;
   }
-  ;
+
 
 
   // берем строку в стихотворении
@@ -139,8 +139,8 @@ export function ReversAccent(state)
                 let StrCasePromt = fr1 + "[" + CaseSlovo + "]" + fr2;
                 console.log(StrCase);
 
-                let СonfirmStrCase = confirm("№ " + SbornikCountTxt + " Ударение верно: " + StrCasePromt);
-                if (СonfirmStrCase) {
+                let ConfirmStrCase = confirm("№ " + SbornikCountTxt + " Ударение верно: " + StrCasePromt);
+                if (ConfirmStrCase) {
                   NextStrStihMas = StrCase;
                   break;
                 } // если пользователь согласен - вставляем вариант в текст
@@ -171,7 +171,7 @@ export function ReversAccent(state)
   }
   //закончились строки в стихотворении
   state.OriginalTextInput = newStrStih;
-  StrStih = newStrStih;
+  // StrStih = newStrStih; // todo - check usage
 
   state.CountNoAccentSlov = state.CountSlov - state.CountAccentSlov;
 

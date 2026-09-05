@@ -83,14 +83,14 @@ export function RitmAnaliz(state)
     if (Ritm[kk] === 2) {
       ++ub;
     }
-    ;
+
 
 
     if (bb > (Ritm.length - 2)) {
       state.CommentRitmika = state.CommentRitmika + "Ударения в словах не расставлены.  ";
       state.flagAccentBall = 0;
     }
-    ;
+
 
 
 // создаём строку троичной записи ритма

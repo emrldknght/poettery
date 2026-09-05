@@ -12,7 +12,7 @@ export function AnalizCrossOverStrof(state) {
         FlagUniCrossRitm = 1;
       }
     }
-    if (FlagUniCrossRitm == 0) {
+    if (FlagUniCrossRitm === 0) {
       UniCrossRitmResume = UniCrossRitmResume + zn9 + k;
       zn9 = ",";
       CountUniCrossRitm = CountUniCrossRitm + 1;
@@ -20,7 +20,7 @@ export function AnalizCrossOverStrof(state) {
   }
 
 
-  if (CountUniCrossRitm == 1) {
+  if (CountUniCrossRitm === 1) {
     UniCrossRitmResume = "Ритм в " + UniCrossRitmResume + " строфе отличается от всех остальных."
   }
 

@@ -1,16 +1,21 @@
+import {DelSpace} from "./DelSpace.js";
+import {ClearForm2} from "./ClearForm2.js";
+import {CapsGlasny} from "./CapsGlasny.js";
+import {CountSimvol} from "./CountSimvol.js";
+
 /** @param state {FetoState} */
 export function AccentTonic(state) {
   DelSpace(state);
   ClearForm2();
 
-  let k = 0;
-  let ResText = "";
-  let NextZnak = "";
-  var NextSlovo = "";
+  // let k = 0;
+  // let ResText = "";
+  // let NextZnak = "";
+  let NextSlovo = "";
   state.CountSlov = 0;
   state.CountAccentSlov = 0;
   state.CountNoAccentSlov = 0;
-  let LowGlasny = "";
+  // let LowGlasny = "";
   let flagYo = 0;
 
   let kirill = /[а-яА-ЯёЁ]/;
@@ -26,7 +31,7 @@ export function AccentTonic(state) {
     if (NextZnak === "ё") {
       flagYo = 1;
     }
-    ;
+
     let kir = kirill.test(NextZnak);
     if (kir) {
       NextSlovo = NextSlovo + NextZnak;
@@ -44,7 +49,7 @@ export function AccentTonic(state) {
         } else {
           state.slovoAccent = CapsGlasny(NextSlovo, state);
         }
-        ;
+
         NextSlovo = "";
       }
     }

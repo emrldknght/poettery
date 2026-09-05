@@ -3,9 +3,9 @@ import {AnalizCrossOverStrof} from "./AnalizCrossOverStrof.js";
 
 /** @param state {FetoState} */
 export function ReturnCrossOverStrof(state)
-// возвращаем перекрёстные строфы (развернув обратно) в первое текстовое поле, а шаблоны в поле шаблонов ==========================================================================================
+// Возвращаем перекрёстные строфы (развернув обратно) в первое текстовое поле, а шаблоны в поле шаблонов ==========================================================================================
 // ритм блока CrossLentaRitm[lenta] - возвращаем (рисуем) в блок шаблона, заодно формируем новый массив ритмов строф CrossRitmResult, чтобы потом искать ритмично идентичные строфы
-// шаблон гласных  CrossTemplateGlasn[lenta] возвращаем (рисуем) в блок шаблона (подпрограмма цветного рисования CreateBlockRitmStroka)
+// шаблон гласных CrossTemplateGlasn[lenta] возвращаем (рисуем) в блок шаблона (подпрограмма цветного рисования CreateBlockRitmStroka)
 // позиции строк стихотворения в массиве NewPosCrossOverStihMas[m]
 // создаём антимассив AntiPosCrossOverStihMas для NewPosCrossOverStihMas[k] (индекс становится значением, а значение индексом);
 // возвращаем стих с ударениями, расставленными в ленте после кроссанализа. Собираем стих построчно (построфно) в цикле ленты NewAccentLentaTextMas
@@ -22,11 +22,11 @@ export function ReturnCrossOverStrof(state)
   let RitmStrokaMas = []; // ритм одной строки в виде одномерного массива
   state.CrossRitmResult = []; // массив ритмов строф
   let ColorStroka = "";
-  let NewAccentLentaTextMas = [];  //массив содержит исходный стих с ударениями, расставленными в кросс-строфах
+  // let NewAccentLentaTextMas = []; //массив содержит исходный стих с ударениями, расставленными в кросс-строфах
 
   //массив содержит исходный стих с ударениями, расставленными в кросс-строфах
   state.NewAccentLentaText = '\n' + state.NewAccentLentaText; // добавим пробел в нулевую позицию
-  NewAccentLentaTextMas = state.NewAccentLentaText.split("\n"); //массив содержит исходный стих с ударениями, расставленными в кросс-строфах
+  let NewAccentLentaTextMas = state.NewAccentLentaText.split("\n"); //массив содержит исходный стих с ударениями, расставленными в кросс-строфах
   state.NewAccentLentaText = "";
   let NewAccentLentaStroka = "";
 

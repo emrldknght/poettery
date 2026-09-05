@@ -1,16 +1,15 @@
 /** @param poem
- @param commentsDiv
  @param repeat {number}
  @param state {FetoState} */
-function splitLines(poem, commentsDiv, repeat, state) {
+function splitLines(poem, repeat, state) {
   const lines = poem.split('\n');
   if (repeat === 1) {
-    commentsDiv.innerHTML += '<b>Анализ подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295) <br><br></b>';
+    // commentsDiv.innerHTML += '<b>Анализ подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295) <br><br></b>';
     state.ContainerAnaliz1 += '<b>Анализ подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295) <br><br></b>';
   }
   console.log('Исходные строки:\n' + lines.join('\n') + '\n\n');
   if (repeat === 1) {
-    commentsDiv.innerHTML += '<b>Исходные строки:</b><br><br>' + lines.join('<br>') + '<br><br>';
+    // commentsDiv.innerHTML += '<b>Исходные строки:</b><br><br>' + lines.join('<br>') + '<br><br>';
     state.ContainerAnaliz1 += '<b>Исходные строки:</b><br><br>' + lines.join('<br>') + '<br><br>';
   }
   return lines;
@@ -27,10 +26,9 @@ function countStresses(lines) {
 }
 
 /** @param stressCounts
- @param commentsDiv
  @param repeat {number}
  @param state {FetoState} */
-function findMostFrequentCount(stressCounts, commentsDiv, repeat, state) {
+function findMostFrequentCount(stressCounts, repeat, state) {
   const countMap = {};
   for (let i = 0; i < stressCounts.length; i++) {
     const count = stressCounts[i];
@@ -49,32 +47,31 @@ function findMostFrequentCount(stressCounts, commentsDiv, repeat, state) {
     }
   }
   if (repeat === 1) {
-    commentsDiv.innerHTML += '<b>Наиболее часто встречающееся количество ударных гласных: ' + mostFrequentCount + '<br><br></b>';
+    // commentsDiv.innerHTML += '<b>Наиболее часто встречающееся количество ударных гласных: ' + mostFrequentCount + '<br><br></b>';
     state.ContainerAnaliz1 += '<b>Наиболее часто встречающееся количество ударных гласных: ' + mostFrequentCount + '<br><br></b>';
   }
   return mostFrequentCount;
 }
 
 /** @param poem
- @param commentsDiv
  @param repeat {number}
  @param state {FetoState} */
-export function analyzePoem(poem, commentsDiv, repeat, state) {
+export function analyzePoem(poem, repeat, state) {
   // 1. Разбиваем стихотворение на строки
-  const lines = splitLines(poem, commentsDiv, repeat, state);
+  const lines = splitLines(poem, repeat, state);
 
   // 2. Подсчитываем количество ударных гласных
   const stressCounts = countStresses(lines);
 
   // 3. Находим наиболее часто встречающееся количество ударных гласных
-  const mostFrequentCount = findMostFrequentCount(stressCounts, commentsDiv, repeat, state);
+  const mostFrequentCount = findMostFrequentCount(stressCounts, repeat, state);
 
   // 4. Исключаем строки с несоответствующим количеством ударных
   const {
     filteredLines,
     excludedLines,
     excludedIndices
-  } = filterLines(lines, stressCounts, mostFrequentCount, commentsDiv, state);
+  } = filterLines(lines, stressCounts, mostFrequentCount, state);
 
   // 5. Определяем ширину матрицы
   const matrixWidth = determineMatrixWidth(mostFrequentCount);
@@ -88,10 +85,10 @@ export function analyzePoem(poem, commentsDiv, repeat, state) {
   // 8. Выводим матрицу с применением стилей
   const styledMatrix = styleMatrix(matrix);
   if (repeat === 1) {
-    commentsDiv.innerHTML += '<b>Схема ударных и безударных гласных:</b><br><br>' + styledMatrix + '<br><br>';
+    // commentsDiv.innerHTML += '<b>Схема ударных и безударных гласных:</b><br><br>' + styledMatrix + '<br><br>';
     state.ContainerAnaliz1 += '<b>Схема ударных и безударных гласных:</b><br><br>' + styledMatrix + '<br><br>';
   } else {
-    commentsDiv.innerHTML += '<b>Схема ударных и безударных гласных, включая исправленные строки:</b><br><br>' + styledMatrix + '<br><br>';
+    // commentsDiv.innerHTML += '<b>Схема ударных и безударных гласных, включая исправленные строки:</b><br><br>' + styledMatrix + '<br><br>';
     state.ContainerAnaliz1 += '<b>Схема ударных и безударных гласных, включая исправленные строки:</b><br><br>' + styledMatrix + '<br><br>';
   }
 
@@ -116,9 +113,8 @@ export function analyzePoem(poem, commentsDiv, repeat, state) {
 }
 
 /** @param columnAverages
- @param resultDiv
  @param state {FetoState} */
-export function checkTonicSystem(columnAverages, resultDiv, state) {
+export function checkTonicSystem(columnAverages, state) {
   let i;
   let isValidTonic = true;
   const errors = [];
@@ -162,16 +158,16 @@ export function checkTonicSystem(columnAverages, resultDiv, state) {
 
   // Вывод результата проверки
   if (isValidTonic) {
-    resultDiv.innerHTML += '<b>Стихи соответствуют тонической системе. Обнаружен ' + stressCount + '-х ударный тонический ритм.<br></b>';
+    // resultDiv.innerHTML += '<b>Стихи соответствуют тонической системе. Обнаружен ' + stressCount + '-х ударный тонический ритм.<br></b>';
     // state.tonicBall = 1;
     state.ContainerAnaliz1f += '<b>Стихи соответствуют тонической системе. Обнаружен ' + stressCount + '-х ударный тонический ритм.<br></b>';
     state.tonicBall = 1;
   } else {
-    resultDiv.innerHTML += '<b>Ритм НЕ соответствует тонической системе. Ошибки:<br></b>';
+    // resultDiv.innerHTML += '<b>Ритм НЕ соответствует тонической системе. Ошибки:<br></b>';
     // state.tonicBall = 0;
     state.ContainerAnaliz1f += '<b>Ритм НЕ соответствует тонической системе. Ошибки:<br></b>';
     state.tonicBall = 0;
-    resultDiv.innerHTML += errors.join('<br>') + '<br>';
+    // resultDiv.innerHTML += errors.join('<br>') + '<br>';
     state.ContainerAnaliz1f += errors.join('<br>') + '<br>';
   }
 }
@@ -179,9 +175,8 @@ export function checkTonicSystem(columnAverages, resultDiv, state) {
 /** @param lines
  @param stressCounts
  @param mostFrequentCount
- @param commentsDiv
  @param state {FetoState} */
-function filterLines(lines, stressCounts, mostFrequentCount, commentsDiv, state) {
+function filterLines(lines, stressCounts, mostFrequentCount, state) {
   const filteredLines = [];
   const excludedLines = [];
   const excludedIndices = [];
@@ -195,7 +190,7 @@ function filterLines(lines, stressCounts, mostFrequentCount, commentsDiv, state)
   }
   console.log('Отфильтрованные строки:\n' + filteredLines.join('\n') + '\n\n');
   if (excludedLines.length > 0) {
-    commentsDiv.innerHTML += '<b>Исключённые строки:</b><br><br>' + excludedLines.join('<br>') + '<br><br>';
+    // commentsDiv.innerHTML += '<b>Исключённые строки:</b><br><br>' + excludedLines.join('<br>') + '<br><br>';
     state.ContainerAnaliz1 += '<b>Исключённые строки:</b><br><br>' + excludedLines.join('<br>') + '<br><br>';
   }
   return { filteredLines, excludedLines, excludedIndices };

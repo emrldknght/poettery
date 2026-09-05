@@ -4,7 +4,7 @@ export function AnalizGroupStrof(state)
 {
 
   state.StrofaRepeatTypeMas = [];
-  let StartStrofy = 0;
+  // let StartStrofy = 0;
   state.UnicStrof = 0;
 
 // перебираем массив уникальных паттернов и определяем количество повторов в общем массиве паттернов - результат StrofaRepeatTypeMas

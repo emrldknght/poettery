@@ -10,14 +10,14 @@ export function Accent(state) {
   ClearForm2();
 
   FullAnaliz(state);
-  let k = 0;
-  let ResText = "";
-  let NextZnak = "";
-  var NextSlovo = "";
+  // let k = 0;
+  // let ResText = "";
+  // let NextZnak = "";
+  let NextSlovo = "";
   state.CountSlov = 0;
   state.CountAccentSlov = 0;
   state.CountNoAccentSlov = 0;
-  let LowGlasny = "";
+  // let LowGlasny = "";
   let flagYo = 0;
 
   let kirill = /[а-яА-ЯёЁ]/;
@@ -32,7 +32,7 @@ export function Accent(state) {
     if (NextZnak === "ё") {
       flagYo = 1;
     }
-    ;
+
     let kir = kirill.test(NextZnak);
     if (kir) {
       NextSlovo = NextSlovo + NextZnak;
@@ -50,7 +50,7 @@ export function Accent(state) {
         } else {
           state.slovoAccent = CapsGlasny(NextSlovo, state);
         }
-        ;
+
         NextSlovo = "";
       }
     }

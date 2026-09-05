@@ -2,18 +2,18 @@
 export function ReturnGroupStrofDom(state) {
   console.log('[DEBUG] ReturnGroupStrof - start', state.GroupStrof, state.GroupStrof.length);
 
-  // возвращаем сгруппированные строфы после анализа из ленты в основной блок. Длина ленты = GroupStrof.length
+  // Возвращаем сгруппированные строфы после анализа из ленты в основной блок. Длина ленты = GroupStrof.length
   // запомнили ReturnStrofaPositionMas [s]=kk; в какую группу kk какая строфа s переместилась.
-  // берем из второй группы шаблона containertemplate2 весь второй блок и сплитим в массив GroupTemplateMas по <br><br>
+  // Берем из второй группы шаблона containertemplate2 весь второй блок и сплитим в массив GroupTemplateMas по <br><br>
   let GroupTemplateMas = [];
   let elem = "";
-  let CountStrofa = 0;
-  let CountReturnStrofa = 0;
+  // let CountStrofa = 0;
+  // let CountReturnStrofa = 0;
   let numgr = 0;
   let n = 0;
   let idt = "";
   let ReturnContainerTemplate = [];
-  let ReturnContainerTemplateReverse = [];
+  // let ReturnContainerTemplateReverse = [];
   if (state.GroupStrof.length === 1) {
     return;
   }
