@@ -1,5 +1,5 @@
 /** @param state {FetoState} */
-function TemplateAnaliz(state) {
+export function TemplateAnaliz(state) {
   // todo - check if passed correctly
   const Ritm = state.Ritm;
 

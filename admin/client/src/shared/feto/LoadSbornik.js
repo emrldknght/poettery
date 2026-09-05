@@ -1,5 +1,9 @@
 /** @param state {FetoState} */
 export function LoadSbornik(state) {
+  console.log('run LoadSbornik - enpty content');
+
+  /*
+
   state.SbornikMas = [];
   const SbornikMasText = []; // from $picker
 
@@ -63,4 +67,5 @@ export function LoadSbornik(state) {
     objTarget.options[lenTarget] = new Option('Обновить существующую запись', 'Обновить');
     state.flagUpdateRecord = 1;
   }
+   */
 }

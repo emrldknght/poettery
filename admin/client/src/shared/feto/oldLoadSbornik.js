@@ -3,7 +3,7 @@ export function oldLoadSbornik(state) {
   let Sbornik = "";
 
   console.log("LoadSbornik");
-  let files1 = document.getElementById("your-files11").files;
+  let files1 = null; // document.getElementById("your-files11").files;
   // Перебираем все файлы
   for (var i = 0; i < files1.length; i++) {
     // file1- объект типа File

@@ -1,3 +1,5 @@
+import {DelSpace} from "./DelSpace.js";
+
 /** @param state {FetoState} */
 export function LentaPoiskStrof(state) {
   DelSpace(state);

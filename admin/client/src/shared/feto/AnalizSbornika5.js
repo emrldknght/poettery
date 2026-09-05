@@ -18,7 +18,7 @@ export function AnalizSbornika5(state) {
 
   let AuthorReport = FIOAuthorReport + "<br>" + GodAuthorReport + "<br>" + AdresAuthorReport + "<br>" + EmailAuthorReport;
   if (AuthorReport.length < 200) {
-    document.getElementById('postscriptum').innerHTML = AuthorReport;
+    state.postscriptum = AuthorReport;
   }
 
   state.SbornikCount = state.SbornikCount + 5;

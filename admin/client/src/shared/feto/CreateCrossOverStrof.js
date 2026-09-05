@@ -1,3 +1,5 @@
+import {DelSpace} from "./DelSpace.js";
+
 /** @param state {FetoState} */
 export function CreateCrossOverStrof(state)
 // интегральный анализ на основе группированных строф CrossOverStihMas -  CrossOverProbelStrofMas

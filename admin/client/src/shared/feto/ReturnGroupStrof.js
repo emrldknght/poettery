@@ -1,5 +1,7 @@
 /** @param state {FetoState} */
-export function ReturnGroupStrof(state) {
+export function ReturnGroupStrofDom(state) {
+  console.log('[DEBUG] ReturnGroupStrof - start', state.GroupStrof, state.GroupStrof.length);
+
   // возвращаем сгруппированные строфы после анализа из ленты в основной блок. Длина ленты = GroupStrof.length
   // запомнили ReturnStrofaPositionMas [s]=kk; в какую группу kk какая строфа s переместилась.
   // берем из второй группы шаблона containertemplate2 весь второй блок и сплитим в массив GroupTemplateMas по <br><br>
@@ -20,6 +22,7 @@ export function ReturnGroupStrof(state) {
 
     idt = 'ContainerTemplate' + (s);
     elem = document.getElementById(idt).innerHTML; // находим шаблон в следующей группе
+    console.log('[DEBUG] ReturnGroupStrof - g1', idt, elem)
     // получаем массив из очередной группы строф (шаблонов) GroupTemplateMas
     GroupTemplateMas = elem.split("<br><br>");
 
@@ -33,10 +36,7 @@ export function ReturnGroupStrof(state) {
         ReturnContainerTemplate[CountStrofa] = GroupTemplateMas[n];
         n = n + 1;
       }
-      ;
-
     }
-
 //===============================================
 
   }
@@ -56,4 +56,52 @@ export function ReturnGroupStrof(state) {
   elem = elem.replace(/<br><br><br>/g, '<br><br>');
   elem = elem.replace(/<br><\/div><br><br>/g, '</div><br>'); // если остались
   state.ContainerTemplate1 = elem;
+}
+
+/** @param state {FetoState} */
+export function ReturnGroupStrof(state) {
+  console.log('[DEBUG] ReturnGroupStrof - start, length:', state.GroupStrof.length);
+
+  if (state.GroupStrof.length === 1) {
+    return;
+  }
+
+  let ReturnContainerTemplate = [];
+  let n = 0;
+
+  // Перебираем группы строф (теперь берем из state, а не из DOM)
+  for (let s = 2; s < state.GroupStrof.length + 1; s++) {
+    // БЫЛО: elem = document.getElementById('ContainerTemplate' + s).innerHTML;
+    // СТАЛО: читаем из сохраненного массива
+    const elem = state.lentaContainerTemplates?.[s] || "";
+
+    console.log('[DEBUG] ReturnGroupStrof - g1, s=', s, 'elem length=', elem.length);
+
+    // Получаем массив из очередной группы строф (шаблонов)
+    const GroupTemplateMas = elem.split("<br><br>");
+
+    n = 0;
+    for (let CountStrofa = 1; CountStrofa < state.ReturnStrofaPositionMas.length; CountStrofa++) {
+      const numgr = state.ReturnStrofaPositionMas[CountStrofa];
+
+      // Если номер группы текущей строфы совпадает с текущей итерацией цикла
+      if (numgr === s) {
+        ReturnContainerTemplate[CountStrofa] = GroupTemplateMas[n];
+        n = n + 1;
+        break; // переходим к следующей строфе, элемент из группы найден
+      }
+    }
+  }
+
+  // Объединяем шаблоны и переносим в первый блок
+  ReturnContainerTemplate.shift(); // удаляем нулевой (пустой) элемент
+
+  state.ContainerTemplate1 = ReturnContainerTemplate.join("<br><br>");
+
+  // Заменяем тройные переносы на двойные (как в оригинале)
+  state.ContainerTemplate1 = state.ContainerTemplate1
+    .replace(/<br><br><br>/g, '<br><br>')
+    .replace(/<br><\/div><br><br>/g, '</div><br>');
+
+  console.log('[DEBUG] ReturnGroupStrof - finished, ContainerTemplate1 length:', state.ContainerTemplate1.length);
 }

@@ -1,3 +1,7 @@
+import {RitmAnaliz} from "./RitmAnaliz.js";
+import {CreateBlockRitm} from "./CreateBlockRitm.js";
+import {Ritmkontrast} from "./Ritmkontrast.js";
+
 /** @param state {FetoState} */
 export function SecondTemplateAnaliz(state)
 // На основе вычисленного базового ритмического рисунка заменяем в шаблоне слабоударные ударными или безударными. Заодно корректируем TemplateGlasn - двусложные слова в безударных столбцах делаем безударными

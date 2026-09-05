@@ -1,3 +1,5 @@
+import {DelSpace} from "./DelSpace.js";
+
 /** @param state {FetoState} */
 export function PoiskStrof(state) {
   DelSpace(state);
@@ -5,7 +7,7 @@ export function PoiskStrof(state) {
   let StihText3 = state.OriginalTextInput + "\n";
   let stihMas3 = StihText3.split("\n");
   let stihMas4 = "";
-  let СountStrok = 0;
+  let CountStrok = 0;
   let CountStrof = 0;
 // считаем количество строф
   for (let i = 0; i < stihMas3.length - 1; i++) {
@@ -15,23 +17,23 @@ export function PoiskStrof(state) {
     if (str === "") {
       ++CountStrof
     } else {
-      ++СountStrok;
+      ++CountStrok;
     }
   }
 // если количество строф=1 , то делим текст на строфы
   if (CountStrof < 2) {
 // можно разделить на четверостишия
 
-    СountStrok = 0;
+    CountStrok = 0;
 
     for (let i = 0; i < stihMas3.length; i++) {
       let str = stihMas3[i];
-      ++СountStrok;
+      ++CountStrok;
 
       // после 4 строки прибавить пустую строку
-      if (СountStrok === 4) {
+      if (CountStrok === 4) {
         stihMas4 = stihMas4 + str + "\n\n";
-        СountStrok = 0;
+        CountStrok = 0;
       } else {
         stihMas4 = stihMas4 + str + "\n";
       }

@@ -1,11 +1,12 @@
 /** @param state {FetoState} */
 export function AnalizSbornika(state) {
 
-  document.getElementById("BallClassicManual").value = ""; //Оценка классики вручную - сброс
-  document.getElementById("BallContentManual").value = ""; // Оценка эксперта за содержание  - сброс
+  state.BallClassicManual = ""; //Оценка классики вручную - сброс
+  state.BallContentManual = ""; // Оценка эксперта за содержание  - сброс
   // document.getElementById("SaveRecord").checked = false; // режим записи в файл - сброс
   state.SaveRecord.checked = false;
-  document.getElementById("FileAccent").checked = false; // ударения расставлены - сброс;
+  state.FileAccent.checked = false; // document.getElementById("FileAccent").checked = false
+  // ; // ударения расставлены - сброс;
 
   // SbornikCount = Number(document.getElementById("SbornikCount").value);
   LentaClearFormStih();

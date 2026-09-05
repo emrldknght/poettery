@@ -9,19 +9,24 @@ export function LentaClearFormStih(state) {
   state.ContainerAnaliz1f = "";
   state.ContainerFlag1 = "";
   state.ContainerComment1 = "";
-  document.getElementById('postscriptum').innerHTML = "";
-  document.getElementById('vopros').style.display = 'none';
-  document.getElementById('otvet').style.display = 'none';
-  document.getElementById('openrecordstih1').style.display = 'none';
-  document.getElementById('openrecordstih2').style.display = 'none';
+  state.postscriptum = "";
+  // document.getElementById('vopros').style.display = 'none';
+  // document.getElementById('otvet').style.display = 'none';
+  // document.getElementById('openrecordstih1').style.display = 'none';
+  // document.getElementById('openrecordstih2').style.display = 'none';
 
+/*
 // удаляем элементы с классом lenta
   document.querySelectorAll('.lenta').forEach(function (a) {
     a.remove()
   });
+ */
 
+  /*
   if (window.konkurs_title != "" && window.konkurs_title != null) {
-    document.getElementById('konkurs_title_note').innerHTML = "<br><br>Прямо сейчас вы можете отправить стихи на " + window.konkurs_title + ". ";
+    document.getElementById('konkurs_title_note').innerHTML =
+      "<br><br>Прямо сейчас вы можете отправить стихи на " + window.konkurs_title + ". ";
   }
+   */
 
 }

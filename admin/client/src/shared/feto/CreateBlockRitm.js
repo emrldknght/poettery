@@ -82,7 +82,7 @@ export function CreateBlockRitm(state) {
             ++state.CountStrofaRitmEr;
             FlagNextStrofaErr = 1
           }
-          ; //количество сбойных строф
+          //количество сбойных строф
         } else if (state.Ritm[kk] === 1) {
           st = '<span class="blue-symbol">';
           sim = sim.toLowerCase();
@@ -139,7 +139,9 @@ export function CreateBlockRitm(state) {
   state.CountSlogSertext = ' 1-СЛАБОУДАРНЫЕ ГЛАСНЫЕ:' + state.CountSlogSer + ' шт.              ';
   state.CountSlogBlacktext = ' 2-УДАРНЫЕ ГЛАСНЫЕ:' + state.CountSlogBlack + ' шт.              ';
 
-  state.ContainerTemplate1 = '<div id="shema" class="text-main lh">' + state.slog + html + '<div id="TriCodRitm"></div></div><div class="legenda1" style="margin: 10px 0px 0px 10px; line-height: 1.3;"><br><span class="blue-symbol" style="letter-spacing: 1px; white-space:pre-wrap;">'
+  state.ContainerTemplate1 = '<div id="shema" class="text-main lh">' + state.slog + html
+    + '<div id="TriCodRitm"></div></div><div class="legenda1" style="margin: 10px 0 0 10px; line-height: 1.3;">' +
+    '<br><span class="blue-symbol" style="letter-spacing: 1px; white-space:pre-wrap;">'
     + state.CountSlogBluetext.substring(0, 32)
     + '</span><br><span class="gray-symbol" style="letter-spacing: 1px; white-space:pre-wrap;">'
     + state.CountSlogSertext.substring(0, 32)
@@ -152,7 +154,7 @@ export function CreateBlockRitm(state) {
 
   state.RitmComment = state.RitmCommentMin + state.CommentRitmika + RitmCommentErr;
 
-  window.flagProcentCountSlogSer = Math.round(state.CountSlogSer / state.CountSlog * 100);
+  state.flagProcentCountSlogSer = Math.round(state.CountSlogSer / state.CountSlog * 100);
 
   state.LentaCountSlogSer = state.CountSlogSer;
   state.LentaCountSlog = state.CountSlog;

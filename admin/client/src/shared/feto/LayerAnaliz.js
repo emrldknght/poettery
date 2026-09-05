@@ -1,9 +1,18 @@
+import {TonicAnaliz} from "./TonicAnaliz.js";
+import {AnalizRazmera} from "./AnalizRazmera.js";
+import {ClassicAnaliz} from "./ClassicAnaliz.js";
+import {CrossAnaliz} from "./CrossAnaliz.js";
+import {LentaAnaliz} from "./LentaAnaliz.js";
+import {TriCodCount} from "./TriCodCount.js";
+
+
 /** @typedef
  * {{
  * level?: 'auto'|'tonic'|'full'|'strof'|'strok',
  * project?: string,
  * epigramma?: number,
  }} LAOptions */
+
 
 /**
  * @param state {FetoState}

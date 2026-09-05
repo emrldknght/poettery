@@ -1,3 +1,5 @@
+import {TextStihResize} from "./TextStihResize.js";
+
 /** @param state {FetoState} */
 export function DelSpace(state) {
 // форматируем текст

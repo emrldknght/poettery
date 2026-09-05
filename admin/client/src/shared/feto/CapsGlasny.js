@@ -1,3 +1,5 @@
+import {PoiskSlov} from "./PoiskSlov.js";
+
 /** @param NextSlovo
  @param state {FetoState} */
 export function CapsGlasny(NextSlovo, state)
@@ -10,7 +12,7 @@ export function CapsGlasny(NextSlovo, state)
   let glasnyLow = "аоиеёэыуюя";
   let LowGlasny = Slovo.replace(/[йцкнгшщзхъфвпрлджчсмтьбЙЦКНГШЩЗХЪФВПРЛДЖЧСМТЬБ]/g, '');
   let lens = Slovo.length;
-  let flagtonic = document.getElementById('level-tonic').checked;
+  let flagtonic = state.levelTonic; // document.getElementById('level-tonic').checked;
 
   if (flagtonic && LowGlasny.length === 1) {
     return state.slovoAccent.toLowerCase();

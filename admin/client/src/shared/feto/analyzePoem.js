@@ -96,7 +96,7 @@ export function analyzePoem(poem, commentsDiv, repeat, state) {
   }
 
   // 9. Выводим итоговую матрицу в ContainerTemplate1
-  document.getElementById('ContainerTemplate1').innerHTML = '<b>Итоговая матрица:</b><br><br>' + styledMatrix;
+  state.ContainerTemplate1 = '<b>Итоговая матрица:</b><br><br>' + styledMatrix;
 
   // 10. Вычисляем ритмический рисунок
   const rhythmMatrix = calculateRhythm(matrix);

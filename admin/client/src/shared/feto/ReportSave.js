@@ -1,5 +1,10 @@
 /** @param state {FetoState} */
 export function ReportSave(state) {
+  function clearPanel () {
+    // document.getElementById('ReportPanel').remove();
+    return false;
+  }
+
   state.explorerPanel =
     state.explorerPanel +
     '<div id="ReportPanel" style="background-color: #ffffff;"><br><a href="data:text/plain;charset=utf-8,%EF%BB%BF'
@@ -22,6 +27,6 @@ export function ReportSave(state) {
     '<a href="data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURIComponent(state.ReportAccentBall3) + '" download="Reports-Accent-ball3.txt">' +
     'Сохранить сборник стихов с баллом=3 с расставленными ударениями в файл</a><br>' +
     '<a href="data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURIComponent(state.ReportTab) + '" download="Reports-csv.txt">Сохранить csv для загрузки в базу данных</a>' +
-    '<br><a href="#" onClick="document.getElementById(&#39;ReportPanel&#39;).remove(); return false;">Убрать панель отчётов</a><br><br></div>';
+    '<br><a href="#" onClick="clearPanel();">Убрать панель отчётов</a><br><br></div>';
 
 }

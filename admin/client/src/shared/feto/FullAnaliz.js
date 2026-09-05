@@ -1,3 +1,17 @@
+import {ClearForm2} from "./ClearForm2.js";
+import {DelSpace} from "./DelSpace.js";
+import {PoiskStrof} from "./PoiskStrof.js";
+import {AnalizRazmera} from "./AnalizRazmera.js";
+import {LentaPoiskStrof} from "./LentaPoiskStrof.js";
+import {AnalizGroupStrof} from "./AnalizGroupStrof.js";
+import {CreateGroupStrof} from "./CreateGroupStrof.js";
+import {AnalizRifm} from "./AnalizRifm.js";
+import {ReversAccent} from "./ReversAccent.js";
+import {CreateTemplateAccent} from "./CreateTemplateAccent.js";
+import {TextStihResize} from "./TextStihResize.js";
+import {processTable} from "./full-analyze/processTable.js";
+import {processTableNoDom} from "./full-analyze/processTableNoDom.js";
+
 /** @param state {FetoState} */
 export function FullAnaliz(state) {
   console.log("START -- Full Analiz");
@@ -49,7 +63,7 @@ export function FullAnaliz(state) {
   let flagRitm1 = "";
   let flagErrorRifma1 = "";
   let FlagRifm1 = "";
-  let flagProcentCountSlogSer = 0;
+  state.flagProcentCountSlogSer = 0;
 
 
 //массивы с оценками по каждому фрагменту
@@ -122,17 +136,17 @@ export function FullAnaliz(state) {
   let BallContentManualText = ""; //Оценка содержания вручную
 
 
-  let tableRef = ''; // находим таблицу
-  let row1 = ''; // строка таблицы
-  let nextrow = ''; // строка таблицы (клон)
-  let nextrow1 = ''; // строка таблицы (клон)
-  let row2 = '';
-  let nextrow2 = '';
-  let row3 = '';
-  let nextrow3 = '';
-  let elem = "";
-  let elem2 = "";
-  let NextID = "";
+  // let tableRef = ''; // находим таблицу
+  // let row1 = ''; // строка таблицы
+  // let nextrow = ''; // строка таблицы (клон)
+  // let nextrow1 = ''; // строка таблицы (клон)
+  // let row2 = '';
+  // let nextrow2 = '';
+  // let row3 = '';
+  // let nextrow3 = '';
+  // let elem = "";
+  // let elem2 = "";
+  // let NextID = "";
   let FullContainerTemplate = "";
   let FragmentReports = "";
   let FragmentN = 0;
@@ -141,9 +155,9 @@ export function FullAnaliz(state) {
   const elementArray = [];
   state.CrossLentaRitm = []; // массив базового ритмического рисунка для перекрестных строф (одна строфа-один ритм). После перекрёстного анализа служит восстановлению ритма в востановленных строфах
   state.CrossTemplateGlasn = []; // массив гласных для перекрестных строф
-  let kolStrokTemplateGlasn = 0;
-  let countStrokTemplateGlasn = 0;
-  let TemplateGlasn2 = [];
+  // let kolStrokTemplateGlasn = 0;
+  // let countStrokTemplateGlasn = 0;
+  // let TemplateGlasn2 = [];
   let CrossRitmStr = "";
   state.NewAccentLentaText = "";
 
@@ -187,7 +201,10 @@ export function FullAnaliz(state) {
   // * Мнение редакции альманаха «Венец поэзии» может отличаться от выводов интеллектуальной системы. Содержание текста требует отдельного анализа.
   // Не забудьте проверить правильность расстановки ударений</a>.';
 
-  let TitleComment = 'Структурный анализ стихотворения «' + state.TitulStih + '» подготовлен* интеллектуальной системой Fet.Online&nbsp;<a href="https://vpoezii.online/document/4502/" target="_blank" style="text-decoration: none; color: #0d6f9c!important;  link: #aaaaaa!important;">&nbsp;(свидетельство Роспатента от 22.03.2021 №2021614295)</a>.';
+  let TitleComment = 'Структурный анализ стихотворения «' + state.TitulStih
+    + '» подготовлен* интеллектуальной системой Fet.Online&nbsp;' +
+    '<a href="https://vpoezii.online/document/4502/" target="_blank" style="text-decoration: none; color: #0d6f9c!important;  ' +
+    'link: #aaaaaa!important;">&nbsp;(свидетельство Роспатента от 22.03.2021 №2021614295)</a>.';
   // document.title = 'Анализ стихотворения «' + state.TitulStih + '»';
 
 // НАЧАЛО АНАЛИЗА =========================================
@@ -300,7 +317,7 @@ export function FullAnaliz(state) {
     } else {
       fragment = "стихотворения";
     }
-    ;
+
     let NextStih = state.OriginalTextInput + "\n";
     let NextStihMas = NextStih.split("\n");
 
@@ -479,7 +496,7 @@ export function FullAnaliz(state) {
       state.flagCountRitmErrorMas[FragmentNumber] = state.flagCountRitmError; // количество сбоев ритма
       state.flagCountErrorRifmaMas[FragmentNumber] = state.flagCountErrorRifma; // количество нерифмованных строк (надо делить на два, у рифмы всегда есть пара)
 
-      state.flagProcentCountSlogSerMas[FragmentNumber] = window.flagProcentCountSlogSer; // процент серых гласных
+      state.flagProcentCountSlogSerMas[FragmentNumber] = state.flagProcentCountSlogSer; // процент серых гласных
 
       state.flagRitmBallMas[FragmentNumber] = state.flagRitmBall;// 1 - ритм найден, 2 - ритм явный, 3 -ритм чёткий.
       state.flagRifmBallMas[FragmentNumber] = state.flagRifmBall;// Рифма точная - flagRifmBall=1 (реально используется количество нерифмованных строк)
@@ -779,132 +796,11 @@ export function FullAnaliz(state) {
 
 // переносим результаты из первого блока в следующий (клонируем первую вторую и далее строку в конец таблицы)  --------lenta-------------------------------------
     TextStihResize();
-
     if (state.GroupStrof.length > 1 && FragmentNumber > 0) {
       // todo - ! REFACTOR
-
-      state.lenta = state.lenta + 1;
-
-      tableRef = document.getElementById('global-table1'); // находим таблицу
-
-      console.log('tableRef', tableRef);
-
-      row1 = tableRef.rows[0]; //0 строка - это флаг
-
-      console.log('tableRef row1', row1);
-
-      row2 = tableRef.rows[1]; //1 строка - это комментарий
-      row3 = tableRef.rows[2]; //2 строка - это стих
-
-      nextrow1 = row1.cloneNode(true); // клонируем
-      nextrow = tableRef.appendChild(nextrow1); // добавляем в конец таблицы
-      nextrow.classList.add("lenta");
-
-      elem = nextrow.innerHTML;
-      elem = elem.replace(/ContainerFlag1/g, 'ContainerFlag' + state.lenta); // id-метку надо переименовать (извлекаем html, делаем текстовую замену и возвращаем)
-      nextrow.innerHTML = elem;
-      nextrow1.innerHTML = elem;
-      nextrow1.id = 'lenta1-' + state.lenta;  // новое имя всему блоку
-
-      nextrow2 = row2.cloneNode(true); // клонируем
-      nextrow = tableRef.appendChild(nextrow2); // добавляем в конец таблицы
-      nextrow.classList.add("lenta");
-
-      elem = nextrow.innerHTML;
-      elem = elem.replace(/ContainerComment1/g, 'ContainerComment' + state.lenta); // id-метку надо переименовать
-      nextrow.innerHTML = elem;
-      nextrow2.innerHTML = elem;
-      nextrow2.id = 'lenta2-' + state.lenta;
-
-      nextrow3 = row3.cloneNode(true); // клонируем, в этом блоке три id-метки, их надо переименовать
-      nextrow = tableRef.appendChild(nextrow3); // добавляем в конец таблицы
-      nextrow.classList.add("lenta");
-
-      elem = nextrow.innerHTML;
-      elem = elem.replace(/ContainerTemplate1/g, 'ContainerTemplate' + state.lenta);// id-метку надо переименовать
-      nextrow.innerHTML = elem;
-      nextrow3.innerHTML = elem;
-      nextrow3.id = 'lenta3-' + state.lenta;
-
-
-      elem = nextrow.innerHTML;
-      elem = elem.replace(/ContainerAnaliz1/g, 'ContainerAnaliz' + state.lenta);// id-метку надо переименовать
-      nextrow.innerHTML = elem;
-      nextrow3.innerHTML = elem;
-
-      elem = nextrow.innerHTML;
-      elem = elem.replace(/ContainerAnaliz1f/g, 'ContainerAnaliz' + state.lenta + 'f');// id-метку надо переименовать
-      nextrow.innerHTML = elem;
-      nextrow3.innerHTML = elem;
-
-// тест переносим последним =============
-
-      elem = nextrow.innerHTML;
-      elem = elem.replace(/formStih1/g, 'formStih' + state.lenta);// name-метку  надо переименовать
-      nextrow.innerHTML = elem;
-      nextrow3.innerHTML = elem;
-
-      elem = nextrow.innerHTML;
-      elem = elem.replace(/TextStih1/g, 'TextStih' + state.lenta);// name-метку  надо переименовать
-      nextrow.innerHTML = elem;
-      nextrow3.innerHTML = elem;
-
-      elem = document.getElementsByName('formStih' + state.lenta)[0];// ищем name-метку
-      console.log('!elem', 'formStih' + state.lenta, elem);
-      if (elem) {
-        textfragment = state.OriginalTextInput; // переносим текст из первого блока
-        const target = elem.TextStih;
-        console.log('fragment', textfragment, 'to target', target);
-        // elem.TextStih.value = textfragment;
-      }
-
-      state.lentacount = state.lenta;
-// потом искать будем по номерам строк tableRef.rows[1] с шагом 3 или по новым id (второй способ пригодился для очистки форм)
-
-
-// заодно перенесём очередной ContainerTemplate из текущей позиции ленты в первый блок вместе с легендой  (если режим ленты)
-      if (state.LentaMode.checked) {
-        NextID = 'ContainerTemplate' + state.lenta;
-        elem = document.getElementById(NextID).innerHTML;
-        elem2 = elem.replace(/NextID/g, '');// id-метку надо убрать
-        FullContainerTemplate = FullContainerTemplate + elem2 + '<br>';
-      }
-
-//--------------------- блоку шаблона присваиваем класс (даже не в режиме ленты)
-      NextID = 'ContainerTemplate' + state.lenta;
-      elem = document.getElementById(NextID);
-      elem.classList.add("ContainerTemplate" + state.lenta);
-
-//--------------------- заодно запомним ритм блока ??? это для кросс-анализа
-      console.log("Ritm ================================================================================");
-      console.log(state.lenta);
-      console.log(state.Ritm);
-      console.log(state.CrossRitm);
-//--------------------- сформировать массив числового ритма в виде текстовых значений чисел, разделённых запятыми. Одна строФА стиха - одна строка ритма.
-
-      state.CrossLentaRitm[state.lenta] = state.CrossRitm.join(',');
-      console.log(state.CrossLentaRitm[state.lenta]);
-
-//формируем массив числового ритма в виде текстовых значений чисел, разделённых запятыми. Одна строка стиха - одна строка ритма.
-//считаем количество строк в строфе
-
-      TemplateGlasn2 = state.TemplateGlasn.split("\n");
-      kolStrokTemplateGlasn = TemplateGlasn2.length;
-
-//создаём в цикле массив строф-ритмов (по аналогии с шаблоном гласных) одна строка стиха - одна строка ритма. CrossRitmStrofa
-
-      for (let q = 0; q < kolStrokTemplateGlasn; q++) {
-        countStrokTemplateGlasn = countStrokTemplateGlasn + 1;
-        state.CrossRitmStrofa[countStrokTemplateGlasn] = state.CrossLentaRitm[state.lenta];
-      }
-
-
-//--------------------- заодно запомним шаблон гласных  ??? TemplateGlasn -- CrossTemplateGlasn
-      state.CrossTemplateGlasn[state.lenta] = state.TemplateGlasn;
-      console.log(state.CrossTemplateGlasn[state.lenta]);
-//--------------------- заодно запомним в NewAccentLentaText сам текст стихотворения с расставленными построфно ударениями textfragment
-      state.NewAccentLentaText = state.NewAccentLentaText + textfragment;
-
+      // FullContainerTemplate = processTable(state);
+      const { fullContainerTemplate } = processTableNoDom(state);
+      FullContainerTemplate = fullContainerTemplate;
     }
 
 // КОНЕЦ переноса результатов из первого блока в следующий ----------------------------------------------
@@ -1073,7 +969,7 @@ export function FullAnaliz(state) {
     // document.getElementById('TextStih1').readOnly = 'true';
   }
 
-  if (window.type == "noclassic") {
+  if (state.inWindow.type === "noclassic") {
     // document.getElementById('openrecordstih2').style.display = '';
     // document.getElementById('TextStih1').readOnly = 'true';
   }
@@ -1088,9 +984,9 @@ export function FullAnaliz(state) {
 
 // Оценка эксперта за содержание всегда вручную (если не пустая) -------------------------------------------------------------------------------
   let BallContentManualText1 = state.BallContentManual;
-  window.BallContentManual = BallContentManualText1;
+  // state.BallContentManual = BallContentManualText1;
   if (BallContentManualText1 !== "") {
-    BallContentManualText = "\nОценка эксперта за содержание: {" + document.getElementById("BallContentManual").value + "}\n";
+    BallContentManualText = "\nОценка эксперта за содержание: {" + BallContentManualText1 + "}\n";
   }
 
 
@@ -1132,20 +1028,40 @@ export function FullAnaliz(state) {
 
 
     for (let FragmentN = 1; FragmentN < state.GroupStrof.length; FragmentN++) {
-      FragmentReports = FragmentReports + document.getElementById('ContainerAnaliz' + FragmentN).innerText + '\n\n'
+      console.log('[Full Analiz] form report frag', FragmentN, 'text');
+      const fragText = ''; // document.getElementById('ContainerAnaliz' + FragmentN).innerText
+
+      FragmentReports = FragmentReports + fragText + '\n\n'
         + state.OriginalTextInput + '\n\n';
     }
     FragmentReports = FragmentReports + 'РЕЗЮМЕ:\n' + state.ContainerComment1;
 
 // формируем отчёт по сборнику в виде csv для последующей загрузки в базу
+    const {
+      lastnameReport = '',
+      firstnameReport = '',
+      middlenameReport = '',
+      regionReport = '',
+      sityReport = '',
+      phoneReport = '',
+      emailReport = '',
+      rubrikaReport = '',
+      targetReport = '',
+      urlReport = '',
+      styleReport = '',
+      sourceReport = '',
+      accordsReport = '',
+    } = state.inWindow
+
     if (GlobalClassicBall > 1) {
-      state.ReportTab = state.ReportTab + "'';'';'" + window.lastnameReport + "';'" + window.firstnameReport + "';'" + window.middlenameReport +
-        "';'" + window.regionReport + "';'" + window.sityReport + "';'" + window.phoneReport + "';'" + window.emailReport + "';'" +
-        window.rubrikaReport + "';'" + state.TitulStihReport + "';'" + state.OriginalTextInput + "';'" + window.targetReport +
-        "';'" + state.flagCountStrofaPatternType + "';'" + state.Strof + "';'" + state.StrofaPatternReport + "';'" + state.RitmReport.replace(/,/g, '') +
+      state.ReportTab = state.ReportTab + "'';'';'" + lastnameReport + "';'" + firstnameReport + "';'" + middlenameReport +
+        "';'" + regionReport + "';'" + sityReport + "';'" + phoneReport + "';'" + emailReport + "';'" +
+        rubrikaReport + "';'" + state.TitulStihReport + "';'" + state.OriginalTextInput + "';'" + targetReport +
+        "';'" + state.flagCountStrofaPatternType + "';'" + state.Strof + "';'" + state.StrofaPatternReport + "';'"
+        + state.RitmReport.replace(/,/g, '') +
         "';'" + state.flagCountRitmError + "';'" + state.flagRitmBall + "';'" + state.flagRifmBall + "';'" + GlobalClassicBall +
-        "';'" + state.ProcentCountSlogSer + "';'" + window.BallContentManual + "';'" + window.urlReport + "';'" + window.styleReport +
-        "';'" + window.sourceReport + "';'" + window.accordsReport + "'" + "\n";
+        "';'" + state.ProcentCountSlogSer + "';'" + state.BallContentManual + "';'" + urlReport + "';'" + styleReport +
+        "';'" + sourceReport + "';'" + accordsReport + "'" + "\n";
     }
 
 
@@ -1193,7 +1109,9 @@ export function FullAnaliz(state) {
 
 //==================================================================================
     state.ContainerAnaliz1f = state.ContainerAnaliz1f
-      + '<br>Ещё вы можете:<br><a href="data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURIComponent(FragmentReports) + '" download="' + document.title + '.txt">Сохранить отчёт в файл</a>';
+      + '<br>Ещё вы можете:<br><a href="data:text/plain;charset=utf-8,%EF%BB%BF'
+      + encodeURIComponent(FragmentReports) + '" download="' +  new Date().getTime() // document.title
+      + '.txt">Сохранить отчёт в файл</a>';
 
   } // конец если запись не отключена
 

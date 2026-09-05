@@ -1,18 +1,18 @@
 /** @param state {FetoState} */
 export function TriCodCount(state)
 {
+  let i;
   // console.log
 
-  var TriCodLegend = document.getElementById("TriCodRitm");
+  // const TriCodLegend = state.TriCodLegend;
 
-  var s="";
-  var n="";
+  let s = "";
+  let n = "";
 
-  var slog='<span class="border1">';
-  var mySlog = document.getElementById("slog");
-// создаём строку нумерации слогов - с учётом интервалов между символами -------------------
-  for (var i = 1; i < state.TriCodRitm.length+1; i++)
-  {
+  let slog = '<span class="border1">';
+  // var mySlog = state.mySlog; // document.getElementById("slog");
+  // создаём строку нумерации слогов - с учётом интервалов между символами -------------------
+  for (i = 1; i < state.TriCodRitm.length+1; i++) {
     s=i+" ";
     console.log ('s');
     console.log (s);
@@ -21,19 +21,18 @@ export function TriCodCount(state)
   }
   slog = slog+'</span>';
 
-  mySlog.innerHTML = '<span class="strofa">&nbsp;&nbsp;&nbsp;&nbsp;</span>'+slog;
+  state.mySlog = '<span class="strofa">&nbsp;&nbsp;&nbsp;&nbsp;</span>'+slog;
 
 // создаём строку троичного кода - с учётом интервалов между символами ---------------------
 
-  var slog='<span class="border1">';
-  var s=0;
+  slog = '<span class="border1">';
+  s = 0;
 
-  for (var i = 0; i < state.TriCodRitm.length; i++)
-  {
+  for (i = 0; i < state.TriCodRitm.length; i++) {
     s = state.TriCodRitm[i];
     slog = slog+'<span class="slog">'+s+'</span>';
   }
   slog = slog+'</span>';
 
-  TriCodLegend.innerHTML = '<span class="strofa">&nbsp;&nbsp;&nbsp;&nbsp;</span>'+slog;
+  state.TriCodLegend = '<span class="strofa">&nbsp;&nbsp;&nbsp;&nbsp;</span>'+slog;
 }

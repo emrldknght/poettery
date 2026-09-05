@@ -1,3 +1,6 @@
+import {CreateBlockRitmStroka} from "./CreateBlockRitmStroka.js";
+import {AnalizCrossOverStrof} from "./AnalizCrossOverStrof.js";
+
 /** @param state {FetoState} */
 export function ReturnCrossOverStrof(state)
 // возвращаем перекрёстные строфы (развернув обратно) в первое текстовое поле, а шаблоны в поле шаблонов ==========================================================================================
@@ -47,7 +50,8 @@ export function ReturnCrossOverStrof(state)
   for (let k = 1; k < state.OldCrossTemplateGlasnMas.length; k++) {
     m = AntiPosCrossOverStihMas[k];
     console.log("k=" + k + "  m=" + m);
-    RitmStroka = state.CrossRitmStrofa[m];
+    RitmStroka = state.CrossRitmStrofa[m] || ''; // todo - can be empty? check logic
+    console.log("state.CrossRitmStrofa", state.CrossRitmStrofa, "RitmStroka", RitmStroka);
 
     NewAccentLentaStroka = NewAccentLentaTextMas[m];
     state.NewAccentLentaText = state.NewAccentLentaText + NewAccentLentaStroka + "\n";

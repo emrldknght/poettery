@@ -40,7 +40,7 @@ export function AnalizSbornikaAuto(state) {
   state.ContainerFlag1 = "";
   state.ContainerAnaliz1 = "";
   state.ContainerAnaliz1f = "";
-  document.title = "Проведён анализ " + SbornikCount + " стихотворений.";
+  // document.title = "Проведён анализ " + SbornikCount + " стихотворений.";
   // document.getElementById('ContainerTemplate1').innerHTML
   state.ContainerTemplate1 = 'Проведён анализ ' + SbornikCount + ' стихотворений. <br>' +
     '<a href="data:text/plain;charset=utf-8,%EF%BB%BF'

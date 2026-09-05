@@ -1,3 +1,5 @@
+import {PoiskE} from "./PoiskE.js";
+
 /**
  @param tryRifma {number}
  @param state {FetoState}
@@ -104,7 +106,7 @@ export function AnalizRifm(tryRifma, state)
           if (SlovoRifmEnd > SlovoRifmEnd1) {
             break
           }
-          ; // нашли позицию ближайшего справа пробела
+          // нашли позицию ближайшего справа пробела
         }
 
         SlovoRifm = NextStrStih.substring(SlovoRifmBegin, SlovoRifmEnd - 1); // вырезали слово по пробелам
@@ -134,10 +136,10 @@ export function AnalizRifm(tryRifma, state)
         AccentRifm = "Ё";
         FlagRifmaYo = 1
       }
-      ;
+
       console.log("Eslovo", Eslovo);
     }
-    ;
+
 
 
 // ёфицировали текущее слово в строке s -------------------
@@ -146,23 +148,23 @@ export function AnalizRifm(tryRifma, state)
     if (AccentRifm === "Я") {
       AccentRifm = "А";
     }
-    ;
+
     if (AccentRifm === "Ю") {
       AccentRifm = "У";
     }
-    ;
+
     if (AccentRifm === "Ё") {
       AccentRifm = "О";
     }
-    ;
+
     if (AccentRifm === "Е") {
       AccentRifm = "Э";
     }
-    ;
+
     if (AccentRifm === "Ы") {
       AccentRifm = "И";
     }
-    ;
+
 
 
     FullRifmMas[s] = AccentRifm;
@@ -256,7 +258,7 @@ export function AnalizRifm(tryRifma, state)
     NextRifm = FullRifmMas[s];
     if (NextRifm === "#") {
       NumStrofaRifm = NumStrofaRifm + 1;
-      if (NumStrokaRifm == 5) {
+      if (NumStrokaRifm === 5) {
         //четверостишие
         if (FullRifmMas[s - 4] == FullRifmMas[s - 3] && FullRifmMas[s - 4] == FullRifmMas[s - 2] && FullRifmMas[s - 4] == FullRifmMas[s - 1]) {
           console.log("полная");
@@ -291,7 +293,7 @@ export function AnalizRifm(tryRifma, state)
         NumStrokaRifm = 0;
       }
     }
-    ;
+
     //следующая строфа
   }
 

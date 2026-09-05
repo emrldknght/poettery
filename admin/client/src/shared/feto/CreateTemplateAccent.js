@@ -1,5 +1,8 @@
+import {TemplateAnaliz} from "./TemplateAnaliz.js";
+import {SecondTemplateAnaliz} from "./SecondTemplateAnaliz.js";
+
 /** @param state {FetoState} */
-function CreateTemplateAccent(state) {
+export function CreateTemplateAccent(state) {
 // Создаём шаблон ударений. Выбираем гласные, заменяем маркерами ударений О:. и записываем шаблон в переменную TemplateAccent.
 // Заодно создаём массив номеров гласных в словах - TemplateNumGlas. Каждая гласная помечается числом 1 -  если она первая в слове, числом 2 - если вторая и тд (NumGlas)
 
@@ -71,11 +74,11 @@ function CreateTemplateAccent(state) {
           if (gllow) {
             TemplateZnak = TemplateZnak31
           }
-          ;
+
           if (glcaps) {
             TemplateZnak = TemplateZnak32
           }
-          ;
+          
           TemplateStr = TemplateStr + TemplateZnak;
           TemplateNumGlasStr = TemplateNumGlasStr + String(Countgl); // заодно создаём массив номеров гласных
 
@@ -84,7 +87,7 @@ function CreateTemplateAccent(state) {
       if (Countgl === 1) {
         TemplateStr = TemplateZnak33
       }
-      ;
+
       NextSlovo = "";
       Countgl = 0;
       ResText = ResText + TemplateStr;

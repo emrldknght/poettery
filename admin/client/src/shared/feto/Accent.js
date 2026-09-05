@@ -1,3 +1,9 @@
+import {DelSpace} from "./DelSpace.js";
+import {ClearForm2} from "./ClearForm2.js";
+import {FullAnaliz} from "./FullAnaliz.js";
+import {CapsGlasny} from "./CapsGlasny.js";
+import {CountSimvol} from "./CountSimvol.js";
+
 /** @param state {FetoState} */
 export function Accent(state) {
   DelSpace(state);

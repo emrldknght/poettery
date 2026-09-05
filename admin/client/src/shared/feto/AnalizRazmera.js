@@ -1,3 +1,5 @@
+import {TextStihResize} from "./TextStihResize.js";
+
 export function AnalyzeEpigram(epigramma, StrofaPatternReport) {
   let ResumeStrofaPatternType = ''
   let epigrammatype = ''
@@ -190,7 +192,8 @@ export function AnalizRazmera(state)
     ResumeStrofaCount = "Стихотворение не разбито на строфы. " + "<br>" + "Нужно добавить пустую строку между строфами. ";
     state.flagStrofa = state.krest + "Разбейте на строфы. ";
     state.flagStrofaRazbita = 0;
-    document.getElementById('level-full').checked = true;
+    // document.getElementById('level-full').checked = true;
+    state.levelFull = true;
   } else {
     state.flagStrofaRazbita = 1;
   }
