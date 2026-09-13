@@ -1,6 +1,7 @@
 ---
 layout: poem
 title: Кот
+pub-in: vk-120926
 ---
 
 

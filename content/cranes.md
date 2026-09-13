@@ -1,6 +1,7 @@
 ---
 layout: poem
 title: Журавлики
+pub-in: vk-120926
 ---
 
 ```text

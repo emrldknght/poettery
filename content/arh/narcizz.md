@@ -1,6 +1,7 @@
 ---
 layout: poem
 title: Нарцисс
+pub-in: vk-130926
 ---
 
 ```text
