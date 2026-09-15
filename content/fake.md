@@ -1,6 +1,8 @@
 ---
 layout: poem
 title: Подделка
+date: 14-05-2026
+pub-in: vk-150926
 ---
 
 ```text
