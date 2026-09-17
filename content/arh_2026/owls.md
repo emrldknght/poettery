@@ -1,6 +1,8 @@
 ---
 layout: poem
 title: Совами
+date: 14-06-2026
+pub-in: vk-160926
 ---
 
 ```text
