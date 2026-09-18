@@ -2,6 +2,7 @@
 layout: poem
 title: Шакал
 date: 23-02-2026
+review: qwen-110926
 ---
 
 Мама холст отбели  
