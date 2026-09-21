@@ -4,124 +4,63 @@ import {PoemStructure} from "@/features/analyzer/PoemStructure.tsx";
 import {PoemRhymes} from "@/features/analyzer/PoemRhymes.tsx";
 import {PoemScoring} from "@/features/analyzer/PoemScoring.tsx";
 import {PoemComments} from "@/features/analyzer/PoemComments.tsx";
-
-interface AnalysisResult {
-  containerFlag1: string;
-  accentedText: string;
-  stats: {
-    total: number;
-    blue: number;
-    gray: number;
-    black: number;
-  };
-  structure: {
-    size: string;
-    rhythmString: string;
-    rhythm: number[];
-    vowelTemplates: string[];
-    accentTemplates: string[];
-    numGlasTemplates: string[];
-    rhythmContrast: {
-      plus: string;
-      minus: string;
-    };
-    triCode: string;
-    ResumeComment: string;
-    ResumeCommentMini: string;
-    razmerComment: string;
-  };
-  rhymes: {
-    words: string[];
-    sounds: string[];
-    type: string;
-    typeCode: string;
-    scheme: string;
-  };
-  scoring: {
-    classicBall: number;
-    tonicBall: number;
-    rhythmBall: number;
-    rhymeBall: number;
-    accentBall: number;
-    groupStrofaBall: number;
-    rhythmErrors: number;
-    rhymeErrors: number;
-    isStrofaBroken: number;
-    uniqueStrof: number;
-    percentSecondarySyllables: number;
-  };
-  comments: {
-    resume: string;
-    resumeMini: string;
-    lentaModeResume: string;
-    rhythm: string;
-    rhyme: string;
-    stopa: string;
-  };
-  legend: {
-    blue: { code: number; label: string; count: number };
-    gray: { code: number; label: string; count: number };
-    black: { code: number; label: string; count: number };
-  };
-  flags: {
-    passed: boolean;
-    flag: string;
-  };
-  dom: {
-    ContainerAnaliz1: string;
-    ContainerAnaliz1f: string;
-    ContainerComment0: string;
-    ContainerComment1: string;
-    ContainerFlag1: string;
-  };
-}
+import {VowelAnalysisGrid} from "@/features/analyzer/VowelAnalysisGrid.tsx";
+import type {AnalysisResult} from "@/features/analyzer/types";
 
 interface PoemAnalysisProps {
   data: AnalysisResult;
 }
 
 export function PoemAnalysis({ data }: PoemAnalysisProps) {
-  return (
-    <div className="poem-analysis" style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      {/* Флаг результата */}
-      <div
-        className="analysis-flag"
-        dangerouslySetInnerHTML={{ __html: data.containerFlag1 }}
-        style={{
-          padding: '15px',
-          marginBottom: '20px',
-          backgroundColor: data.flags.passed ? '#d4edda' : '#f8d7da',
-          borderRadius: '4px'
-        }}
-      />
+  // Собираем текст из массива слов (каждые 4 слова = строка стиха)
+  const words = data.AccentedFragments || [];
+  const lines: string[] = [];
+  for (let i = 0; i < words.length; i += 4) {
+    lines.push(words.slice(i, i + 4).join(' '));
+  }
+  const accentedText = lines.join('\n');
 
-      {/* Текст с ударениями */}
-      <div className="accented-text" style={{
-        padding: '20px',
-        backgroundColor: '#f5f5f5',
-        marginBottom: '20px',
-        whiteSpace: 'pre-wrap',
-        fontSize: '16px',
-        lineHeight: '1.8'
-      }}>
-        <h3>Текст с расставленными ударениями:</h3>
-        {data.accentedText}
+
+  return (
+    <div className="poem-analysis" style={{
+      padding: '20px',
+      fontFamily: 'Arial, sans-serif',
+      display: 'flex',
+      gap: '30px',
+      alignItems: 'flex-start'
+    }}>
+      {/* ЛЕВАЯ КОЛОНКА - Текст с ударениями */}
+      <div style={{ flex: '0 0 40%', minWidth: '300px' }}>
+        <div className="accented-text" style={{
+          padding: '20px',
+          backgroundColor: '#f5f5f5',
+          whiteSpace: 'pre-wrap',
+          fontSize: '16px',
+          lineHeight: '1.8',
+          borderRadius: '8px',
+          border: '1px solid #ddd'
+        }}>
+          <h3 style={{ marginTop: 0 }}>Текст с расставленными ударениями:</h3>
+          {accentedText}
+        </div>
       </div>
 
-      {/* Статистика */}
-      <PoemStats stats={data.stats} legend={data.legend} />
+      {/* ПРАВАЯ КОЛОНКА - Анализ */}
+      <div style={{ flex: '0 0 60%', minWidth: '400px' }}>
+        {/* Сетка гласных */}
+        <VowelAnalysisGrid
+          vowelTemplates={data.structure.vowelTemplates}
+          rhythm={data.structure.rhythm}
+          stats={data.stats}
+        />
 
-      {/* Структура */}
-      <PoemStructure structure={data.structure} />
-
-      {/* Рифмы */}
-      <PoemRhymes rhymes={data.rhymes} />
-
-      {/* Оценки */}
-      <PoemScoring scoring={data.scoring} />
-
-      {/* Комментарии */}
-      <PoemComments comments={data.comments} />
+        {/* Остальные блоки */}
+        <PoemStats stats={data.stats} legend={data.legend} />
+        <PoemStructure structure={data.structure} />
+        <PoemRhymes rhymes={data.rhymes} />
+        <PoemScoring scoring={data.scoring} />
+        <PoemComments comments={data.comments} />
+      </div>
     </div>
   );
 }

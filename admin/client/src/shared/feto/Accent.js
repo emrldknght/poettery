@@ -6,6 +6,7 @@ import {CountSimvol} from "./CountSimvol.js";
 
 /** @param state {FetoState} */
 export function Accent(state) {
+  console.log("RUN Accent state");
   DelSpace(state);
   ClearForm2();
 
@@ -50,6 +51,10 @@ export function Accent(state) {
         } else {
           state.slovoAccent = CapsGlasny(NextSlovo, state);
         }
+
+        // save accented words in array
+        state.AccentedFragments.push(state.slovoAccent);
+
 
         NextSlovo = "";
       }

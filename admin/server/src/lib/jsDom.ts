@@ -1,7 +1,7 @@
 export const MOCK_DOM =
 `
 <!DOCTYPE html>
-  <html>
+  <html lang="ru">
   <body>
     <form name="formStih1"><textarea name="TextStih"></textarea></form>
     
@@ -29,30 +29,31 @@ export const MOCK_DOM =
 <tbody id="global-table1">
 <tr>
 <td colspan=3>
-<div id="ContainerFlag1" width="100%" class="text-main border-top pd02"></div>
+<div id="ContainerFlag1" class="text-main border-top pd02"></div>
 </td>
 </tr>
 
 <tr>
 <td colspan=3>
-<div id="ContainerComment1" width="100%" class="text-main  border-bottom pd02"></div>
+<div id="ContainerComment1" class="text-main  border-bottom pd02"></div>
 </td>
 </tr>
 
 <tr class="border-table">
-<td width="40%" valign=top class="ov">
+<td class="ov">
  <form name="formStih1">
-<textarea class="stih" name="TextStih"  id="TextStih1" placeholder="Вставьте стихотворение в это поле и нажмите кнопку «Анализ стихотворения». Заголовок, нумерацию и прочие примечания лучше убрать."  style="width: 100%; rows: 60;" valign=top onfocus="hiderecordstih()" readonly=""></textarea>
+<textarea class="stih" name="TextStih"  id="TextStih1" placeholder="Вставьте стихотворение в это поле и нажмите кнопку «Анализ стихотворения». Заголовок, нумерацию и прочие примечания лучше убрать."
+  onfocus="hiderecordstih()" readonly=""></textarea>
 </form>
-<div id="postscriptum" width="100%" class="text-main" style="padding: 10 10 10 10;"></div>
-<div id="vopros" width="100%" class="text-main" style="padding: 10 10 10 10; "></div>
-<div id="otvet" width="100%" class="text-main" style="padding: 10 10 10 10;"></div>
+<div id="postscriptum" class="text-main"></div>
+<div id="vopros" class="text-main"></div>
+<div id="otvet" class="text-main"></div>
 
 </td>
-<td  width="25%" valign=top  align=left class="ov" style="border: 1px solid #e0e0e0; padding-left:10px;" >
+<td class="ov" style="border: 1px solid #e0e0e0; padding-left:10px;" >
 <div id="ContainerTemplate1" class="text-main lh"></div>
 </td>
-<td  width="35%" valign=top  align=left class="ov">
+<td  class="ov">
 <div id="ContainerAnaliz1"  class="text-main lh pd1">В альманахе <a href="https://vpoezii.online" target="_blank" style="text-decoration: none;">«Венец поэзии»</a> публикуются только классические стихотворения, то есть имеющие регулярно выдержанный размер, чётко выраженный ритм и точные рифмы. Для отбора стихотворений редакция организовала ряд конкурсов и марафонов. <div id="konkurs_title_note" style="display:inline-block;"></div><br><br>Для предварительной проверки стихотворений создана интеллектуальная система Fet.Online, с помощью которой вы можете получить автоматизированный анализ своего стихотворения. При положительном результате анализа появится кнопка «Отправить стихотворение в редакцию». Далее нужно будет заполнить анкету с целью сохранения ваших авторских прав. <br><br>Для получения анализа вставьте стихотворение в первое поле и нажмите кнопку «Анализ стихотворения». Желаем удачи!</div>
 <div id="ContainerAnaliz1f"  class="text-main lh pd1"></div>
 <div id="openrecordstih2" style="display:none">

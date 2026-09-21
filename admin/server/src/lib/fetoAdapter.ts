@@ -3,6 +3,12 @@ import fs from 'fs';
 import path from 'path';
 import * as vm from "node:vm";
 import {MOCK_DOM} from "./jsDom";
+import {createLegacyState} from "./createFetoState";
+
+let currentRawState: any = null;
+export function getRawState() {
+  return currentRawState;
+}
 
 // ИСПРАВЛЕНИЕ ПУТИ: __dirname указывает на папку lib, поднимаемся на 2 уровня вверх и идём в client
 const FETO_DIR = path.resolve(__dirname, '../../../client/src/shared/feto');
@@ -40,8 +46,8 @@ Object.defineProperty(g, 'navigator', {
 });
 
 // fix fir ids
-g.LentaMode = g.document.getElementById('LentaMode');
-g.SaveRecord = g.document.getElementById('SaveRecord');
+// g.LentaMode = g.document.getElementById('LentaMode');
+// g.SaveRecord = g.document.getElementById('SaveRecord');
 
 g.$ = () => ({ change: () => {}, attr: () => {}, text: () => '', val: () => '', html: () => '', css: () => ({}) });
 g.confirm = () => false;
@@ -138,9 +144,9 @@ console.log(`[FETO] Словари загружены: ${g.slovar_accent_Mas.len
 
 // 5. Функция анализа
 export function analyzePoemWithFeto(text: string) {
-  g.Ritm = [];
-  g.TemplateGlasn = "";
-  g.BlockRitmTemplate = "";
+  // g.Ritm = [];
+  // g.TemplateGlasn = "";
+  // g.BlockRitmTemplate = "";
   g.CountSlog = 0;
   g.CountSlogSer = 0;
   g.CountSlogBlue = 0;
@@ -176,9 +182,26 @@ export function analyzePoemWithFeto(text: string) {
   console.log('[DEBUG] Перед вызовом LayerAnaliz');
   console.log('[DEBUG] text в textarea:', g.TextArea);
 
+
+  // integrate new state -
+  const state = createLegacyState();
+  currentRawState = state;
+
+  state.OriginalTextInput = text;
+
+  state.slovar_accent_Mas = accentContent.split(',');
+  state.slovar_noaccent_Mas = accentContent.toLowerCase().split(',');
+  state.slovar_E_Mas = yoContent.split(',');
+  state.slovar_noaccent_E_Mas = yoContent.toLowerCase().split(',');
+
+
+
   try {
-    g.LayerAnaliz();
+    g.LayerAnaliz(state);
     console.log('[DEBUG] LayerAnaliz завершился успешно');
+
+    // g.FullAnaliz(state);
+    // console.log('[DEBUG] FullAnaliz завершился успешно');
   } catch (error) {
     console.error('[DEBUG] Ошибка в LayerAnaliz:', error);
   }
@@ -209,7 +232,7 @@ export function analyzePoemWithFeto(text: string) {
   };
 
   // const textArea = g.document.querySelector('form[name="formStih1"] textarea[name="TextStih"]');
-  const resumeFlag = parseFlag(g.ResumeCommentMini || '');
+  const resumeFlag = parseFlag(state.ResumeCommentMini || '');
 
   // console.log('[DEBUG] g.Ritmstring:', g.Ritmstring);
   // console.log('[DEBUG] g._TempRitmstring:', g._TempRitmstring);
@@ -221,82 +244,105 @@ export function analyzePoemWithFeto(text: string) {
   // console.log('[DEBUG] g.CountSlogBlack:', g.CountSlogBlack);
   // console.log('[DEBUG] g.CountSlogSer:', g.CountSlogSer);
 
-  console.log('[DEBUG] g.ContainerFlag1Report:', g.ContainerFlag1Report);
-  console.log('[DEBUG] g.flagStrofa:', g.flagStrofa);
+  // console.log('[DEBUG] state.ContainerFlag1Report:', state.ContainerFlag1Report);
 
-  const flagPassed = (g.ClassicBall || 0) >= 2 && (g.window?.flagStrofaRazbita ?? g.flagStrofaRazbita ?? 0) === 0;
-  const flagValue = ((g.ClassicBall || 0) >= 2 && (g.window?.flagStrofaRazbita ?? g.flagStrofaRazbita ?? 0) === 0) ? '✓' : 'X'
+  const flagPassed = (state.ClassicBall || 0) >= 2 && (state.flagStrofaRazbita ?? 0) === 0;
+  const flagValue = ((state.ClassicBall || 0) >= 2 && (state.flagStrofaRazbita ?? 0) === 0) ? '✓' : 'X'
+
+  console.log('[DEBUG] state.RitmReport:', state.RitmReport);
 
   return {
-    containerFlag1: g.SbornikContainerFlag1Report || "",
+    containerFlag1: state.SbornikContainerFlag1Report || "",
 
-    accentedText: textArea ? textArea.value : text,
+    accentedText: state.OriginalTextInput, // textArea ? textArea.value : text,
 
     stats: {
-      total: g.CountSlog || 0,
-      blue: g.CountSlogBlue || 0,
-      gray: g.CountSlogSer || 0,
-      black: g.CountSlogBlack || 0,
+      total: state.CountSlog || 0,
+      blue: state.CountSlogBlue || 0,
+      gray: state.CountSlogSer || 0,
+      black: state.CountSlogBlack || 0,
     },
 
     structure: {
-      size: (g.StrofaPatternMas && g.StrofaPatternMas[1]) ? g.StrofaPatternMas[1].trim() : "",
-      rhythmString: g.RitmReport || g._TempRitmstring || "",
-      rhythm: cleanArray(g.Ritm || []).map(Number),
-      vowelTemplates: cleanArray(g.TemplateGlasnMas || []),
-      accentTemplates: (g.TemplateAccent || '')
+      size: (state.StrofaPatternMas && state.StrofaPatternMas[1]) ? state.StrofaPatternMas[1].trim() : "",
+      rhythmString: state.RitmReport || "", // || g._TempRitmstring ||
+      rhythm: cleanArray(state.Ritm || []).map(Number),
+      vowelTemplates: cleanArray(state.TemplateGlasnMas || []),
+      accentTemplates: (state.TemplateAccent || '')
         .split('\n')
         .map((s: string) => s.trim())
         .filter((s: string) => s.length > 0),
-      numGlasTemplates: cleanArray(g.TemplateNumGlasMas || []),
+      numGlasTemplates: cleanArray(state.TemplateNumGlasMas || []),
       rhythmContrast: {
-        plus: g.ritmkontrastplus || "",
-        minus: g.ritmkontrastminus || "",
+        plus: state.ritmkontrastplus || "",
+        minus: state.ritmkontrastminus || "",
       },
-      triCode: g._TempTriCodeRitm,
+      triCode: state._TempTriCodeRitm,
+
+      // additional blocks
+      // BlockRitmTemplate: state.BlockRitmTemplate,
+      // BlockRitmTemplateMas: cleanArray(state.BlockRitmTemplateMas || []),
+      // StrofaPatternMas: state.StrofaPatternMas,
+      StrofaPatternTypeMas: state.StrofaPatternTypeMas,
+      StrofaRepeatTypeMas: state.StrofaRepeatTypeMas,
+      StrofaPositionMas:  state.StrofaPositionMas,
+      ResumeComment: state.ResumeComment,
+      ResumeCommentMini: state.ResumeCommentMini,
+      razmerComment: state.razmerComment,
+      ReportMas: state.ReportMas,
+      GlobalflagRitmBallMas: state.GlobalflagRitmBallMas,
     },
 
     rhymes: {
-      words: trimArray(g.SlovaRifmMas || []),
+      words: trimArray(state.SlovaRifmMas || []),
       // sounds: cleanArray(g.FullRifmMas || []),
-      sounds: cleanArray(g.FullRifmMas || g._TempFullRifmMas || []),
-      type: g.rifmovkatext || "",
-      typeCode: g.rifmovkatype || "",
-      scheme: g.rifmovkalong || "",
+      sounds: cleanArray(state._TempFullRifmMas || []), // state.FullRifmMas ||
+      type: state.rifmovkatext || "",
+      typeCode: state.rifmovkatype || "",
+      scheme: state.rifmovkalong || "",
     },
 
     scoring: {
-      classicBall: g.ClassicBall || 0,
-      tonicBall: g.tonicBall || 0,
-      rhythmBall: g._TempFlagRitmBall || 0,
-      rhymeBall: g.flagRifmBall || 0,
-      accentBall: g.flagAccentBall || 0,
-      groupStrofaBall: g.flagGroupStrofaBall || 0,
-      rhythmErrors: g.flagCountRitmError || 0,
-      rhymeErrors: g.flagCountErrorRifma || 0,
-      isStrofaBroken: g.window?.flagStrofaRazbita ?? g.flagStrofaRazbita ?? 0,
-      uniqueStrof: g.UnicStrof || 0,
-      percentSecondarySyllables: g.ProcentCountSlogSer || 0,
+      classicBall: state.ClassicBall || 0,
+      tonicBall: state.tonicBall || 0,
+      rhythmBall: state._TempFlagRitmBall || 0,
+      rhymeBall: state.flagRifmBall || 0,
+      accentBall: state.flagAccentBall || 0,
+      groupStrofaBall: state.flagGroupStrofaBall || 0,
+      rhythmErrors: state.flagCountRitmError || 0,
+      rhymeErrors: state.flagCountErrorRifma || 0,
+      isStrofaBroken: state.flagStrofaRazbita || 0,
+      uniqueStrof: state.UnicStrof || 0,
+      percentSecondarySyllables: state.ProcentCountSlogSer || 0,
     },
 
     comments: {
-      resume: g.ResumeComment || "",
+      resume: state.ResumeComment || "",
       resumeMini: resumeFlag.text,
-      lentaModeResume: g.ResumeLentaMode || "",
-      rhythm: g.RitmComment || "",
-      rhyme: g.RifmComment || "",
-      stopa: g.CommentStopa || g._TempCommentStopa || "",
+      lentaModeResume: state.ResumeLentaMode || "",
+      rhythm: state.RitmComment || "",
+      rhyme: state.RifmComment || "",
+      stopa: state._TempCommentStopa || "", // state.CommentStopa ||
     },
 
     legend: {
-      blue: { code: 0, label: 'БЕЗУДАРНЫЕ ГЛАСНЫЕ', count: g.CountSlogBlue || 0 },
-      gray: { code: 1, label: 'СЛАБОУДАРНЫЕ ГЛАСНЫЕ', count: g.CountSlogSer || 0 },
-      black: { code: 2, label: 'УДАРНЫЕ ГЛАСНЫЕ', count: g.CountSlogBlack || 0 },
+      blue: { code: 0, label: 'БЕЗУДАРНЫЕ ГЛАСНЫЕ', count: state.CountSlogBlue || 0 },
+      gray: { code: 1, label: 'СЛАБОУДАРНЫЕ ГЛАСНЫЕ', count: state.CountSlogSer || 0 },
+      black: { code: 2, label: 'УДАРНЫЕ ГЛАСНЫЕ', count: state.CountSlogBlack || 0 },
     },
 
     flags: {
       passed: flagPassed, // resumeFlag.passed,
       flag: flagValue, // resumeFlag.flag,
+    },
+
+    dom: {
+      // ContainerTemplate1: state.ContainerTemplate1, // ok
+      ContainerAnaliz1: state.ContainerAnaliz1,
+      ContainerAnaliz1f: state.ContainerAnaliz1f,
+      ContainerComment0: state.ContainerComment0,
+      ContainerComment1: state.ContainerComment1,
+      ContainerFlag1: state.ContainerFlag1,
     }
   };
 

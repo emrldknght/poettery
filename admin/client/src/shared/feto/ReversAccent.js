@@ -1,7 +1,9 @@
 /** @param state {FetoState} */
 export function ReversAccent(state)
-// Находим неразмеченные слова и размечаем по шаблону Ritm[]. Если не помогло, то предлагаем несколько ударений на выбор.
+// Находим неразмеченные слова и размечаем по шаблону Ritm[].
+// Если не помогло, то предлагаем несколько ударений на выбор.
 {
+  console.log("RUN ReversAccent state");
   let flagAccentSlovo = 0;
   // let NextZnak = "";
   let CountNextZnak = 0;
@@ -68,6 +70,8 @@ export function ReversAccent(state)
           //если буква гласная gl, слово неразмеченное !glcaps и в шаблоне на соответствующей позиции стоит ударение Ritm[Countgl]===3, то делаем букву ударной
           if (gl) {
             ++Countgl; // счетчик гласных в строке
+            console.log(`[ReversAccent] Слог ${Countgl}, буква "${NextBukva}", Ritm[${Countgl}]=${Ritm[Countgl]}, Ritm[${Countgl-1}]=${Ritm[Countgl-1]}, Ritm[${Countgl+1}]=${Ritm[Countgl+1]}, flagAccentSlovo=${flagAccentSlovo}, onlycaps.length=${onlycaps.length}`);
+
             ++CountglSlovo;
             CaseAccent[CountglSlovo] = s; // номер безударной в слове;
             // если в слове нет заглавных гласных, то слово не размечено ударением
@@ -172,6 +176,7 @@ export function ReversAccent(state)
   //закончились строки в стихотворении
   state.OriginalTextInput = newStrStih;
   // StrStih = newStrStih; // todo - check usage
+  state.FinalAccentedText = newStrStih;
 
   state.CountNoAccentSlov = state.CountSlov - state.CountAccentSlov;
 

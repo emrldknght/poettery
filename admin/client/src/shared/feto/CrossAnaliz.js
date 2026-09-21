@@ -23,9 +23,11 @@ export function CrossAnaliz(state) {
 // если количество букв SimvolCount после расстановки ударений изменилось более чем на на 7 букв, то заново автоматом ставим ударения и проводим полный анализ, если нет- ударения расставляем руками и проводим анализ.
   state.SimvolCount = CountSimvol(state);
   if (Math.abs(state.SimvolCount - state.AccentCountSimvol) > 7) {
+    console.log('RERUN ACCENTS!')
     state.FileAccent.checked = false;
     Accent(state);
   } else {
+    console.log('NO RERUN ACCENTS! - check')
     state.FileAccent.checked = true;
   }
   FullAnaliz(state);

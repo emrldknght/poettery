@@ -1,16 +1,25 @@
 #!/bin/bash
-
 # Пути
 CONTENT_DIR="./content"
 OUTPUT_FILE="./all_poems.md"
+
+# Папки для исключения (добавляй/убирай по необходимости)
+EXCLUDE_DIRS=("horned") #  "drafts" "trash"
+
+# Формируем аргументы для find
+PRUNE_ARGS=()
+for dir in "${EXCLUDE_DIRS[@]}"; do
+    PRUNE_ARGS+=( -name "$dir" -o )
+done
+# Убираем последний лишний "-o"
+unset 'PRUNE_ARGS[${#PRUNE_ARGS[@]}-1]'
 
 # Очищаем выходной файл
 echo "# Все стихи сборника" > "$OUTPUT_FILE"
 echo "" >> "$OUTPUT_FILE"
 
-# Находим все .md файлы рекурсивно, исключая папку arh (если нужно)
-# Вариант 1: собираем ВСЕ файлы, включая arh
-find "$CONTENT_DIR" -name "*.md" | sort | while read -r file; do
+# Находим все .md файлы, исключая папки из EXCLUDE_DIRS
+find "$CONTENT_DIR" -type d \( "${PRUNE_ARGS[@]}" \) -prune -o -name "*.md" -print | sort | while read -r file; do
     # Получаем относительный путь без ./content/ и без расширения
     REL_PATH="${file#$CONTENT_DIR/}"
     POEM_TITLE="${REL_PATH%.md}"
@@ -18,7 +27,7 @@ find "$CONTENT_DIR" -name "*.md" | sort | while read -r file; do
     # Убираем front matter
     sed -n '/^---$/,/^---$/d; /^---$/d; p' "$file" > /tmp/poem_content.tmp
 
-    # Добавляем заголовок (с вложенностью, например arh/esenin)
+    # Добавляем заголовок
     echo "## $POEM_TITLE" >> "$OUTPUT_FILE"
     echo "" >> "$OUTPUT_FILE"
 
@@ -30,5 +39,4 @@ find "$CONTENT_DIR" -name "*.md" | sort | while read -r file; do
 done
 
 rm -f /tmp/poem_content.tmp
-
 echo "✅ Готово! Стихи собраны в $OUTPUT_FILE"

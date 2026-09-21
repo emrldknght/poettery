@@ -152,6 +152,9 @@ export function FullAnaliz(state) {
   let FragmentN = 0;
   state.lenta = 1;
   state.lentacount = 1;
+
+  // state.AccentedFragments = [];
+
   const elementArray = [];
   state.CrossLentaRitm = []; // массив базового ритмического рисунка для перекрестных строф (одна строфа-один ритм). После перекрёстного анализа служит восстановлению ритма в востановленных строфах
   state.CrossTemplateGlasn = []; // массив гласных для перекрестных строф
@@ -322,6 +325,8 @@ export function FullAnaliz(state) {
     let NextStihMas = NextStih.split("\n");
 
     console.log('NextStihMas', NextStihMas);
+
+    // state.AccentedFragments[FragmentNumber] = NextStihMas.filter(s => s.trim() !== '').join('\n');
 
     let TitulStih = NextStihMas[0];
     TitulStih = TitulStih.toUpperCase();
@@ -807,7 +812,8 @@ export function FullAnaliz(state) {
 
   }
 
-// выводим глобальную интегрированную оценку==============================================================================================
+  state.FinalAccentedText = state.OriginalTextInput;
+  // выводим глобальную интегрированную оценку==============================================================================================
 
   state.ProcentCountSlogSer = Math.round(state.CountSlogSer / state.CountSlog * 100);
 
@@ -1162,5 +1168,8 @@ export function FullAnaliz(state) {
     state.ContainerAnaliz1 = NoLentaComment + state.ResumeLentaMode + "<br><br>";
 
   }
+  // Сохраняем финальный текст с ударениями, чтобы не потерять его при возврате
+  state.FinalAccentedText = state.OriginalTextInput;
+  // state.AccentedFragments.filter(s => s).join('\n\n');
 
 }
