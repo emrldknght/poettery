@@ -1,6 +1,7 @@
 ---
 layout: poem
 title: не хватает
+date: 29-04-2026
 ---
 
 ```text
