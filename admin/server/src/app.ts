@@ -4,6 +4,8 @@ import { logger } from 'hono/logger';
 import poemsRoutes from './routes/poems.routes';
 import filesRoutes from './routes/files.routes';
 import tagsRoutes from './routes/tags.routes';
+import analyze from "./routes/analyze";
+import fetoRoute from './routes/feto.js';
 
 const app = new Hono();
 
@@ -23,6 +25,8 @@ app.use('/api/*', async (c, next) => {
 app.route('/api/poems', poemsRoutes);
 app.route('/api/files', filesRoutes);
 app.route('/api/tags', tagsRoutes);
+app.route('/api', analyze);
+app.route('/', fetoRoute);
 
 // Базовый health-check
 app.get('/', (c) => c.json({ status: 'ok', name: 'poettery-admin' }));

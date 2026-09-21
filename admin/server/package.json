@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "run": "pnpm tsx src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,10 +17,12 @@
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "gray-matter": "^4.0.3",
-    "hono": "^4.13.5"
+    "hono": "^4.13.5",
+    "jsdom": "^30.0.1"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",
+    "@types/jsdom": "^30.0.0",
     "@types/node": "^26.4.0",
     "drizzle-kit": "^0.31.10",
     "tsx": "^4.23.12",
