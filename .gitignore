@@ -13,3 +13,11 @@ entities_frequency.html
 
 # temp - ignore public
 public
+# temp - ignore fl
+fl
+content/media
+/content/0509_test_apteka.md
+/content/0509_test_apteka__short.md
+*.rpp*
+im
+*.xml
