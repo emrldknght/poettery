@@ -2,6 +2,7 @@
 layout: poem
 title: не хватает
 date: 29-04-2026
+pub-in: vk-09102026
 ---
 
 ```text
