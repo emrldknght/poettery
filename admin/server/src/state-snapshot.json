@@ -1,0 +1,444 @@
+{
+  "OriginalTextInput": "ночь, Улица, фонАрь, аптЕка, \nбессмЫсленный и тУсклый свет. \nживИ ещЕ хоть чЕтверть вЕка —\nвсе бУдет так. исхОда нет. \n",
+  "stih": "ночь, Улица, фонАрь, аптЕка, \nбессмЫсленный и тУсклый свет. \nживИ ещЕ хоть чЕтверть вЕка —\nвсе бУдет так. исхОда нет. \n\n",
+  "stihMas": [
+    "",
+    "ночь, Улица, фонАрь, аптЕка, ",
+    "бессмЫсленный и тУсклый свет. ",
+    "живИ ещЕ хоть чЕтверть вЕка —",
+    "все бУдет так. исхОда нет. ",
+    "",
+    ""
+  ],
+  "stih0": "Ночь, улица, фонарь, аптека, \nБессмысленный и тусклый свет. \nЖиви еще хоть четверть века —\nВсе будет так. Исхода нет. \n\n",
+  "stihMas0": [
+    "Ночь, улица, фонарь, аптека, ",
+    "Бессмысленный и тусклый свет. ",
+    "Живи еще хоть четверть века —",
+    "Все будет так. Исхода нет. ",
+    "",
+    ""
+  ],
+  "StihText": "ночь, Улица, фонАрь, аптЕка, \nбессмЫсленный и тУсклый свет. \nживИ ещЕ хоть чЕтверть вЕка —\nвсе бУдет так. исхОда нет. ",
+  "SbornikMas": [],
+  "slovarGlobal": "",
+  "slovar_accent_Mas": "[DICT_LENGTH_2876361]",
+  "slovar_noaccent_Mas": "[DICT_LENGTH_2876361]",
+  "slovar_E_Mas": "[DICT_LENGTH_12312]",
+  "slovar_noaccent_E_Mas": "[DICT_LENGTH_12312]",
+  "slovar_narod_Mas": [],
+  "slovar_noaccent_narod_Mas": [],
+  "slovar_noaccent_classic_Mas": [],
+  "slovar_classic_Mas": [],
+  "slovar_neoclassic_Mas": [],
+  "slovar_noaccent_neoclassic_Mas": [],
+  "TitulStih": "НОЧЬ, УЛИЦА, ФОНАРЬ, АПТЕКА, ...",
+  "TitulStihReport": "НОЧЬ, УЛИЦА, ФОНАРЬ, АПТЕКА, ...",
+  "flagSetAccent": 1,
+  "AccentCountSimvol": 119,
+  "SimvolCount": 119,
+  "NewAccentLentaText": "",
+  "HandAccent": 1,
+  "CountSlov": 0,
+  "CountSlog": 34,
+  "CountSlogSer": 4,
+  "CountSlogBlack": 12,
+  "CountSlogBlue": 18,
+  "CountStrok": 0,
+  "CountBukv": 0,
+  "slovoAccent": "",
+  "CountAccentSlov": 0,
+  "CountNoAccentSlov": 37,
+  "CountStrofa": 0,
+  "CountStrofaRitmEr": 0,
+  "ClassicBall": 0,
+  "ClassicBallMas": [
+    0,
+    3,
+    3,
+    3,
+    3
+  ],
+  "BlockRitmTemplate": "оУиаоАаЕа\nеЫеыиУыЕ\nиИеЕоЕеЕа\nеУеаиОаЕ\n",
+  "BlockRitmTemplateMas": [
+    "оУиаоАаЕа",
+    "еЫеыиУыЕ",
+    "иИеЕоЕеЕа",
+    "еУеаиОаЕ",
+    ""
+  ],
+  "Ritm": [
+    null,
+    1,
+    3,
+    1,
+    2,
+    1,
+    3,
+    1,
+    3,
+    1
+  ],
+  "RitmErr": [],
+  "RitmReport": ",1,3,1,2,1,3,1,3,1",
+  "RitmReportInt": "131213131",
+  "RitmComment": "Строфы имеют очень чёткий ритмический рисунок, повторяющийся в каждой строке. Полностью безударные слоги  1, 3, 5, 7 и  9. Ударение падает на  2, 6 и  8 слоги. ",
+  "RitmCommentMin": "",
+  "RitmkontrastMas": [
+    0,
+    1,
+    3,
+    1,
+    3,
+    1,
+    3,
+    1,
+    3,
+    1
+  ],
+  "RifmComment": "Рифмы в строфах достаточно точные, в рифмующихся словах ударные гласные совпадают. ",
+  "FlagRifm": "<span style=\"color:#32CD32 ; font-weight: 900;\">✓&nbsp;</span>Рифма точная!",
+  "SlovaRifmMas": [
+    "аптЕка ",
+    "свет ",
+    "вЕка —",
+    "нет "
+  ],
+  "CommentRitmika": "Строфы имеют очень чёткий ритмический рисунок, повторяющийся в каждой строке. Полностью безударные слоги  1, 3, 5, 7 и  9. Ударение падает на  2, 6 и  8 слоги. ",
+  "TemplateMas": [
+    "оУиаоАаЕа",
+    "еЫеыиУые",
+    "иИеЕоЕеЕа",
+    "еУеаиОае"
+  ],
+  "TemplateAccent": ".О...О.О.\n.О...О.О\n.О.О.О.О.\n.О.:.О.О\n",
+  "TemplateNumGlas": "112312123\n12341121\n121211212\n11211231\n",
+  "TemplateGlasn": "оУиаоАаЕа\nеЫеыиУые\nиИеЕоЕеЕа\nеУеаиОае",
+  "TemplateGlasnMas": [
+    "оУиаоАаЕа",
+    "еЫеыиУые",
+    "иИеЕоЕеЕа",
+    "еУеаиОае"
+  ],
+  "TemplateNumGlasMas": [
+    "112312123",
+    "12341121",
+    "121211212",
+    "11211231"
+  ],
+  "ProbelPositionMas": [
+    [
+      null,
+      0,
+      6,
+      6,
+      6,
+      13,
+      13,
+      21,
+      21,
+      21,
+      30
+    ],
+    [
+      null,
+      0,
+      0,
+      0,
+      0,
+      14,
+      16,
+      16,
+      24,
+      31
+    ],
+    [
+      null,
+      0,
+      0,
+      5,
+      5,
+      9,
+      14,
+      14,
+      23,
+      23,
+      30
+    ],
+    [
+      null,
+      0,
+      4,
+      4,
+      10,
+      15,
+      15,
+      15,
+      22,
+      28
+    ],
+    [
+      null,
+      1
+    ],
+    []
+  ],
+  "StrofaPatternMas": [
+    null,
+    " 9, 8, 9, 8"
+  ],
+  "StrofaPatternTypeMas": [
+    " 9, 8, 9, 8"
+  ],
+  "StrofaRepeatTypeMas": [],
+  "StrofaPositionMas": [
+    null,
+    0,
+    5
+  ],
+  "StrofaPatternReport": " 9, 8, 9, 8",
+  "GroupStrof": [
+    "ночь, Улица, фонАрь, аптЕка, \nбессмЫсленный и тУсклый свет. \nживИ ещЕ хоть чЕтверть вЕка —\nвсе бУдет так. исхОда нет. \n\n"
+  ],
+  "ResumeComment": "Одной строфы недостаточно, чтобы считать данный текст стихотворением. <br>",
+  "ResumeCommentMini": "<span style=\"color:#FF0000 ; font-weight: bold;\">X&nbsp;</span>Одной строфы недостаточно, чтобы считать данный текст стихотворением. <br>",
+  "razmerComment": "Стихотворение не разбито на строфы. <br>Нужно добавить пустую строку между строфами. ",
+  "FullRazmerComment": " Только одна строфа по размеру не согласована с другими строфами. ",
+  "ResumeStrofaPatternType": "",
+  "CountStrofaPatternType": 1,
+  "SbornikCount": 0,
+  "Strof": 1,
+  "UnicStrof": 1,
+  "tonicBall": 1,
+  "CountSlogBluetext": " 0-БЕЗУДАРНЫЕ ГЛАСНЫЕ:18 шт.              ",
+  "CountSlogSertext": " 1-СЛАБОУДАРНЫЕ ГЛАСНЫЕ:4 шт.              ",
+  "CountSlogBlacktext": " 2-УДАРНЫЕ ГЛАСНЫЕ:12 шт.              ",
+  "TriCodRitm": "020102020",
+  "ReportMas": "",
+  "ReportMasBall0": "",
+  "ReportMasBall1": "",
+  "ReportMasBall2": "",
+  "ReportMasBall3": "",
+  "ReportTab": "",
+  "ReportAccent": "",
+  "ReportAccentBall0": "",
+  "ReportAccentBall1": "",
+  "ReportAccentBall2": "",
+  "ReportAccentBall3": "",
+  "SbornikContainerTemplate": "<b>Итоговая матрица:</b><br><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">Ы</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">е</span><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">О</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">е</span>",
+  "SbornikContainerAnaliz": "<b>Анализ подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295) <br><br></b><b>Исходные строки:</b><br><br>ночь, Улица, фонАрь, аптЕка, <br>бессмЫсленный и тУсклый свет. <br>живИ ещЕ хоть чЕтверть вЕка —<br>все бУдет так. исхОда нет. <br><br><br><b>Наиболее часто встречающееся количество ударных гласных: 2<br><br></b><b>Исключённые строки:</b><br><br>ночь, Улица, фонАрь, аптЕка, <br>живИ ещЕ хоть чЕтверть вЕка —<br><br><br><b>Схема ударных и безударных гласных:</b><br><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">Ы</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">е</span><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">О</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">е</span><br><br><b>Исключённые строки:</b><br><br>нОчь Улица фонАрь аптЕка<br>ночь, Улица, фонАрь, аптЕка, <br>живИ ещЕ хоть чЕтверть вЕка —<br><br><br><b>Схема ударных и безударных гласных, включая исправленные строки:</b><br><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">Ы</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">е</span><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">О</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">е</span><br><br>",
+  "SbornikContainerFlag1Report": "<span style=\"color:#FF0000 ; font-weight: bold;\">X&nbsp;</span>Разбейте на строфы. <span style=\"color:#32CD32 ; font-weight: 900;\">✓&nbsp;</span>Ритм чёткий!  <span style=\"color:#32CD32 ; font-weight: 900;\">✓&nbsp;</span>Рифма точная! Количество слабоударных (смешанных) гласных в норме:12%  &nbsp;</span>",
+  "SbornikResumeCommentMiniReport": "Редакция альманаха «Венец поэзии» принимает стихи такого размера только в рамках специальных проектов.",
+  "flagRitm": "<span style=\"color:#32CD32 ; font-weight: 900;\">✓&nbsp;</span>Ритм чёткий!  ",
+  "flagRifmBall": 1,
+  "flagRitmBall": 3,
+  "flagAccentBall": 1,
+  "flagStrofaRazbita": 0,
+  "ProcentCountSlogSer": 12,
+  "flagCountStrofaPatternType": 0,
+  "flagGroupStrofaBall": 1,
+  "flagCountRitmError": 0,
+  "flagCountErrorRifma": 0,
+  "flagRitmError": "",
+  "GlobalflagCountErrorRifmaMas": 0,
+  "GlobalflagRitmBallMas": 3,
+  "GlobalflagCountStrofaPatternTypeMas": 0,
+  "GlobalflagStrofaRazbitaMas": 0,
+  "GlobalflagAccentBallMas": 1,
+  "GlobalClassicBall": 0,
+  "ResumeLentaMode": "Ниже приводится анализ фрагментов, в которых сгруппированы строфы одного размера.",
+  "flagStrofaBallMas": [],
+  "flagRitmBallMas": [
+    3
+  ],
+  "flagRifmBallMas": [
+    1
+  ],
+  "flagAccentBallMas": [
+    1
+  ],
+  "flagStrofaRazbitaMas": [
+    0
+  ],
+  "flagGroupStrofaBallMas": [
+    1
+  ],
+  "flagCountStrofaPatternTypeMas": [
+    0
+  ],
+  "flagCountErrorRifmaMas": [
+    0
+  ],
+  "flagProcentCountSlogSerMas": [
+    12
+  ],
+  "flagCountRitmErrorMas": [
+    0
+  ],
+  "flagErrorRifma": "",
+  "FlagStrofaMultiPatternType": 0,
+  "flagStrofa": "<span style=\"color:#FF0000 ; font-weight: bold;\">X&nbsp;</span>Разбейте на строфы. ",
+  "flagAccent": "",
+  "flagUpdateRecord": 0,
+  "lenta": 1,
+  "lentacount": 1,
+  "LentaStihMas": [
+    "живИ ещЕ хоть чЕтверть вЕка —\n\nночь, Улица, фонАрь, аптЕка, \n\nвсе бУдет тАк. исхОда нЕт. \n\nбессмЫсленный и тУсклый свЕт. \n\n",
+    "бессмЫсленный и тУсклый свЕт. \n",
+    "все бУдет тАк. исхОда нЕт. ",
+    "ночь, Улица, фонАрь, аптЕка, ",
+    "живИ ещЕ хоть чЕтверть вЕка —"
+  ],
+  "LentaStihText": "живИ ещЕ хоть чЕтверть вЕка —\n\nночь, Улица, фонАрь, аптЕка, \n\nвсе бУдет тАк. исхОда нЕт. \n\nбессмЫсленный и тУсклый свЕт. \n",
+  "ReturnStrofaPositionMas": [
+    null,
+    2
+  ],
+  "CrossOverMode": 0,
+  "LentaCountSlog": 34,
+  "LentaCountSlogSer": 4,
+  "CrossRitm": [
+    null,
+    1,
+    3,
+    1,
+    2,
+    1,
+    3,
+    1,
+    3,
+    1
+  ],
+  "CrossRitmStrofa": [
+    null,
+    ",1,3,1,3,1,3,1,3,1",
+    ",1,3,1,1,1,3,1,3,1",
+    ",1,3,1,1,1,3,1,1",
+    ",1,3,1,1,1,3,1,1"
+  ],
+  "CrossRitmResult": [
+    null,
+    ",1,3,1,1,1,3,1,3,1,1,3,1,1,1,3,1,1,1,3,1,3,1,3,1,3,1,1,3,1,1,1,3,1,1"
+  ],
+  "CrossOverStihMas": [
+    "",
+    "живИ ещЕ хоть чЕтверть вЕка —",
+    "ночь, Улица, фонАрь, аптЕка, ",
+    "все бУдет тАк. исхОда нЕт. ",
+    "бессмЫсленный и тУсклый свЕт. ",
+    "",
+    ""
+  ],
+  "CrossOverProbelStrofMas": [
+    null,
+    null,
+    null,
+    null,
+    "живИ ещЕ хоть чЕтверть вЕка —",
+    "",
+    "ночь, Улица, фонАрь, аптЕка, ",
+    "",
+    "все бУдет тАк. исхОда нЕт. ",
+    "",
+    "бессмЫсленный и тУсклый свЕт. ",
+    "",
+    null
+  ],
+  "CrossOverProbelStrofMas2": [
+    null,
+    null,
+    null,
+    null,
+    "живИ ещЕ хоть чЕтверть вЕка —",
+    "",
+    "ночь, Улица, фонАрь, аптЕка, ",
+    "",
+    "все бУдет тАк. исхОда нЕт. ",
+    "",
+    "бессмЫсленный и тУсклый свЕт. ",
+    "",
+    null
+  ],
+  "CrossTemplateGlasnMas": [
+    "",
+    "иИеЕоЕеЕа",
+    "оУиаоАаЕа",
+    "еУеАиОаЕ",
+    "еЫеыиУыЕ",
+    ""
+  ],
+  "OldCrossTemplateGlasnMas": [
+    "",
+    "оУиаоАаЕа",
+    "еЫеыиУыЕ",
+    "иИеЕоЕеЕа",
+    "еУеАиОаЕ"
+  ],
+  "OldCrossOverStihMas": [
+    "ночь, Улица, фонАрь, аптЕка, ",
+    "бессмЫсленный и тУсклый свЕт. ",
+    "живИ ещЕ хоть чЕтверть вЕка —",
+    "все бУдет тАк. исхОда нЕт. ",
+    ""
+  ],
+  "NewPosCrossOverStihMas": [
+    null,
+    3,
+    1,
+    4,
+    2,
+    5
+  ],
+  "CrossLentaRitm": [],
+  "CrossTemplateGlasn": [],
+  "epigramma": 1,
+  "epigrammatype": "",
+  "ritmkontrastplus": "131313131",
+  "ritmkontrastminus": "131113131",
+  "rifmovkatext": "полная",
+  "rifmovkalong": "1111#",
+  "rifmovkatype": "1",
+  "inWindow": {},
+  "ContainerTemplate1": "<b>Итоговая матрица:</b><br><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">Ы</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">е</span><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">О</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">е</span>",
+  "ContainerAnaliz1": "<b>Анализ подготовлен интеллектуальной системой Fet.Online (свидетельство Роспатента от 22.03.2021 №2021614295) <br><br></b><b>Исходные строки:</b><br><br>ночь, Улица, фонАрь, аптЕка, <br>бессмЫсленный и тУсклый свет. <br>живИ ещЕ хоть чЕтверть вЕка —<br>все бУдет так. исхОда нет. <br><br><br><b>Наиболее часто встречающееся количество ударных гласных: 2<br><br></b><b>Исключённые строки:</b><br><br>ночь, Улица, фонАрь, аптЕка, <br>живИ ещЕ хоть чЕтверть вЕка —<br><br><br><b>Схема ударных и безударных гласных:</b><br><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">Ы</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">е</span><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">О</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">е</span><br><br><b>Исключённые строки:</b><br><br>нОчь Улица фонАрь аптЕка<br>ночь, Улица, фонАрь, аптЕка, <br>живИ ещЕ хоть чЕтверть вЕка —<br><br><br><b>Схема ударных и безударных гласных, включая исправленные строки:</b><br><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">Ы</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">ы</span> <span class=\"white-symbol\">е</span><br><span class=\"white-symbol\">е</span> <span class=\"black-symbol\">У</span> <span class=\"white-symbol\">е</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">и</span> <span class=\"black-symbol\">О</span> <span class=\"white-symbol\">а</span> <span class=\"white-symbol\">е</span><br><br>",
+  "ContainerAnaliz1f": "<b>Итоговый ритм: 0 2 0 0 0 2 0 0<br><br></b><b>Стихи соответствуют тонической системе. Обнаружен 2-х ударный тонический ритм.<br></b>",
+  "ContainerComment0": "",
+  "ContainerComment1": "Редакция альманаха «Венец поэзии» принимает стихи такого размера только в рамках специальных проектов.",
+  "ContainerFlag1": "<span style=\"color:#FF0000 ; font-weight: bold;\">X&nbsp;</span>Разбейте на строфы. <span style=\"color:#32CD32 ; font-weight: 900;\">✓&nbsp;</span>Ритм чёткий!  <span style=\"color:#32CD32 ; font-weight: 900;\">✓&nbsp;</span>Рифма точная! Количество слабоударных (смешанных) гласных в норме:12%  &nbsp;</span>",
+  "explorerPanel": "",
+  "LentaMode": {
+    "checked": false
+  },
+  "SaveRecord": {
+    "checked": false
+  },
+  "FileAccent": {
+    "checked": true
+  },
+  "levelFull": true,
+  "levelTonic": false,
+  "levelStrof": false,
+  "levelStrok": false,
+  "postscriptum": "",
+  "BallClassicManual": "",
+  "BallContentManual": "",
+  "TriCodLegend": "<span class=\"strofa\">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"border1\"><span class=\"slog\">0</span><span class=\"slog\">2</span><span class=\"slog\">0</span><span class=\"slog\">1</span><span class=\"slog\">0</span><span class=\"slog\">2</span><span class=\"slog\">0</span><span class=\"slog\">2</span><span class=\"slog\">0</span></span>",
+  "mySlog": "<span class=\"strofa\">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class=\"border1\"><span class=\"slog\">1</span><span class=\"slog\">2</span><span class=\"slog\">3</span><span class=\"slog\">4</span><span class=\"slog\">5</span><span class=\"slog\">6</span><span class=\"slog\">7</span><span class=\"slog\">8</span><span class=\"slog\">9</span></span>",
+  "galka": "<span style=\"color:#32CD32 ; font-weight: 900;\">✓&nbsp;</span>",
+  "greengalka": "<span style=\"background-color: #32CD32; color: #ffffff; font-weight: 900;\">&nbsp;✓&nbsp;</span>",
+  "krest": "<span style=\"color:#FF0000 ; font-weight: bold;\">X&nbsp;</span>",
+  "redkrest": "<span style=\"background-color: #FF0000; color:#ffffff ; font-weight: bold;\">&nbsp;X&nbsp;</span>",
+  "indikator": "<img alt=\"i\" src=\"https://fet.vpoezii.online/idikator.gif\" style=\"vertical-align: middle; text-align:center;\">",
+  "slog": "<div id=\"slog\" >&nbsp;&nbsp;123456789012345</div>",
+  "_TempFullRifmMas": [
+    "О",
+    "О",
+    "О",
+    "О",
+    "#"
+  ],
+  "_TempRitmstring": ",1,3,1,2,1,3,1,3,1",
+  "_TempFlagRitmBall": 3,
+  "_TempCommentStopa": "Строфы имеют очень чёткий ритмический рисунок, повторяющийся в каждой строке. ",
+  "_TempTriCodeRitm": "020102020"
+}
