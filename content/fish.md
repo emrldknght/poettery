@@ -1,6 +1,7 @@
 ---
 layout: poem
 title: Рыба
+pub-in: vk-21-10-26
 ---
 
 ```text

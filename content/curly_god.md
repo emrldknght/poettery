@@ -1,6 +1,7 @@
 ---
 layout: poem
 title: кудрявый бог
+review: gemma?
 ---
 
 ```text

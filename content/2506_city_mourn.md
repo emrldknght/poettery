@@ -2,6 +2,7 @@
 layout: poem
 title: Прощание с городом
 date: 16-06-2026
+review: gemma
 ---
 ```txt 
 мы

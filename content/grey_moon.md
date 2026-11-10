@@ -1,6 +1,7 @@
 ---
 layout: poem
 title: Седая Лунь
+pub-in: vk-20-10-26
 ---
 
 ```text
