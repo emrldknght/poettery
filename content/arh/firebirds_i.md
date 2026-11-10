@@ -1,6 +1,7 @@
 ---
 layout: poem
 title: птицы огненные (-unlinked-)
+pub-in: vk-11112026
 ---
 
 ```text

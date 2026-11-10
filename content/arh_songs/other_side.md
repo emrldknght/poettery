@@ -1,6 +1,7 @@
 ---
 layout: poem
 title: другая сторона луны
+analyzed: gemini
 ---
 
 ```text

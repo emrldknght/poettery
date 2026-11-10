@@ -1,6 +1,7 @@
 ---
 layout: poem
 date: xx-xx-2008
+analyzed: gemini
 ---
 <table>  
   <tr>  
