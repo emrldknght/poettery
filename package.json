@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "test": "echo \"Error: no test specified\" && exit 1",
     "j:serve": "bundle exec jekyll serve",
-    "j:build": "bundle exec jekyll build"
+    "j:build": "bundle exec jekyll build",
+    "check:yaml": "node check-yaml.mjs"
   },
   "repository": {
     "type": "git"

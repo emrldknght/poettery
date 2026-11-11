@@ -8,15 +8,12 @@ import { getAllMdFiles } from '../utils/getAllMdFiles.js';
 const contentDir = './content';
 const allFiles = getAllMdFiles(contentDir);
 
-interface FileInfo {
-  slug: string;
-  title: string;
-}
+// 🚫 Массив папок, которые нужно исключить из индекса
+const IGNORED_FOLDERS = ['horned'];
 
-interface FolderConfig {
-  title: string;
-  icon: string;
-  description?: string;
+interface FileInfo {
+    slug: string;
+    title: string;
 }
 
 // Группируем
@@ -24,35 +21,41 @@ const rootFiles: FileInfo[] = [];
 const groups: Record<string, FileInfo[]> = {};
 
 for (const file of allFiles) {
-  const relativePath = path.relative(contentDir, file);
-  const parts = relativePath.split(path.sep);
-  const slug = relativePath.replace(/\.md$/, '').replace(/\\/g, '/');
+    const relativePath = path.relative(contentDir, file);
+    const parts = relativePath.split(path.sep);
 
-  // Читаем frontmatter для названия
-  const raw = fs.readFileSync(file, 'utf-8');
-  const { data } = matter(raw);
+    // 🚫 Если первая часть пути (имя папки) есть в списке исключений — пропускаем
+    if (IGNORED_FOLDERS.includes(parts[0])) {
+        continue;
+    }
 
-  if (data.published === false) {
-    continue;
-  }
+    const slug = relativePath.replace(/\.md$/, '').replace(/\\/g, '/');
 
-  const title = data.title || slug.split('/').pop();
+    // Читаем frontmatter для названия
+    const raw = fs.readFileSync(file, 'utf-8');
+    const { data } = matter(raw);
 
-  if (parts.length === 1) {
-    rootFiles.push({ slug, title });
-  } else {
-    const folder = parts[0];
-    if (!groups[folder]) groups[folder] = [];
-    groups[folder].push({ slug, title });
-  }
+    if (data.published === false) {
+        continue;
+    }
+
+    const title = data.title || slug.split('/').pop();
+
+    if (parts.length === 1) {
+        rootFiles.push({ slug, title });
+    } else {
+        const folder = parts[0];
+        if (!groups[folder]) groups[folder] = [];
+        groups[folder].push({ slug, title });
+    }
 }
 ---
 
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>poettery</title>
-  <link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <title>poettery</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <h1>poettery</h1>
@@ -60,21 +63,21 @@ for (const file of allFiles) {
 <!-- Корневые стихи -->
 <h2>Стихи</h2>
 <ul>
-  {rootFiles.map(({ slug, title }) => (
-      <li><a href={`/poettery/${slug}`}>{title}</a></li>
-  ))}
+    {rootFiles.map(({ slug, title }) => (
+            <li><a href={`/poettery/${slug}`}>{title}</a></li>
+    ))}
 </ul>
 
 <!-- Папки -->
 {Object.keys(groups).sort().map(folder => (
-    <>
-      <h2>{folder}</h2>
-      <ul>
-        {groups[folder].map(({ slug, title }) => (
-            <li><a href={`/poettery/${slug}`}>{title}</a></li>
-        ))}
-      </ul>
-    </>
+        <>
+            <h2>{folder}</h2>
+            <ul>
+                {groups[folder].map(({ slug, title }) => (
+                        <li><a href={`/poettery/${slug}`}>{title}</a></li>
+                ))}
+            </ul>
+        </>
 ))}
 </body>
 </html>
