@@ -96,7 +96,12 @@ export function useAccentDictionary() {
     []
   );
 
-  return { ...state, load, placeAccents };
+  return {
+    ...state,
+    ready: state.status === 'ready',
+    load,
+    placeAccents,
+  };
 }
 
 export const formatCount = (n) => Number(n || 0).toLocaleString('ru-RU');

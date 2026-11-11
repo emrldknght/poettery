@@ -1,7 +1,7 @@
 /* Структурный анализ русского стиха: столбцовые профили (силлабо-тоника) + тоника.
    Соглашение об ударениях: ЗАГЛАВНАЯ гласная или U+0301. Без зависимостей, без DOM. */
 
-export const PROSODY_BUILD = 'build 4 · whole-poem profile';
+export const PROSODY_BUILD = 'build 5 · mono-weak + reverse';
 
 const VOWELS = 'аеёиоуыэюя';
 const UPPER = 'АЕЁИОУЫЭЮЯ';
@@ -100,6 +100,8 @@ function scanLine(raw, start) {
       }
     }
 
+    const isMono = positions.length === 1;
+
     positions.forEach((vi, v) => {
       const local = match.index + vi;
       vowels.push({
@@ -110,13 +112,18 @@ function scanLine(raw, start) {
         vowelCount: positions.length,
         word: clean,
         marked: v === marked,
+        mono: isMono,
       });
-      if (marked >= 0) template += v === marked ? 'О' : '.';
-      else template += positions.length === 1 ? ':' : '.';
+
+      // Как в оригинале: односложное слово ВСЕГДА слабоударное ':' в шаблоне,
+      // независимо от регистра буквы в тексте (CreateTemplateAccent, Countgl===1).
+      if (isMono) template += ':';
+      else template += v === marked ? 'О' : '.';
+
       numGlas += String(v + 1);
     });
 
-    if (marked < 0 && positions.length > 1) unmarked.push(clean.toLowerCase());
+    if (marked < 0 && !isMono) unmarked.push(clean.toLowerCase());
   }
 
   return {
@@ -574,8 +581,6 @@ export function analyze(text, options = {}) {
     s.inDominant = s.pattern === dominantPattern;
   });
 
-  /* ВАЖНО: итоговая схема в оригинале строится по всему стиху
-     (FragmentNumber = 0 — это GroupStrof.unshift(stih)). */
   const groupLines = stanzas.filter((s) => s.inDominant).flat();
   const baseLines = scope === 'group' && groupLines.length ? groupLines : voiced;
 

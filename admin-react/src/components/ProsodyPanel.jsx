@@ -1,13 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   analyze,
   placeAccents as fallbackAccents,
   toggleStress,
   clearAccents,
   hasAccents,
+  PROSODY_BUILD,
 } from '../lib/fet-method';
 import { useAccentDictionary, formatCount, formatMb } from '../lib/useAccentDictionary';
+import ProsodyDebug from './ProsodyDebug';
 import './ProsodyPanel.css';
+import './ProsodyDebug.css';
+import './ProsodyAccent.css';
 
 function Icon({ path }) {
   return <svg viewBox="0 0 24 24" aria-hidden="true">{path}</svg>;
@@ -21,6 +25,10 @@ const ICON_COPY = <><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M
 
 const RITM_LABEL = ['нет', 'слабый', 'явный', 'чёткий'];
 
+/* Порог как в оригинале: если длина текста изменилась больше чем на 7 символов,
+   ударения расставляются заново, иначе ручная разметка сохраняется. */
+const ACCENT_LENGTH_TOLERANCE = 7;
+
 const EXAMPLE = `бумАжным Аистом он стАл
 и с тЕх угрЮмых пОр
 над бЕлой бАшней он кричИт
@@ -31,7 +39,6 @@ const EXAMPLE = `бумАжным Аистом он стАл
 и снОва тЫсяча одИн
 и нОль - двоИчный счЁт`;
 
-/* Как в Fet: регистр буквы задаётся столбцом, а не самим словом. */
 function cellLetter(vowel, mode) {
   if (mode === 'words') {
     return vowel.stressed ? vowel.char.toUpperCase() : vowel.char.toLowerCase();
@@ -52,12 +59,83 @@ function cellTone(vowel) {
 export default function ProsodyPanel({ open, onClose, content, onChangeContent }) {
   const [mode, setMode] = useState('syllabic');
   const [caseMode, setCaseMode] = useState('columns');
-  const [busy, setBusy] = useState(false);
+  const [scope, setScope] = useState('poem');
+  const [accentBusy, setAccentBusy] = useState(false);
   const [accentInfo, setAccentInfo] = useState(null);
   const [copied, setCopied] = useState(false);
 
-  const dictionary = useAccentDictionary();
-  const result = useMemo(() => analyze(content || ''), [content]);
+  const {
+    status: dictStatus,
+    phase: dictPhase,
+    loaded: dictLoaded,
+    total: dictTotal,
+    stats: dictStats,
+    error: dictError,
+    load: loadDictionary,
+    placeAccents: workerAccents,
+  } = useAccentDictionary();
+
+  const changeRef = useRef(onChangeContent);
+  changeRef.current = onChangeContent;
+
+  const accentRunRef = useRef({ key: '', length: 0 });
+  const accentSeqRef = useRef(0);
+
+  const result = useMemo(() => analyze(content || '', { scope }), [content, scope]);
+
+  const textHasAccents = hasAccents(content || '');
+  const preparing = accentBusy && !textHasAccents;
+
+  /* ---------- ШАГ 1: ударения из словаря прямо в поле ввода ---------- */
+  useEffect(() => {
+    if (!open) return;
+    const text = content || '';
+    if (!text.trim()) return;
+    if (accentBusy) return;
+
+    const key = `${mode}::${text}`;
+    if (accentRunRef.current.key === key) return;
+
+    // ручные правки бережём: ударения уже есть, длина почти не изменилась
+    if (
+      textHasAccents
+      && accentRunRef.current.length > 0
+      && Math.abs(text.length - accentRunRef.current.length) <= ACCENT_LENGTH_TOLERANCE
+    ) {
+      accentRunRef.current = { key, length: text.length };
+      return;
+    }
+
+    const seq = ++accentSeqRef.current;
+    setAccentBusy(true);
+
+    workerAccents(text, { tonic: mode === 'tonic' })
+      .then((res) => {
+        if (seq !== accentSeqRef.current) return;
+        accentRunRef.current = { key: `${mode}::${res.text}`, length: res.text.length };
+        setAccentInfo({ ...res.stats, source: 'dictionary', auto: true });
+        if (res.text !== text) changeRef.current?.(res.text);
+      })
+      .catch((error) => {
+        if (seq !== accentSeqRef.current) return;
+        const local = fallbackAccents(text, undefined, { tonic: mode === 'tonic' });
+        accentRunRef.current = { key: `${mode}::${local.text}`, length: local.text.length };
+        setAccentInfo({
+          source: 'starter',
+          missed: local.unmarked.length,
+          error: error.message,
+          auto: true,
+        });
+        if (local.text !== text) changeRef.current?.(local.text);
+      })
+      .finally(() => {
+        if (seq === accentSeqRef.current) setAccentBusy(false);
+      });
+  }, [open, content, mode, accentBusy, textHasAccents, workerAccents]);
+
+  useEffect(() => {
+    if (!open) setAccentBusy(false);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -80,11 +158,23 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
   const shown = useMemo(() => {
     const acc = { light: 0, weak: 0, strong: 0, err: 0 };
     result.lines.forEach((line) => {
-      line.vowels.forEach((vowel) => {
-        acc[cellTone(vowel)] += 1;
-      });
+      line.vowels.forEach((vowel) => { acc[cellTone(vowel)] += 1; });
     });
     return acc;
+  }, [result]);
+
+  const debugColumns = useMemo(() => {
+    if (Array.isArray(result.columns) && result.columns.length) return result.columns;
+    return (result.ritm || []).map((type, i) => ({
+      index: i + 1,
+      strong: 0,
+      weak: 0,
+      light: 0,
+      real: 0,
+      type,
+      reason: 'Подробная статистика недоступна — обновите src/lib/fet-method.js.',
+      error: false,
+    }));
   }, [result]);
 
   if (!open) return null;
@@ -95,33 +185,67 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
   const counts = s.counts || { syllables: 0 };
   const unmarkedWords = s.unmarkedWords || [];
   const width = s.width || 0;
+  const buildShort = String(PROSODY_BUILD || '').split(' · ')[0];
+
   const ruler = Array.from({ length: width }, (_, i) => (
     i + 1 < 10 ? i + 1 : String(i + 1).slice(-1)
   ));
 
-  const change = (next) => onChangeContent?.(next);
+  const change = (next) => changeRef.current?.(next);
 
-  const handleAuto = async () => {
-    if (busy) return;
-    setBusy(true);
+  /* принудительная перестановка ударений по кнопке */
+  const handleForceAccents = () => {
+    if (accentBusy) return;
+    const text = content || '';
+    if (!text.trim()) return;
+
+    const seq = ++accentSeqRef.current;
+    setAccentBusy(true);
     setAccentInfo(null);
-    try {
-      const response = await dictionary.placeAccents(content || '', { tonic: mode === 'tonic' });
-      change(response.text);
-      setAccentInfo({ ...response.stats, source: 'dictionary' });
-    } catch (error) {
-      const local = fallbackAccents(content || '', undefined, { tonic: mode === 'tonic' });
-      change(local.text);
-      setAccentInfo({ source: 'starter', missed: local.unmarked.length, error: error.message });
-    } finally {
-      setBusy(false);
-    }
+
+    workerAccents(text, { tonic: mode === 'tonic' })
+      .then((res) => {
+        if (seq !== accentSeqRef.current) return;
+        accentRunRef.current = { key: `${mode}::${res.text}`, length: res.text.length };
+        setAccentInfo({ ...res.stats, source: 'dictionary', auto: false });
+        if (res.text !== text) change(res.text);
+      })
+      .catch((error) => {
+        if (seq !== accentSeqRef.current) return;
+        const local = fallbackAccents(text, undefined, { tonic: mode === 'tonic' });
+        accentRunRef.current = { key: `${mode}::${local.text}`, length: local.text.length };
+        setAccentInfo({
+          source: 'starter',
+          missed: local.unmarked.length,
+          error: error.message,
+          auto: false,
+        });
+        if (local.text !== text) change(local.text);
+      })
+      .finally(() => {
+        if (seq === accentSeqRef.current) setAccentBusy(false);
+      });
   };
 
   const handleExample = () => {
     if ((content || '').trim() && !window.confirm('Заменить текущий текст примером?')) return;
+    accentRunRef.current = { key: '', length: 0 };
     change(EXAMPLE);
     setAccentInfo(null);
+  };
+
+  const handleClear = () => {
+    const next = clearAccents(content || '');
+    // помечаем очищенный текст как обработанный, чтобы авторасстановка не вернула ударения
+    accentRunRef.current = { key: `${mode}::${next}`, length: next.length };
+    change(next);
+    setAccentInfo(null);
+  };
+
+  const handleVowel = (pos) => {
+    const next = toggleStress(content || '', pos);
+    accentRunRef.current = { key: `${mode}::${next}`, length: next.length };
+    change(next);
   };
 
   const handleCopyScheme = async () => {
@@ -140,13 +264,17 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
     }
   };
 
-  const handlePreload = () => { dictionary.load().catch(() => {}); };
-  const handleClear = () => { change(clearAccents(content || '')); setAccentInfo(null); };
-  const handleVowel = (pos) => change(toggleStress(content || '', pos));
-
-  const percent = dictionary.total
-    ? Math.min(100, Math.round((dictionary.loaded / dictionary.total) * 100))
+  const percent = dictTotal
+    ? Math.min(100, Math.round((dictLoaded / dictTotal) * 100))
     : 0;
+
+  const statusClass = accentBusy
+    ? 'is-working'
+    : (textHasAccents ? 'is-done' : 'is-warn');
+
+  const statusText = accentBusy
+    ? '① Расставляю ударения…'
+    : (textHasAccents ? '① Ударения → ② Разбор' : '① Ударения не расставлены');
 
   return (
     <div
@@ -159,8 +287,12 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
         <div className="prosody__head">
           <div className="prosody__head-text">
             <div className="prosody__title">Разбор</div>
-            <div className="prosody__sub">клик по гласной — ударение · клик вне панели или Esc — закрыть</div>
+            <div className="prosody__sub">
+              ударения из словаря пишутся в текст · клик по гласной — правка · Esc — закрыть
+            </div>
           </div>
+
+          <span className="build-stamp" title={PROSODY_BUILD}>{buildShort}</span>
 
           <div className={`ball ball--${s.classicBall}`} title={s.ballText}>
             {s.classicBall}<span>/3</span>
@@ -169,12 +301,12 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
           <button
             type="button"
             className="p-icon p-icon--wide"
-            onClick={handleAuto}
-            disabled={busy}
-            title="Расставить ударения по словарю"
+            onClick={handleForceAccents}
+            disabled={accentBusy}
+            title="Переставить ударения по словарю заново"
           >
             <Icon path={ICON_WAND} />
-            <span>{busy ? 'Работаю…' : 'Ударения'}</span>
+            <span>{accentBusy ? 'Работаю…' : 'Ударения'}</span>
           </button>
 
           <button type="button" className="p-icon" onClick={handleExample} title="Вставить пример">
@@ -189,49 +321,53 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
         </div>
 
         <div className="prosody__dict">
-          {dictionary.status === 'ready' && (
+          <span className={`acc-status ${statusClass}`}>{statusText}</span>
+
+          {dictStatus === 'ready' && (
             <span className="dict-ok">
-              Словарь: {formatCount(dictionary.stats?.words)} слов
-              {' · '}Ё: {formatCount(dictionary.stats?.yoWords)}
-              {' · '}{((dictionary.stats?.ms || 0) / 1000).toFixed(1)} с
+              Словарь: {formatCount(dictStats?.words)} слов
+              {' · '}Ё: {formatCount(dictStats?.yoWords)}
+              {' · '}{((dictStats?.ms || 0) / 1000).toFixed(1)} с
             </span>
           )}
 
-          {dictionary.status === 'loading' && (
+          {dictStatus === 'loading' && (
             <div className="dict-progress">
               <div className="dict-progress__track">
                 <div
                   className="dict-progress__bar"
-                  style={{ width: dictionary.phase === 'index' ? '100%' : `${percent}%` }}
+                  style={{ width: dictPhase === 'index' ? '100%' : `${percent}%` }}
                 />
               </div>
               <span className="dict-progress__label">
-                {dictionary.phase === 'index'
+                {dictPhase === 'index'
                   ? 'Индексация словаря…'
-                  : dictionary.phase === 'yo'
-                    ? `Словарь Ё: ${formatMb(dictionary.loaded)}`
-                    : `${formatMb(dictionary.loaded)}${dictionary.total ? ` / ${formatMb(dictionary.total)} · ${percent}%` : ''}`}
+                  : dictPhase === 'yo'
+                    ? `Словарь Ё: ${formatMb(dictLoaded)}`
+                    : `${formatMb(dictLoaded)}${dictTotal ? ` / ${formatMb(dictTotal)} · ${percent}%` : ''}`}
               </span>
             </div>
           )}
 
-          {dictionary.status === 'idle' && (
-            <button type="button" className="dict-load" onClick={handlePreload}>
+          {dictStatus === 'idle' && (
+            <button type="button" className="dict-load" onClick={() => loadDictionary().catch(() => {})}>
               Загрузить словарь ударений (~69 МБ, один раз)
             </button>
           )}
 
-          {dictionary.status === 'error' && (
+          {dictStatus === 'error' && (
             <span className="dict-error">
-              {dictionary.error}
-              <button type="button" className="dict-retry" onClick={handlePreload}>повторить</button>
+              {dictError}
+              <button type="button" className="dict-retry" onClick={() => loadDictionary().catch(() => {})}>
+                повторить
+              </button>
             </span>
           )}
 
           {accentInfo && (
             <span className="dict-result">
               {accentInfo.source === 'starter'
-                ? `Встроенный мини-словарь · не найдено: ${accentInfo.missed}`
+                ? `Встроенный мини-словарь · не найдено: ${formatCount(accentInfo.missed)}`
                 : `Размечено ${formatCount(accentInfo.marked)} из ${formatCount(accentInfo.words)} · словарь ${formatCount(accentInfo.fromDict)} · ё ${formatCount(accentInfo.yoApplied)} · вручную ${formatCount(accentInfo.manual)} · не найдено ${formatCount(accentInfo.missed)}`}
             </span>
           )}
@@ -327,7 +463,7 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
             {!s.accentsSet && unmarkedWords.length > 0 && (
               <div className="unmarked">
                 <div className="unmarked__head">
-                  Слова без ударения — нажмите «Ударения» или кликните гласную в схеме:
+                  Этих слов нет в словаре — кликните нужную гласную в схеме:
                 </div>
                 <div className="unmarked__list">
                   {unmarkedWords.slice(0, 40).map((word) => (
@@ -342,6 +478,13 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
           </div>
 
           <div className="prosody__main">
+            {preparing && (
+              <div className="acc-preparing">
+                <span className="acc-preparing__spinner" />
+                Сначала расставляю ударения по словарю — разбор посчитается по размеченному тексту.
+              </div>
+            )}
+
             {s.lineCount === 0 && (
               <div className="prosody__empty">
                 Текст пуст — напишите строку или нажмите значок книги, чтобы вставить пример.
@@ -378,7 +521,7 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
                   </div>
                 </div>
 
-                <div className="scheme">
+                <div className={`scheme${preparing ? ' is-preparing' : ''}`}>
                   <div className="scheme__row scheme__row--ruler">
                     <span className="scheme__count" />
                     <span className="scheme__cells">
@@ -478,6 +621,14 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
                 )}
               </div>
             )}
+
+            <ProsodyDebug
+              columns={debugColumns}
+              lineCount={s.profileLineCount || s.lineCount || 0}
+              scope={scope}
+              onScopeChange={setScope}
+              build={buildShort}
+            />
           </div>
         </div>
 
@@ -488,7 +639,7 @@ export default function ProsodyPanel({ open, onClose, content, onChangeContent }
           <span><i className="dot d-err" /> сбой ритма</span>
           <span><i className="dot d-actual" /> фактическое ударение в строке</span>
           <span className="prosody__foot-tail">
-            {hasAccents(content) ? 'ударения размечены' : 'ударения не размечены'}
+            {textHasAccents ? 'ударения размечены' : 'ударения не размечены'}
           </span>
         </div>
       </aside>

@@ -1,4 +1,5 @@
-import { buildStressIndex, buildYoIndex, applyAccents } from '../lib/accentCore.js';
+import { buildStressIndex, buildYoIndex } from '../lib/accentCore.js';
+import { runAccentPipeline } from '../lib/accentPipeline.js';
 
 let index = null;
 let yoIndex = null;
@@ -85,16 +86,23 @@ self.onmessage = async (event) => {
 
     if (type === 'accent') {
       const info = await ensureLoaded(base);
-      const result = applyAccents(data.text || '', {
+      const result = runAccentPipeline(data.text || '', {
         index,
         yoIndex,
         tonic: Boolean(data.tonic),
+        passes: Number(data.passes) > 0 ? Number(data.passes) : 2,
+        adjustMono: data.adjustMono !== false,
+        promoteUnmarked: data.promoteUnmarked !== false,
       });
+
       self.postMessage({
         type: 'accented',
         id,
         text: result.text,
         unmarked: result.unmarked,
+        triCod: result.triCod,
+        razmer: result.razmer,
+        steps: result.steps,
         stats: { ...result.stats, dictionary: info },
       });
     }
