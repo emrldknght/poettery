@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+
+const OPEN_KEY = 'poettery-tree-open';
 
 function buildTree(files) {
   const root = { children: [] };
@@ -26,7 +28,6 @@ function buildTree(files) {
     });
   });
 
-  // сортируем: папки сверху, файлы снизу, внутри — по алфавиту
   const sortNodes = (nodes) => {
     nodes.sort((a, b) => {
       if (a.isLeaf !== b.isLeaf) return a.isLeaf ? 1 : -1;
@@ -39,8 +40,25 @@ function buildTree(files) {
   return root.children;
 }
 
-function TreeNode({ node, depth, openSet, toggle, onSelect, selectedFile }) {
+// Собирает id всех родительских папок для пути файла
+function collectParentIds(filePath) {
+  if (!filePath) return new Set();
+  const parts = filePath.split('/');
+  const ids = new Set();
+  for (let i = 1; i < parts.length; i++) {
+    ids.add(parts.slice(0, i).join('/'));
+  }
+  return ids;
+}
+
+function TreeNode({ node, depth, openSet, toggle, onSelect, selectedFile, highlightedIds }) {
   const isOpen = openSet.has(node.id);
+  const isSelected = selectedFile === node.path;
+  const isHighlighted = highlightedIds.has(node.id);
+
+  let background = 'transparent';
+  if (isSelected) background = '#487395';
+  else if (isHighlighted) background = '#3471a7';
 
   return (
     <div>
@@ -60,8 +78,8 @@ function TreeNode({ node, depth, openSet, toggle, onSelect, selectedFile }) {
           paddingLeft: 8 + depth * 16,
           cursor: 'pointer',
           fontSize: 13,
-          background: selectedFile === node.path ? '#e3f2fd' : 'transparent',
-          fontWeight: selectedFile === node.path ? 600 : 400,
+          background,
+          fontWeight: isSelected ? 600 : 400,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
@@ -87,6 +105,7 @@ function TreeNode({ node, depth, openSet, toggle, onSelect, selectedFile }) {
               toggle={toggle}
               onSelect={onSelect}
               selectedFile={selectedFile}
+              highlightedIds={highlightedIds}
             />
           ))}
         </div>
@@ -98,6 +117,7 @@ function TreeNode({ node, depth, openSet, toggle, onSelect, selectedFile }) {
 export default function FileTree({ onSelect, selectedFile }) {
   const [tree, setTree] = useState([]);
   const [openSet, setOpenSet] = useState(new Set());
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     fetch('/admin-list')
@@ -105,15 +125,37 @@ export default function FileTree({ onSelect, selectedFile }) {
       .then(({ files }) => {
         const built = buildTree(files);
         setTree(built);
-        // раскрываем все папки по умолчанию
-        const all = new Set();
+
+        const allIds = new Set();
         const walk = (nodes) => nodes.forEach(n => {
-          if (!n.isLeaf) { all.add(n.id); walk(n.children); }
+          if (!n.isLeaf) { allIds.add(n.id); walk(n.children); }
         });
         walk(built);
-        setOpenSet(all);
+
+        // восстанавливаем из localStorage, иначе раскрываем всё
+        let initial = allIds;
+        try {
+          const saved = localStorage.getItem(OPEN_KEY);
+          if (saved) {
+            const arr = JSON.parse(saved);
+            if (Array.isArray(arr)) {
+              initial = new Set(arr.filter(id => allIds.has(id)));
+            }
+          }
+        } catch {}
+
+        setOpenSet(initial);
+        setLoaded(true);
       });
   }, []);
+
+  // сохраняем openSet в localStorage при каждом изменении
+  useEffect(() => {
+    if (!loaded) return;
+    try {
+      localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet]));
+    } catch {}
+  }, [openSet, loaded]);
 
   const toggle = (id) => {
     setOpenSet(prev => {
@@ -122,6 +164,8 @@ export default function FileTree({ onSelect, selectedFile }) {
       return next;
     });
   };
+
+  const highlightedIds = useMemo(() => collectParentIds(selectedFile), [selectedFile]);
 
   return (
     <div style={{
@@ -140,6 +184,7 @@ export default function FileTree({ onSelect, selectedFile }) {
           toggle={toggle}
           onSelect={onSelect}
           selectedFile={selectedFile}
+          highlightedIds={highlightedIds}
         />
       ))}
     </div>
