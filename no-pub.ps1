@@ -1,4 +1,4 @@
-$folder = 'content'
+$folder = 'src/content'
 $excludeFolders = @('node_modules', '.git', 'temp', 'bin', 'obj', 'horned')  # папки, которые не нужно обходить
 
 # $folder = (Read-Host 'input dir').Trim('"')
