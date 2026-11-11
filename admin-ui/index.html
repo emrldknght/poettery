@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Poettery Admin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>🎸 Poettery Admin</h1>
+
+<div id="message" class="message"></div>
+
+<form id="adminForm">
+    <div class="form-grid">
+        <div class="left-col">
+            <label>Slug (имя файла):</label>
+            <input type="text" name="slug" placeholder="020726_cup" required>
+            <div class="hint">Без расширения .md</div>
+
+            <label>Папка:</label>
+            <input type="text" name="folder" id="folderInput">
+            <div class="hint">Оставь пустым для корня src/content/</div>
+
+            <label>Заголовок:</label>
+            <input type="text" name="title" required>
+
+            <label>Дата:</label>
+            <input type="date" name="date" id="dateInput" required>
+
+            <label>Layout:</label>
+            <select name="layout">
+                <option value="poem">Poem</option>
+                <option value="music">Music</option>
+            </select>
+
+            <label>Review (через запятую):</label>
+            <input type="text" name="review" placeholder="qwen-100926, gemma">
+
+            <div class="button-group">
+                <button type="submit" class="btn-primary" id="saveBtn">💾 Сохранить</button>
+                <button type="button" class="btn-secondary" id="newBtn">🆕 Новый файл</button>
+            </div>
+            <div class="hint" id="draftStatus" style="margin-top:8px;"></div>
+        </div>
+
+        <div class="right-col">
+            <label>Текст стиха (Markdown):</label>
+            <textarea name="content" placeholder="Пиши здесь..."></textarea>
+        </div>
+    </div>
+</form>
+
+<script src="script.js"></script>
+</body>
+</html>
