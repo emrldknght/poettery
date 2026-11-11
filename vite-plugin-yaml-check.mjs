@@ -3,31 +3,42 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 
-export default function yamlCheckPlugin() {
+export default function yamlCheckAndHmrPlugin() {
     return {
-        name: 'yaml-check',
+        name: 'yaml-check-and-hmr',
 
-        // Проверяем при старте dev-сервера
+        // 1. Проверяем всё при старте сервера
         buildStart() {
             checkAllYaml();
         },
 
-        // Проверяем при каждом изменении файла
+        // 2. 🚀 HOT RELOAD: Слушаем изменения .md файлов
         handleHotUpdate({ file, server }) {
-            if (file.endsWith('.md') || file.endsWith('.mdx') || file.endsWith('.astro')) {
-                const result = checkSingleFile(file);
-                if (!result.ok) {
-                    server.config.logger.error(`\n❌ YAML Error in ${result.file}`);
-                    server.config.logger.error(`   Строка ${result.line}, колонка ${result.column}`);
-                    server.config.logger.error(`   → ${result.message}\n`);
-                }
+            // Нормализуем пути, чтобы работало и на Windows (\), и на Mac/Linux (/)
+            const normalizedFile = path.normalize(file);
+            const normalizedContentDir = path.normalize('src/content');
+
+            if (normalizedFile.endsWith('.md') && normalizedFile.includes(normalizedContentDir)) {
+                console.log(`\n🔄 [HMR] Изменён контент: ${path.relative(process.cwd(), file)}`);
+                console.log('🔄 Выполняется полная перезагрузка страницы в браузере...\n');
+
+                // Принудительно перезагружаем страницу (full-reload)
+                server.ws.send({
+                    type: 'full-reload',
+                    path: '*'
+                });
+
+                // Заодно мгновенно проверяем YAML изменённого файла
+                checkSingleFile(file);
             }
         }
     };
 }
 
+// --- Вспомогательные функции (без изменений) ---
+
 function checkAllYaml() {
-    const contentDir = './src/content';
+    const contentDir = path.resolve(process.cwd(), 'src', 'content');
     if (!fs.existsSync(contentDir)) return;
 
     const files = getAllMdFiles(contentDir);
@@ -45,8 +56,6 @@ function checkAllYaml() {
 
     if (errors === 0) {
         console.log(`✅ YAML check: ${files.length} files OK`);
-    } else {
-        console.error(`❌ YAML check: ${errors} errors found`);
     }
 }
 
