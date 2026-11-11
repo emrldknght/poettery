@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import matter from 'gray-matter';
 
-const TARGET_DIR = 'content';
+const TARGET_DIR = 'src/content';
 const EXTENSIONS = ['.md', '.mdx', '.astro'];
 
 async function* walk(dir) {

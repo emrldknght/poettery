@@ -15,9 +15,9 @@ entities_frequency.html
 public
 # temp - ignore fl
 fl
-content/media
-/content/0509_test_apteka.md
-/content/0509_test_apteka__short.md
+src/content/media
+src/content/0509_test_apteka.md
+src/content/0509_test_apteka__short.md
 *.rpp*
 im
 *.xml

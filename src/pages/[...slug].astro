@@ -9,22 +9,32 @@ import PoemLayout from '../layouts/PoemLayout.astro';
 import MusicLayout from '../layouts/MusicLayout.astro';
 
 export async function getStaticPaths() {
-  const contentDir = './content';
-  const allFiles = getAllMdFiles(contentDir);
+    // ✅ 1. Абсолютный путь к папке content от корня проекта
+    const contentDir = path.resolve(process.cwd(), 'src', 'content');
+    const allFiles = getAllMdFiles(contentDir);
 
-  return allFiles.map(file => {
-    const relativePath = path.relative(contentDir, file);
-    const slug = relativePath.replace(/\.md$/, '').replace(/\\/g, '/');
-    return { params: { slug } };
-  });
+    return allFiles.map(file => {
+        // Теперь relativePath будет корректным, например: '020726_cup.md' или 'horned/file.md'
+        const relativePath = path.relative(contentDir, file);
+        const slug = relativePath.replace(/\.md$/, '').replace(/\\/g, '/');
+        return { params: { slug } };
+    });
 }
 
 const { slug } = Astro.params;
 const slugPath = Array.isArray(slug) ? slug.join('/') : slug;
-const filePath = `./content/${slugPath}.md`;
-const fileContent = fs.readFileSync(filePath, 'utf-8');
 
+// ✅ 2. Абсолютный путь к конкретному файлу для чтения
+const filePath = path.resolve(process.cwd(), 'src', 'content', `${slugPath}.md`);
+
+// Защита от 404, если файл вдруг не найден
+if (!fs.existsSync(filePath)) {
+    return Astro.redirect('/404');
+}
+
+const fileContent = fs.readFileSync(filePath, 'utf-8');
 const { data, content } = matter(fileContent);
+
 const title = data.title || slugPath;
 const layout = data.layout || 'poem';
 const htmlContent = await marked(content);
@@ -34,26 +44,31 @@ let lyricsContent = undefined;
 let gp5File = null;
 
 if (layout === 'music') {
-  if (data.file) {
-    gp5File = data.file;
-
-    // path fix
-    gp5File = data.file.replace(/^\/poettery/, '');
-    if (!gp5File.startsWith('/')) {
-      gp5File = '/' + gp5File;
+    if (data.file) {
+        gp5File = data.file;
+        // path fix
+        gp5File = data.file.replace(/^\/poettery/, '');
+        if (!gp5File.startsWith('/')) {
+            gp5File = '/' + gp5File;
+        }
     }
-  }
 
-  if (data.lyrics) {
-    try {
-      const lyricsPath = path.join(process.cwd(), data.lyrics);
-      if (fs.existsSync(lyricsPath)) {
-        const lyricsRaw = fs.readFileSync(lyricsPath, 'utf-8');
-        const { content: lyricsMd } = matter(lyricsRaw);
-        lyricsContent = await marked(lyricsMd);
-      }
-    } catch (e) {}
-  }
+    if (data.lyrics) {
+        try {
+            // ✅ 3. Убедимся, что путь к lyrics тоже абсолютный
+            const lyricsPath = path.isAbsolute(data.lyrics)
+                ? data.lyrics
+                : path.resolve(process.cwd(), data.lyrics);
+
+            if (fs.existsSync(lyricsPath)) {
+                const lyricsRaw = fs.readFileSync(lyricsPath, 'utf-8');
+                const { content: lyricsMd } = matter(lyricsRaw);
+                lyricsContent = await marked(lyricsMd);
+            }
+        } catch (e) {
+            console.warn(`Не удалось загрузить lyrics для ${slugPath}:`, e.message);
+        }
+    }
 }
 
 // Выбираем лэйаут
@@ -61,9 +76,9 @@ const Layout = layout === 'music' ? MusicLayout : PoemLayout;
 ---
 
 <Layout
-    title={title}
-    content={htmlContent}
-    lyricsContent={lyricsContent}
-    gp5File={gp5File}
-    date={data.date}
+        title={title}
+        content={htmlContent}
+        lyricsContent={lyricsContent}
+        gp5File={gp5File}
+        date={data.date}
 />

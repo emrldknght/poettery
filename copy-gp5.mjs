@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const srcDir = 'content/tabs';
+const srcDir = 'src/content/tabs';
 const destDir = 'public/content/tabs';
 
 function copyGp5() {

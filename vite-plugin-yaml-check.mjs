@@ -27,7 +27,7 @@ export default function yamlCheckPlugin() {
 }
 
 function checkAllYaml() {
-    const contentDir = './content';
+    const contentDir = './src/content';
     if (!fs.existsSync(contentDir)) return;
 
     const files = getAllMdFiles(contentDir);

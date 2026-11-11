@@ -9,7 +9,7 @@ export default defineConfig({
     srcDir: './src',
 
     // Для GitHub Pages рекомендуется явно указать поведение слешей
-    trailingSlash: 'never',  // или 'always', в зависимости от ваших предпочтений
+    trailingSlash: 'never', //, в зависимости от ваших предпочтений
 
     vite: {
         server: {
