@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import yamlCheckPlugin from "./vite-plugin-yaml-check.mjs";
 
 export default defineConfig({
     site: 'https://emrldknght.github.io',
@@ -11,6 +12,13 @@ export default defineConfig({
     trailingSlash: 'never',  // или 'always', в зависимости от ваших предпочтений
 
     vite: {
+        server: {
+            watch: {
+                // Следим за папкой content вне src/
+                ignored: ['!content/**/*'],
+            },
+        },
+        plugins: [yamlCheckPlugin()],
         assetsInclude: [
             '**/*.gp5',
         ],

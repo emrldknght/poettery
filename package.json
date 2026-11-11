@@ -4,6 +4,7 @@
   "description": "",
   "main": "tabs.js",
   "scripts": {
+    "predev": "node check-yaml.mjs",
     "dev": "astro dev",
     "build": "node copy-gp5.mjs && astro build",
     "preview": "astro preview",
