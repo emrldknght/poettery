@@ -2,9 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import './FileTree.css';
 
 const OPEN_KEY = 'poettery-tree-open';
-const DBLCLICK_DELAY = 220; // пауза, чтобы одиночный клик не срабатывал при даблклике
-
-/* ---------------- утилиты ---------------- */
+const DBLCLICK_DELAY = 220;
 
 function buildTree(files, dir = 1) {
   const root = { children: [] };
@@ -30,7 +28,7 @@ function buildTree(files, dir = 1) {
   });
   const sortNodes = (nodes) => {
     nodes.sort((a, b) => {
-      if (a.isLeaf !== b.isLeaf) return a.isLeaf ? 1 : -1; // папки всегда сверху
+      if (a.isLeaf !== b.isLeaf) return a.isLeaf ? 1 : -1;
       return a.name.localeCompare(b.name, 'ru') * dir;
     });
     nodes.forEach((n) => n.children && sortNodes(n.children));
@@ -66,7 +64,10 @@ function plural(n, forms) {
   return forms[2];
 }
 
-/* ---------------- иконки ---------------- */
+async function copyToClipboard(text) {
+  if (!navigator.clipboard?.writeText) throw new Error('clipboard unavailable');
+  await navigator.clipboard.writeText(text);
+}
 
 const svgProps = {
   width: 14, height: 14, viewBox: '0 0 24 24',
@@ -95,6 +96,9 @@ const RefreshIcon = () => (
 const PickIcon = () => (
   <svg {...svgProps} width={13} height={13}><path d="m15 10 5 5-5 5" /><path d="M4 4v7a4 4 0 0 0 4 4h12" /></svg>
 );
+const CopyIcon = () => (
+  <svg {...svgProps} width={13} height={13}><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>
+);
 const ExpandIcon = () => (
   <svg {...svgProps}><path d="m7 6 5 5 5-5" /><path d="m7 13 5 5 5-5" /></svg>
 );
@@ -104,8 +108,6 @@ const CollapseIcon = () => (
 const FeatherIcon = () => (
   <svg {...svgProps} width={18} height={18}><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" /><path d="M16 8 2 22" /><path d="M17.5 15H9" /></svg>
 );
-
-/* ---------------- подсветка совпадений поиска ---------------- */
 
 function Highlight({ text, query }) {
   if (!query) return text;
@@ -120,12 +122,10 @@ function Highlight({ text, query }) {
   );
 }
 
-/* ---------------- узел дерева ---------------- */
-
 function TreeNode({
-                    node, depth, openSet, toggle, onSelect, selectedFile,
-                    highlightedIds, onFolderPick, pickedFolder, searching, query,
-                  }) {
+  node, depth, openSet, toggle, onSelect, selectedFile,
+  highlightedIds, onFolderPick, pickedFolder, searching, query, onToast,
+}) {
   const clickTimer = useRef(null);
   useEffect(() => () => clearTimeout(clickTimer.current), []);
 
@@ -139,8 +139,7 @@ function TreeNode({
       onSelect(node.path);
       return;
     }
-    if (searching) return; // при поиске всё раскрыто
-    // откладываем toggle, чтобы даблклик не «щёлкнул» папкой
+    if (searching) return;
     clearTimeout(clickTimer.current);
     clickTimer.current = setTimeout(() => toggle(node.id), DBLCLICK_DELAY);
   };
@@ -148,7 +147,7 @@ function TreeNode({
   const handleDoubleClick = () => {
     if (node.isLeaf) return;
     clearTimeout(clickTimer.current);
-    onFolderPick(node.id); // ← путь папки в поле «Папка»
+    onFolderPick(node.id);
   };
 
   const handleKey = (e) => {
@@ -156,6 +155,13 @@ function TreeNode({
     e.preventDefault();
     if (node.isLeaf) onSelect(node.path);
     else if (!searching) toggle(node.id);
+  };
+
+  const copyPath = (e) => {
+    e.stopPropagation();
+    copyToClipboard(node.path)
+      .then(() => onToast('Путь скопирован', 'success'))
+      .catch(() => onToast('Буфер обмена недоступен', 'error'));
   };
 
   const rowClass = [
@@ -189,9 +195,21 @@ function TreeNode({
         <span className="tree-row__name">
           <Highlight text={node.name} query={query} />
         </span>
-        {!node.isLeaf && (
+
+        {node.isLeaf ? (
           <button
-            className="tree-row__pick"
+            className="tree-row__action tree-row__action--copy"
+            tabIndex={-1}
+            title="Скопировать путь"
+            aria-label={`Скопировать путь ${node.path}`}
+            onClick={copyPath}
+            onDoubleClick={(e) => e.stopPropagation()}
+          >
+            <CopyIcon />
+          </button>
+        ) : (
+          <button
+            className="tree-row__action tree-row__action--pick"
             tabIndex={-1}
             title="Подставить в поле «Папка»"
             aria-label={`Подставить папку ${node.id} в поле «Папка»`}
@@ -223,6 +241,7 @@ function TreeNode({
               pickedFolder={pickedFolder}
               searching={searching}
               query={query}
+              onToast={onToast}
             />
           ))}
         </div>
@@ -231,18 +250,10 @@ function TreeNode({
   );
 }
 
-/* ---------------- дерево ---------------- */
-
-export default function FileTree({ onSelect, selectedFile, onFolderPick, pickedFolder, refreshKey }) {
-  const [files, setFiles] = useState([]);
-  const [loaded, setLoaded] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [retryKey, setRetryKey] = useState(0);
-  const [query, setQuery] = useState('');
-  const [sortDir, setSortDir] = useState(1);
-
-  // null = ещё ни разу не сохранялось → при первой загрузке раскрыть всё
+export default function FileTree({
+  files, loading, error, onRetry,
+  onSelect, selectedFile, onFolderPick, pickedFolder, onToast,
+}) {
   const [openSet, setOpenSet] = useState(() => {
     try {
       const saved = localStorage.getItem(OPEN_KEY);
@@ -251,30 +262,16 @@ export default function FileTree({ onSelect, selectedFile, onFolderPick, pickedF
     } catch {}
     return null;
   });
+  const [query, setQuery] = useState('');
+  const [sortDir, setSortDir] = useState(1);
+
+  const hasFiles = files.length > 0;
 
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetch('/admin-list')
-      .then((r) => {
-        if (!r.ok) throw new Error(String(r.status));
-        return r.json();
-      })
-      .then((data) => {
-        setFiles(Array.isArray(data.files) ? data.files : []);
-        setLoaded(true);
-      })
-      .catch(() => setError('Не удалось загрузить список файлов'))
-      .finally(() => setLoading(false));
-  }, [refreshKey, retryKey]);
-
-  // первое раскрытие
-  useEffect(() => {
-    if (!loaded || openSet !== null) return;
+    if (!hasFiles || openSet !== null) return;
     setOpenSet(collectFolderIds(buildTree(files)));
-  }, [loaded, files, openSet]);
+  }, [hasFiles, files, openSet]);
 
-  // персист раскрытых папок
   useEffect(() => {
     if (openSet === null) return;
     try { localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet])); } catch {}
@@ -300,7 +297,6 @@ export default function FileTree({ onSelect, selectedFile, onFolderPick, pickedF
     });
   };
 
-  const retry = () => setRetryKey((k) => k + 1);
   const searching = Boolean(q);
 
   return (
@@ -312,14 +308,14 @@ export default function FileTree({ onSelect, selectedFile, onFolderPick, pickedF
             <div className="brand__name">Poettery</div>
             <div className="brand__sub">рукописи · песни</div>
           </div>
-          <button className="icon-btn" onClick={retry} disabled={loading} title="Обновить список" aria-label="Обновить список">
+          <button className="icon-btn" onClick={onRetry} disabled={loading} title="Обновить список" aria-label="Обновить список">
             <span className={loading ? 'spin' : ''} style={{ display: 'grid' }}><RefreshIcon /></span>
           </button>
         </div>
 
         <div className="brand__staff" aria-hidden="true" />
 
-        <div className="tree-search">
+        <div className="tree-search" title="Ctrl+K — командная палитра">
           <SearchIcon />
           <input
             value={query}
@@ -334,15 +330,15 @@ export default function FileTree({ onSelect, selectedFile, onFolderPick, pickedF
         </div>
       </div>
 
-      {error && loaded && (
+      {error && hasFiles && (
         <div className="tree-error-strip">
           Не удалось обновить список
-          <button onClick={retry}>повторить</button>
+          <button onClick={onRetry}>повторить</button>
         </div>
       )}
 
       <div className="tree-scroll" role="tree" aria-label="Файлы">
-        {!loaded && loading && (
+        {loading && !hasFiles && (
           <div className="skel" aria-hidden="true">
             {[82, 64, 74, 58, 70, 48, 66, 52].map((w, i) => (
               <div key={i} className="skel-row" style={{ width: `${w}%`, marginLeft: i % 3 === 2 ? 18 : 0 }} />
@@ -350,23 +346,23 @@ export default function FileTree({ onSelect, selectedFile, onFolderPick, pickedF
           </div>
         )}
 
-        {!loaded && error && (
+        {!loading && error && !hasFiles && (
           <div className="tree-note">
             <div className="tree-note__glyph">⚠</div>
             {error}
             <br />
-            <button className="btn btn--ghost" onClick={retry}>Повторить</button>
+            <button className="btn btn--ghost" onClick={onRetry}>Повторить</button>
           </div>
         )}
 
-        {loaded && files.length === 0 && (
+        {!loading && !error && !hasFiles && (
           <div className="tree-note">
             <div className="tree-note__glyph">✒</div>
             Файлов пока нет.<br />Создайте первый — форма справа.
           </div>
         )}
 
-        {loaded && files.length > 0 && visibleFiles.length === 0 && (
+        {hasFiles && visibleFiles.length === 0 && (
           <div className="tree-note">
             Ничего не найдено по «{query.trim()}»
             <br />
@@ -388,6 +384,7 @@ export default function FileTree({ onSelect, selectedFile, onFolderPick, pickedF
             pickedFolder={pickedFolder}
             searching={searching}
             query={q}
+            onToast={onToast}
           />
         ))}
       </div>
@@ -402,7 +399,7 @@ export default function FileTree({ onSelect, selectedFile, onFolderPick, pickedF
           className="icon-btn"
           title="Развернуть всё"
           aria-label="Развернуть всё"
-          disabled={searching || !loaded}
+          disabled={searching || !hasFiles}
           onClick={() => setOpenSet(collectFolderIds(buildTree(files)))}
         >
           <ExpandIcon />
@@ -411,7 +408,7 @@ export default function FileTree({ onSelect, selectedFile, onFolderPick, pickedF
           className="icon-btn"
           title="Свернуть всё"
           aria-label="Свернуть всё"
-          disabled={searching || !loaded}
+          disabled={searching || !hasFiles}
           onClick={() => setOpenSet(new Set())}
         >
           <CollapseIcon />

@@ -1,250 +1,246 @@
-/* ============ Дерево файлов ============ */
-
 .file-tree {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
 
-/* --- шапка / бренд --- */
 .tree-head {
-    padding: 16px 14px 12px;
-    border-bottom: 1px solid var(--line-soft);
+  padding: 16px 14px 12px;
+  border-bottom: 1px solid var(--line-soft);
 }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand__mark {
-    width: 34px; height: 34px;
-    border-radius: 9px;
-    display: grid; place-items: center;
-    background: linear-gradient(135deg, rgba(242, 181, 77, 0.18), rgba(160, 127, 240, 0.14));
-    border: 1px solid rgba(242, 181, 77, 0.35);
-    color: var(--amber);
-    flex-shrink: 0;
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, rgba(242, 181, 77, 0.18), rgba(160, 127, 240, 0.14));
+  border: 1px solid rgba(242, 181, 77, 0.35);
+  color: var(--amber);
+  flex-shrink: 0;
 }
 .brand__text { min-width: 0; }
 .brand__name {
-    font-family: var(--serif);
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    line-height: 1;
-    color: var(--paper);
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  line-height: 1;
+  color: var(--paper);
 }
 .brand__sub {
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--faint);
-    margin-top: 4px;
-    white-space: nowrap;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-top: 4px;
+  white-space: nowrap;
 }
 .brand .icon-btn { margin-left: auto; }
 
-/* нотный стан — подпись проекта */
 .brand__staff {
-    height: 17px;
-    margin: 12px 2px 0;
-    background: repeating-linear-gradient(180deg, rgba(95, 165, 245, 0.32) 0 1px, transparent 1px 4px);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  height: 17px;
+  margin: 12px 2px 0;
+  background: repeating-linear-gradient(180deg, rgba(95, 165, 245, 0.32) 0 1px, transparent 1px 4px);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
 
-/* --- поиск --- */
 .tree-search {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 12px;
-    background: var(--ink-850);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-s);
-    padding: 7px 10px;
-    color: var(--faint);
-    transition: border-color 0.2s, box-shadow 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  background: var(--ink-850);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  padding: 7px 10px;
+  color: var(--faint);
+  transition: border-color 0.2s, box-shadow 0.2s, color 0.2s;
 }
 .tree-search:focus-within {
-    border-color: var(--amber-deep);
-    box-shadow: 0 0 0 3px rgba(242, 181, 77, 0.12);
-    color: var(--amber);
+  border-color: var(--amber-deep);
+  box-shadow: 0 0 0 3px rgba(242, 181, 77, 0.12);
+  color: var(--amber);
 }
 .tree-search input {
-    flex: 1;
-    min-width: 0;
-    background: none;
-    border: none;
-    outline: none;
-    color: var(--paper);
-    font-size: 13px;
-    font-family: var(--ui);
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--paper);
+  font-size: 13px;
+  font-family: var(--ui);
 }
 .tree-search input::placeholder { color: var(--faint); }
 .tree-search__clear {
-    background: none;
-    border: none;
-    color: var(--faint);
-    font-size: 15px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0 2px;
+  background: none;
+  border: none;
+  color: var(--faint);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
 }
 .tree-search__clear:hover { color: var(--paper); }
 
-/* --- строки --- */
 .tree-scroll {
-    flex: 1;
-    overflow: auto;
-    padding: 8px 6px 14px;
+  flex: 1;
+  overflow: auto;
+  padding: 8px 6px 14px;
 }
 .tree-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    color: var(--paper-dim);
-    user-select: none;
-    position: relative;
-    white-space: nowrap;
-    transition: background 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--paper-dim);
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
 }
 .tree-row:hover { background: var(--ink-800); color: var(--paper); }
 .tree-row.is-static { cursor: default; }
-
 .tree-row.is-trail { color: var(--blue); }
 .tree-row.is-selected {
-    background: linear-gradient(90deg, rgba(242, 181, 77, 0.2), rgba(242, 181, 77, 0.05));
-    color: var(--amber-hi);
-    font-weight: 600;
+  background: linear-gradient(90deg, rgba(242, 181, 77, 0.2), rgba(242, 181, 77, 0.05));
+  color: var(--amber-hi);
+  font-weight: 600;
 }
 .tree-row.is-selected::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 4px; bottom: 4px;
-    width: 3px;
-    border-radius: 3px;
-    background: var(--amber);
+  content: '';
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--amber);
 }
 
 .tree-row__chev {
-    width: 14px; height: 14px;
-    flex-shrink: 0;
-    display: grid; place-items: center;
-    color: var(--faint);
-    transition: transform 0.18s var(--ease);
+  width: 14px; height: 14px;
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  color: var(--faint);
+  transition: transform 0.18s var(--ease);
 }
 .tree-row__chev.is-open { transform: rotate(90deg); }
 
 .tree-row__icon {
-    flex-shrink: 0;
-    display: grid; place-items: center;
-    color: var(--faint);
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  color: var(--faint);
 }
 .tree-row--folder .tree-row__icon { color: var(--blue); }
 .tree-row.is-selected .tree-row__icon { color: var(--amber); }
 
 .tree-row__name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-    min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
 }
 .tree-row__name mark {
-    background: rgba(242, 181, 77, 0.3);
-    color: var(--amber-hi);
-    border-radius: 3px;
-    padding: 0 1px;
+  background: rgba(242, 181, 77, 0.3);
+  color: var(--amber-hi);
+  border-radius: 3px;
+  padding: 0 1px;
 }
 
-/* кнопка «подставить папку» — видна при наведении */
-.tree-row__pick {
-    opacity: 0;
-    flex-shrink: 0;
-    width: 22px; height: 22px;
-    border: none;
-    border-radius: 5px;
-    background: rgba(242, 181, 77, 0.14);
-    color: var(--amber);
-    display: grid; place-items: center;
-    cursor: pointer;
-    transition: opacity 0.15s, background 0.15s;
+.tree-row__action {
+  opacity: 0;
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border: none;
+  border-radius: 5px;
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
 }
-.tree-row:hover .tree-row__pick,
-.tree-row__pick:focus-visible { opacity: 1; }
-.tree-row__pick:hover { background: rgba(242, 181, 77, 0.32); }
+.tree-row:hover .tree-row__action,
+.tree-row__action:focus-visible { opacity: 1; }
+.tree-row__action--pick {
+  background: rgba(242, 181, 77, 0.14);
+  color: var(--amber);
+}
+.tree-row__action--pick:hover { background: rgba(242, 181, 77, 0.32); }
+.tree-row__action--copy {
+  background: rgba(95, 165, 245, 0.14);
+  color: var(--blue);
+}
+.tree-row__action--copy:hover { background: rgba(95, 165, 245, 0.3); }
 
-/* последняя выбранная даблкликом папка */
 .tree-row.is-picked .tree-row__icon { color: var(--amber); }
 .tree-row.is-picked .tree-row__name { color: var(--amber-hi); }
 
-/* --- подвал --- */
 .tree-foot {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 12px;
-    border-top: 1px solid var(--line-soft);
-    font-size: 11px;
-    color: var(--faint);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 11px;
+  color: var(--faint);
 }
 .tree-foot__count { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tree-foot__sort {
-    background: transparent;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    color: var(--muted);
-    font-size: 10.5px;
-    font-weight: 600;
-    padding: 4px 8px;
-    cursor: pointer;
-    transition: color 0.15s, border-color 0.15s;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
 }
 .tree-foot__sort:hover { color: var(--amber); border-color: var(--amber-deep); }
 
-/* --- скелетон / пустые состояния / ошибки --- */
 .skel { padding: 10px 8px; display: flex; flex-direction: column; gap: 11px; }
 .skel-row {
-    height: 14px;
-    border-radius: 6px;
-    background: linear-gradient(90deg, var(--ink-800) 25%, var(--ink-750) 50%, var(--ink-800) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s infinite;
+  height: 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--ink-800) 25%, var(--ink-750) 50%, var(--ink-800) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
 }
 @keyframes shimmer {
-    from { background-position: 200% 0; }
-    to { background-position: -200% 0; }
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
 }
 
 .tree-note {
-    padding: 28px 16px;
-    text-align: center;
-    color: var(--faint);
-    font-size: 12.5px;
-    line-height: 1.7;
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--faint);
+  font-size: 12.5px;
+  line-height: 1.7;
 }
 .tree-note__glyph { font-size: 22px; margin-bottom: 8px; color: var(--amber-deep); }
 .tree-note .btn { margin-top: 12px; }
 
 .tree-error-strip {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 14px;
-    font-size: 11.5px;
-    color: #f2a6aa;
-    background: rgba(229, 84, 92, 0.1);
-    border-bottom: 1px solid rgba(229, 84, 92, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  font-size: 11.5px;
+  color: #f2a6aa;
+  background: rgba(229, 84, 92, 0.1);
+  border-bottom: 1px solid rgba(229, 84, 92, 0.25);
 }
 .tree-error-strip button {
-    margin-left: auto;
-    background: none;
-    border: none;
-    color: var(--amber);
-    font-size: 11.5px;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--amber);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }

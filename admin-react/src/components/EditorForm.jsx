@@ -1,7 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import './EditorForm.css';
 
 const DRAFT_KEY = 'poettery-draft';
+const METER_KEY = 'poettery-meter';
+const HISTORY_PREFIX = 'poettery-history:';
+const HISTORY_LIMIT = 12;
 const IS_MAC = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || '');
 
 const todayISO = () => new Date().toISOString().split('T')[0];
@@ -19,8 +29,6 @@ const emptyForm = () => ({
   content: '',
 });
 
-/* ---------------- slug транслитом ---------------- */
-
 const RU_MAP = {
   а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z',
   и: 'i', й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r',
@@ -37,8 +45,6 @@ function slugify(text) {
     .replace(/^-+|-+$/g, '')
     .slice(0, 80);
 }
-
-/* ---------------- мини-Markdown (безопасный, с сохранением переносов) ---------------- */
 
 function escapeHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -62,7 +68,7 @@ function renderMarkdown(src) {
   let para = [];
   const flushPara = () => {
     if (para.length) {
-      html += `<p>${para.map(inlineMd).join('<br>')}</p>`; // переносы строк важны для стихов
+      html += `<p>${para.map(inlineMd).join('<br>')}</p>`;
       para = [];
     }
   };
@@ -76,7 +82,7 @@ function renderMarkdown(src) {
     const h = t.match(/^(#{1,5})\s+(.*)$/);
     if (h) {
       flushPara(); closeList(); closeQuote();
-      const lvl = Math.min(h[1].length + 1, 6); // # → h2, т.к. h1 — заголовок страницы
+      const lvl = Math.min(h[1].length + 1, 6);
       html += `<h${lvl}>${inlineMd(h[2])}</h${lvl}>`;
       continue;
     }
@@ -106,8 +112,6 @@ function renderMarkdown(src) {
   return html;
 }
 
-/* ---------------- мелочи ---------------- */
-
 function formatDate(iso) {
   if (!iso) return '';
   try {
@@ -118,6 +122,11 @@ function formatDate(iso) {
     return iso;
   }
 }
+function formatDateTime(ts) {
+  return new Date(ts).toLocaleString('ru-RU', {
+    day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',
+  });
+}
 function plural(n, forms) {
   const a = Math.abs(n) % 100;
   const b = a % 10;
@@ -125,6 +134,62 @@ function plural(n, forms) {
   if (b > 1 && b < 5) return forms[1];
   if (b === 1) return forms[0];
   return forms[2];
+}
+
+const VOWELS = /[аеёиоуыэюя]/gi;
+const countSyllables = (line) => (line.match(VOWELS) || []).length;
+
+const historyKeyFor = (file, slug) => file || `draft:${slug || 'new'}`;
+function readHistory(key) {
+  try {
+    const raw = localStorage.getItem(HISTORY_PREFIX + key);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+function writeHistory(key, items) {
+  try {
+    localStorage.setItem(HISTORY_PREFIX + key, JSON.stringify(items));
+    return true;
+  } catch {
+    return false;
+  }
+}
+function pushSnapshot(key, data) {
+  const entry = { ts: Date.now(), data: { ...data } };
+  let next = [entry, ...readHistory(key)].slice(0, HISTORY_LIMIT);
+  if (!writeHistory(key, next)) {
+    next = next.slice(0, 6);
+    writeHistory(key, next);
+  }
+  return next;
+}
+
+const yamlEscape = (s) => String(s ?? '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+function buildMarkdown(d) {
+  const fm = [
+    '---',
+    `title: "${yamlEscape(d.title)}"`,
+    `date: ${d.date || todayISO()}`,
+    `layout: ${d.layout || 'poem'}`,
+  ];
+  if (d.review) fm.push(`review: "${yamlEscape(d.review)}"`);
+  if (d.slug) fm.push(`slug: "${yamlEscape(d.slug)}"`);
+  fm.push('---', '');
+  return fm.join('\n') + (d.content || '');
+}
+function downloadText(filename, text) {
+  const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 const svgProps = {
@@ -153,12 +218,50 @@ const FeatherSmallIcon = () => (
 const MusicIcon = () => (
   <svg {...svgProps}><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>
 );
+const HistoryIcon = () => (
+  <svg {...svgProps}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></svg>
+);
+const DownloadIcon = () => (
+  <svg {...svgProps}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="m7 10 5 5 5-5" /><path d="M12 15V3" /></svg>
+);
+const FocusIcon = () => (
+  <svg {...svgProps}><path d="M8 3H5a2 2 0 0 0-2 2v3" /><path d="M16 3h3a2 2 0 0 1 2 2v3" /><path d="M8 21H5a2 2 0 0 1-2-2v-3" /><path d="M16 21h3a2 2 0 0 0 2-2v-3" /></svg>
+);
+const CopyIcon = () => (
+  <svg {...svgProps}><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>
+);
+const MeterIcon = () => (
+  <svg {...svgProps}><path d="M4 9h16" /><path d="M4 15h16" /><path d="M10 3 8 21" /><path d="M16 3l-2 18" /></svg>
+);
+const CloseIcon = () => (
+  <svg {...svgProps} width={16} height={16}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+);
 
-/* ---------------- компонент ---------------- */
+const Paper = forwardRef(function Paper({ data, mini = false }, ref) {
+  const html = useMemo(() => renderMarkdown(data.content), [data.content]);
+  return (
+    <article ref={ref} className={`paper${mini ? ' paper--mini' : ''}`}>
+      <div className="paper__meta">
+        {formatDate(data.date)}
+        {data.date ? ' · ' : ''}
+        {data.layout === 'music' ? '♪ песня' : '✒ стихотворение'}
+      </div>
+      <h1 className="paper__title">{data.title || 'Без заголовка'}</h1>
+      {data.review && <p className="paper__review">{data.review}</p>}
+      <div className="paper__divider" aria-hidden="true">
+        <span />{data.layout === 'music' ? '♪' : '❦'}<span />
+      </div>
+      {data.content
+        ? <div className="paper__body" dangerouslySetInnerHTML={{ __html: html }} />
+        : <p className="paper__empty">Текст пока пуст.</p>}
+    </article>
+  );
+});
 
-export default function EditorForm({
-                                     selectedFile, folderPick, onDirtyChange, onSaved, onNew, onToast, onOpenTree,
-                                   }) {
+const EditorForm = forwardRef(function EditorForm({
+  selectedFile, folderPick, onDirtyChange, onSaved, onNew, onToast, onOpenTree,
+  focusMode, onToggleFocus,
+}, ref) {
   const [formData, setFormData] = useState(() => {
     try {
       const saved = localStorage.getItem(DRAFT_KEY);
@@ -178,15 +281,32 @@ export default function EditorForm({
   const [loadError, setLoadError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
   const [saving, setSaving] = useState(false);
-  const [view, setView] = useState('write'); // write | split | preview
+  const [view, setView] = useState('write');
   const [folderPulse, setFolderPulse] = useState(false);
+  const [meterOn, setMeterOn] = useState(() => {
+    try { return localStorage.getItem(METER_KEY) === '1'; } catch { return false; }
+  });
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [historyItems, setHistoryItems] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(0);
 
   const loadSeq = useRef(0);
   const savingRef = useRef(false);
+  const textareaRef = useRef(null);
+  const gutterRef = useRef(null);
+  const apiRef = useRef({});
+  const saveRef = useRef(null);
 
   useEffect(() => { onDirtyChange(dirty); }, [dirty, onDirtyChange]);
 
-  /* --- загрузка файла / режим нового файла --- */
+  useEffect(() => {
+    try { localStorage.setItem(METER_KEY, meterOn ? '1' : '0'); } catch {}
+  }, [meterOn]);
+
+  useEffect(() => {
+    document.title = `${dirty ? '• ' : ''}${formData.title || 'Без заголовка'} — Poettery`;
+  }, [dirty, formData.title]);
+
   useEffect(() => {
     const seq = ++loadSeq.current;
     if (selectedFile) {
@@ -198,7 +318,7 @@ export default function EditorForm({
           return r.json();
         })
         .then((data) => {
-          if (seq !== loadSeq.current) return; // ответ устарел — пользователь уже кликнул другой файл
+          if (seq !== loadSeq.current) return;
           const normalized = { ...emptyForm(), ...data };
           if (normalized.date) normalized.date = String(normalized.date).slice(0, 10);
           setFormData(normalized);
@@ -233,7 +353,6 @@ export default function EditorForm({
     }
   }, [selectedFile, reloadKey]);
 
-  /* --- даблклик по папке в дереве → поле «Папка» --- */
   useEffect(() => {
     if (!folderPick) return;
     setFormData((prev) => ({ ...prev, folder: folderPick.path }));
@@ -241,7 +360,6 @@ export default function EditorForm({
     setFolderPulse(true);
   }, [folderPick]);
 
-  /* --- автосохранение черновика: один debounce вместо таймера на каждый keystroke --- */
   useEffect(() => {
     if (!dirty) return;
     setDraftStatus('✏️ правки…');
@@ -260,7 +378,6 @@ export default function EditorForm({
   };
   const handleChange = (e) => setField(e.target.name, e.target.value);
 
-  /* --- сохранение --- */
   const handleSave = async () => {
     if (savingRef.current || loading) return;
     if (!formData.slug.trim() || !formData.title.trim() || !formData.date) {
@@ -283,6 +400,8 @@ export default function EditorForm({
       });
       const result = await response.json().catch(() => ({}));
       if (response.ok) {
+        const key = result.path || selectedFile || historyKeyFor(null, payload.slug);
+        pushSnapshot(key, payload);
         setDirty(false);
         setDraftStatus('💾 записано на диск');
         onToast(`Сохранено: ${result.path || payload.slug}`, 'success');
@@ -297,22 +416,19 @@ export default function EditorForm({
       setSaving(false);
     }
   };
-
-  /* --- Ctrl/Cmd+S: один слушатель, работает и на русской раскладке --- */
-  const saveRef = useRef(handleSave);
   saveRef.current = handleSave;
+
   useEffect(() => {
     const onKey = (e) => {
       if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 's' || e.code === 'KeyS')) {
         e.preventDefault();
-        saveRef.current();
+        saveRef.current?.();
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  /* --- предупреждение при закрытии вкладки с правками --- */
   useEffect(() => {
     if (!dirty) return;
     const handler = (e) => {
@@ -323,7 +439,6 @@ export default function EditorForm({
     return () => window.removeEventListener('beforeunload', handler);
   }, [dirty]);
 
-  /* --- новый файл --- */
   const handleNew = () => {
     if (!window.confirm('Очистить форму и черновик?')) return;
     try { localStorage.removeItem(DRAFT_KEY); } catch {}
@@ -334,7 +449,6 @@ export default function EditorForm({
     onNew();
   };
 
-  /* --- Tab в редакторе = два пробела --- */
   const handleTab = (e) => {
     if (e.key !== 'Tab') return;
     e.preventDefault();
@@ -347,7 +461,58 @@ export default function EditorForm({
     });
   };
 
-  /* --- превью и счётчики --- */
+  const syncGutter = () => {
+    if (gutterRef.current && textareaRef.current) {
+      gutterRef.current.scrollTop = textareaRef.current.scrollTop;
+    }
+  };
+  useEffect(() => { syncGutter(); }, [meterOn, view, formData.content]);
+
+  const exportMarkdown = () => {
+    const name = (formData.slug || 'untitled').replace(/[^\w-]+/g, '-');
+    downloadText(`${name}.md`, buildMarkdown(formData));
+    onToast('Файл .md скачан', 'success');
+  };
+
+  const copyMarkdown = async () => {
+    try {
+      await navigator.clipboard.writeText(buildMarkdown(formData));
+      onToast('Markdown скопирован в буфер', 'success');
+    } catch {
+      onToast('Буфер обмена недоступен', 'error');
+    }
+  };
+
+  const openHistory = () => {
+    const key = historyKeyFor(selectedFile, formData.slug);
+    setHistoryItems(readHistory(key));
+    setHistoryIndex(0);
+    setHistoryOpen(true);
+  };
+
+  const takeSnapshot = () => {
+    const key = historyKeyFor(selectedFile, formData.slug);
+    const next = pushSnapshot(key, formData);
+    setHistoryItems(next);
+    setHistoryIndex(0);
+    onToast('Снимок сохранён в истории', 'success');
+  };
+
+  const restoreSnapshot = (snap) => {
+    if (dirty && !window.confirm(`Заменить текущий текст версией от ${formatDateTime(snap.ts)}?`)) return;
+    setFormData({ ...emptyForm(), ...snap.data });
+    setDirty(true);
+    setHistoryOpen(false);
+    onToast('Версия восстановлена в редактор — не забудьте сохранить', 'info');
+  };
+
+  useEffect(() => {
+    if (!historyOpen) return;
+    const onKey = (e) => { if (e.key === 'Escape') setHistoryOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [historyOpen]);
+
   const previewHtml = useMemo(() => renderMarkdown(formData.content), [formData.content]);
   const stats = useMemo(() => {
     const c = formData.content || '';
@@ -359,26 +524,47 @@ export default function EditorForm({
     };
   }, [formData.content]);
 
-  const paper = (
-    <article className="paper">
-      <div className="paper__meta">
-        {formatDate(formData.date)}
-        {formData.date ? ' · ' : ''}
-        {formData.layout === 'music' ? '♪ песня' : '✒ стихотворение'}
-      </div>
-      <h1 className="paper__title">{formData.title || 'Без заголовка'}</h1>
-      {formData.review && <p className="paper__review">{formData.review}</p>}
-      <div className="paper__divider" aria-hidden="true">
-        <span />{formData.layout === 'music' ? '♪' : '❦'}<span />
-      </div>
-      {formData.content
-        ? <div className="paper__body" dangerouslySetInnerHTML={{ __html: previewHtml }} />
-        : <p className="paper__empty">Текст пока пуст — начните писать во вкладке «Текст».</p>}
-    </article>
+  const meter = useMemo(() => {
+    const lines = (formData.content || '').split('\n');
+    const counts = lines.map(countSyllables);
+    const nonEmpty = counts.filter((c, i) => lines[i].trim().length > 0);
+    const freq = {};
+    let dominant = 0;
+    let best = 0;
+    nonEmpty.forEach((c) => {
+      freq[c] = (freq[c] || 0) + 1;
+      if (freq[c] > best) { best = freq[c]; dominant = c; }
+    });
+    const inMeter = nonEmpty.filter((c) => c === dominant).length;
+    return { lines, counts, dominant, total: nonEmpty.length, inMeter };
+  }, [formData.content]);
+
+  const activeSnap = historyItems[historyIndex];
+
+  apiRef.current = {
+    save: handleSave,
+    createNew: handleNew,
+    exportMarkdown,
+    copyMarkdown,
+    openHistory,
+    setView,
+  };
+  useImperativeHandle(ref, () => ({
+    save: () => apiRef.current.save(),
+    createNew: () => apiRef.current.createNew(),
+    exportMarkdown: () => apiRef.current.exportMarkdown(),
+    copyMarkdown: () => apiRef.current.copyMarkdown(),
+    openHistory: () => apiRef.current.openHistory(),
+    setView: (v) => apiRef.current.setView(v),
+  }), []);
+
+  const activeHistoryHtml = useMemo(
+    () => (activeSnap ? renderMarkdown(activeSnap.data.content || '') : ''),
+    [activeSnap]
   );
 
   return (
-    <div className="editor">
+    <div className={`editor${focusMode ? ' is-focus' : ''}`}>
       <div className="editor-top">
         <button className="icon-btn only-mobile" onClick={onOpenTree} title="Файлы" aria-label="Открыть список файлов">
           <MenuIcon />
@@ -395,6 +581,25 @@ export default function EditorForm({
           {dirty && <span className="dirty-dot" title="Есть несохранённые изменения" />}
           {loading && <span className="loading-hint">загрузка…</span>}
         </div>
+
+        <div className="editor-top__tools">
+          <button className="icon-btn" onClick={openHistory} title="История версий" aria-label="История версий">
+            <HistoryIcon />
+          </button>
+          <button className="icon-btn" onClick={exportMarkdown} title="Скачать .md" aria-label="Скачать .md">
+            <DownloadIcon />
+          </button>
+          <button
+            className={`icon-btn${focusMode ? ' is-active' : ''}`}
+            onClick={onToggleFocus}
+            title="Фокус-режим (Ctrl+.)"
+            aria-label="Фокус-режим"
+            aria-pressed={focusMode}
+          >
+            <FocusIcon />
+          </button>
+        </div>
+
         <div className="editor-top__actions">
           <button className="btn btn--ghost" onClick={handleNew}>
             <PlusIcon /> Новый
@@ -510,28 +715,74 @@ export default function EditorForm({
           <section className="content-panel">
             <div className="content-head">
               <label htmlFor="f-content">Контент · Markdown</label>
-              <div className="seg" role="tablist" aria-label="Режим редактора">
-                <button role="tab" aria-selected={view === 'write'} className={view === 'write' ? 'is-active' : ''} onClick={() => setView('write')}>Текст</button>
-                <button role="tab" aria-selected={view === 'split'} className={view === 'split' ? 'is-active' : ''} onClick={() => setView('split')}>Сплит</button>
-                <button role="tab" aria-selected={view === 'preview'} className={view === 'preview' ? 'is-active' : ''} onClick={() => setView('preview')}>Превью</button>
+              <div className="content-head__tools">
+                <button
+                  className={`tool-toggle${meterOn ? ' is-active' : ''}`}
+                  onClick={() => setMeterOn((v) => !v)}
+                  title="Слоги по строкам: гласные = слоги. Строки вне основного размера подсвечиваются."
+                  aria-pressed={meterOn}
+                >
+                  <MeterIcon /> Слоги
+                </button>
+                <button className="icon-btn" onClick={copyMarkdown} title="Скопировать Markdown с frontmatter" aria-label="Скопировать Markdown">
+                  <CopyIcon />
+                </button>
+                <div className="seg" role="tablist" aria-label="Режим редактора">
+                  <button role="tab" aria-selected={view === 'write'} className={view === 'write' ? 'is-active' : ''} onClick={() => setView('write')}>Текст</button>
+                  <button role="tab" aria-selected={view === 'split'} className={view === 'split' ? 'is-active' : ''} onClick={() => setView('split')}>Сплит</button>
+                  <button role="tab" aria-selected={view === 'preview'} className={view === 'preview' ? 'is-active' : ''} onClick={() => setView('preview')}>Превью</button>
+                </div>
               </div>
             </div>
 
             <div className={`content-body view-${view}`}>
               {view !== 'preview' && (
-                <textarea
-                  id="f-content"
-                  className="editor-textarea"
-                  name="content"
-                  value={formData.content}
-                  onChange={handleChange}
-                  onKeyDown={handleTab}
-                  spellCheck={false}
-                  placeholder={'Пишите так, как дышится:\nкаждая строка — отдельная строка,\n\nпустая строка — пауза между строфами.\n\nMarkdown: **жирный**, *курсив*, > цитата'}
-                />
+                <div className="write-wrap">
+                  {meterOn && (
+                    <div className="meter-gutter" ref={gutterRef} aria-hidden="true">
+                      {meter.counts.map((c, i) => (
+                        <div
+                          key={i}
+                          className={`meter-gutter__line${!meter.lines[i].trim() ? ' is-empty' : (meter.dominant && c !== meter.dominant ? ' is-off' : '')}`}
+                          title={`${c} ${plural(c, ['слог', 'слога', 'слогов'])}`}
+                        >
+                          {!meter.lines[i].trim() ? '·' : c}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <textarea
+                    ref={textareaRef}
+                    id="f-content"
+                    className="editor-textarea"
+                    name="content"
+                    value={formData.content}
+                    onChange={handleChange}
+                    onKeyDown={handleTab}
+                    onScroll={syncGutter}
+                    wrap={meterOn ? 'off' : 'soft'}
+                    spellCheck={false}
+                    placeholder={'Пишите так, как дышится:\nкаждая строка — отдельная строка,\n\nпустая строка — пауза между строфами.\n\nMarkdown: **жирный**, *курсив*, > цитата'}
+                  />
+                </div>
               )}
-              {view !== 'write' && <div className="preview-scroll">{paper}</div>}
+              {view !== 'write' && (
+                <div className="preview-scroll">
+                  <Paper data={formData} />
+                </div>
+              )}
             </div>
+
+            {meterOn && view !== 'preview' && meter.total > 0 && (
+              <div className="meter-summary">
+                <span className="meter-summary__label">Размер строки:</span>
+                <span className="meter-summary__value">{meter.dominant} {plural(meter.dominant, ['слог', 'слога', 'слогов'])}</span>
+                <span className={`meter-summary__score${meter.inMeter < meter.total ? ' is-off' : ''}`}>
+                  {meter.inMeter}/{meter.total} строк в размер
+                </span>
+                <span className="meter-summary__hint">слог = гласная буква</span>
+              </div>
+            )}
           </section>
         </div>
       </div>
@@ -544,8 +795,89 @@ export default function EditorForm({
           {' · '}{stats.words} {plural(stats.words, ['слово', 'слова', 'слов'])}
           {' · '}{stats.chars} {plural(stats.chars, ['знак', 'знака', 'знаков'])}
         </span>
-        <span className="editor-status__keys"><kbd>Ctrl</kbd>+<kbd>S</kbd> сохранить</span>
+        <span className="editor-status__keys"><kbd>Ctrl</kbd>+<kbd>K</kbd> файлы · <kbd>Ctrl</kbd>+<kbd>S</kbd> сохранить</span>
       </div>
+
+      {historyOpen && (
+        <div className="drawer-layer">
+          <div className="drawer-scrim" onClick={() => setHistoryOpen(false)} />
+          <aside className="drawer" role="dialog" aria-modal="true" aria-label="История версий">
+            <div className="drawer__head">
+              <div className="drawer__head-text">
+                <div className="drawer__title">История версий</div>
+                <div className="drawer__sub">{selectedFile || 'черновик'} · {historyItems.length} {plural(historyItems.length, ['снимок', 'снимка', 'снимков'])}</div>
+              </div>
+              <button className="icon-btn" onClick={() => setHistoryOpen(false)} aria-label="Закрыть историю">
+                <CloseIcon />
+              </button>
+            </div>
+
+            <div className="drawer__body">
+              <div className="drawer__list">
+                <button className="btn btn--ghost btn--small drawer__snapshot-btn" onClick={takeSnapshot}>
+                  <PlusIcon /> Снимок сейчас
+                </button>
+                {historyItems.length === 0 && (
+                  <div className="drawer__empty">
+                    Снимки появятся после первого сохранения.<br />Или сделайте снимок вручную.
+                  </div>
+                )}
+                {historyItems.map((s, i) => (
+                  <button
+                    key={s.ts}
+                    className={`drawer__item${i === historyIndex ? ' is-active' : ''}`}
+                    onClick={() => setHistoryIndex(i)}
+                  >
+                    <span className="drawer__item-time">{formatDateTime(s.ts)}</span>
+                    <span className="drawer__item-title">{s.data.title || 'Без заголовка'}</span>
+                    <span className="drawer__item-meta">
+                      {(s.data.content || '').length} {plural((s.data.content || '').length, ['знак', 'знака', 'знаков'])}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="drawer__preview">
+                {activeSnap ? (
+                  <>
+                    <div className="drawer__preview-head">
+                      <span>{formatDateTime(activeSnap.ts)}</span>
+                      <div className="drawer__preview-actions">
+                        <button
+                          className="btn btn--ghost btn--small"
+                          onClick={() => {
+                            const name = (activeSnap.data.slug || 'snapshot').replace(/[^\w-]+/g, '-');
+                            downloadText(`${name}.md`, buildMarkdown(activeSnap.data));
+                            onToast('Снимок скачан как .md', 'success');
+                          }}
+                        >
+                          <DownloadIcon /> Скачать
+                        </button>
+                        <button className="btn btn--primary btn--small" onClick={() => restoreSnapshot(activeSnap)}>
+                          Восстановить
+                        </button>
+                      </div>
+                    </div>
+                    <div className="drawer__paper">
+                      <article className="paper paper--mini">
+                        <div className="paper__meta">{formatDate(activeSnap.data.date)}</div>
+                        <h1 className="paper__title">{activeSnap.data.title || 'Без заголовка'}</h1>
+                        {activeSnap.data.review && <p className="paper__review">{activeSnap.data.review}</p>}
+                        <div className="paper__divider" aria-hidden="true"><span />❦<span /></div>
+                        <div className="paper__body" dangerouslySetInnerHTML={{ __html: activeHistoryHtml }} />
+                      </article>
+                    </div>
+                  </>
+                ) : (
+                  <div className="drawer__empty drawer__empty--center">Выберите снимок слева</div>
+                )}
+              </div>
+            </div>
+          </aside>
+        </div>
+      )}
     </div>
   );
-}
+});
+
+export default EditorForm;
