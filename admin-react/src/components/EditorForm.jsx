@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import './EditorForm.css';
+import ProsodyPanel from "./ProsodyPanel.jsx";
 
 const DRAFT_KEY = 'poettery-draft';
 const METER_KEY = 'poettery-meter';
@@ -287,6 +288,7 @@ const EditorForm = forwardRef(function EditorForm({
     try { return localStorage.getItem(METER_KEY) === '1'; } catch { return false; }
   });
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [prosodyOpen, setProsodyOpen] = useState(false);
   const [historyItems, setHistoryItems] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
 
@@ -583,6 +585,11 @@ const EditorForm = forwardRef(function EditorForm({
         </div>
 
         <div className="editor-top__tools">
+          <button className="icon-btn" onClick={() => setProsodyOpen(!prosodyOpen)} title="Разбор: размер, ритм, рифма" aria-label="Разбор стихотворения">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <path d="M3 6h18" /><path d="M3 12h12" /><path d="M3 18h16" /><circle cx="19" cy="12" r="2" />
+            </svg>
+          </button>
           <button className="icon-btn" onClick={openHistory} title="История версий" aria-label="История версий">
             <HistoryIcon />
           </button>
@@ -797,6 +804,12 @@ const EditorForm = forwardRef(function EditorForm({
         </span>
         <span className="editor-status__keys"><kbd>Ctrl</kbd>+<kbd>K</kbd> файлы · <kbd>Ctrl</kbd>+<kbd>S</kbd> сохранить</span>
       </div>
+      <ProsodyPanel
+        open={prosodyOpen}
+        onClose={() => setProsodyOpen(false)}
+        content={formData.content}
+        onChangeContent={(next) => setField('content', next)}
+      />
 
       {historyOpen && (
         <div className="drawer-layer">
@@ -811,6 +824,8 @@ const EditorForm = forwardRef(function EditorForm({
                 <CloseIcon />
               </button>
             </div>
+
+
 
             <div className="drawer__body">
               <div className="drawer__list">

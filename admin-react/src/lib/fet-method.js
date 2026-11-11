@@ -1,6 +1,8 @@
 /* Структурный анализ русского стиха: столбцовые профили (силлабо-тоника) + тоника.
    Соглашение об ударениях: ЗАГЛАВНАЯ гласная или U+0301. Без зависимостей, без DOM. */
 
+export const PROSODY_BUILD = 'build 4 · whole-poem profile';
+
 const VOWELS = 'аеёиоуыэюя';
 const UPPER = 'АЕЁИОУЫЭЮЯ';
 const ACUTE = '\u0301';
@@ -36,7 +38,6 @@ const BALL_TEXT = [
   'Соответствует канонам классического стихосложения',
 ];
 
-/* Встроенный стартовый словарь. Формат: ударная гласная заглавной. */
 const STARTER = `
 любОвь крОвь нОчь душА тоскА окнО лунА звездА водА огОнь сЕрдце сОлнце
 вЕтер нЕбо мОре пОле дорОга пАмять слезА мечтА тишинА веснА зимА Осень
@@ -69,7 +70,7 @@ export function createDictionary(csv) {
 
 const STARTER_DICT = createDictionary(STARTER);
 
-/* ---------- разбор строки на гласные с привязкой к словам ---------- */
+/* ---------- разбор строки ---------- */
 
 function scanLine(raw, start) {
   const vowels = [];
@@ -129,12 +130,13 @@ function scanLine(raw, start) {
   };
 }
 
-/* ---------- столбцовый профиль ---------- */
+/* ---------- столбцовый профиль (TemplateAnaliz) ---------- */
 
 function columnProfile(templates) {
   const width = templates.reduce((max, t) => Math.max(max, t.length), 0);
   const ritm = [];
   const errorColumns = [];
+  const columns = [];
 
   for (let k = 0; k < width; k += 1) {
     let strong = 0;
@@ -151,96 +153,184 @@ function columnProfile(templates) {
       else light += 1;
     }
 
-    if (real === 0) { ritm[k] = 1; continue; }
+    const col = k + 1;
+    const strongWeak = weak + strong;
+    const lightWeak = light + weak;
 
-    if (strong > real * 0.8 && weak + strong !== real) ritm[k] = 3;
-    else if (light > real * 0.8 && strong > 0) { ritm[k] = 1; errorColumns.push(k); }
-    else if (strong === 0) ritm[k] = 1;
-    else if (weak + strong === real) ritm[k] = 3;
-    else if (light + weak === real) ritm[k] = 1;
-    else if (strong > real * 0.3 && weak + strong > real * 0.4) ritm[k] = 2;
-    else ritm[k] = 2;
+    let type;
+    let reason;
+    let error = false;
+
+    if (real === 0) {
+      type = 1; reason = 'пустой столбец';
+    } else if (strong > real * 0.8 && strongWeak !== real) {
+      type = 3; reason = 'больше 80% ударных';
+    } else if (light > real * 0.8 && strong > 0) {
+      type = 1; reason = 'сбой ритма'; error = true; errorColumns.push(k);
+    } else if (strong === 0) {
+      type = 1; reason = 'ударных нет';
+    } else if (strongWeak === real) {
+      type = 3; reason = 'все ударные или односложные';
+    } else if (lightWeak === real) {
+      type = 1; reason = 'ударных нет';
+    } else if (strong > real * 0.3 && strongWeak > real * 0.4) {
+      type = 2; reason = 'частично ударный';
+    } else {
+      type = 2; reason = 'смешанный';
+    }
+
+    ritm[col] = type;
+    columns.push({ index: col, strong, weak, light, real, type, reason, error });
   }
 
-  return { ritm, errorColumns };
+  return { ritm, errorColumns, width, columns };
 }
 
-function resolveTemplates(templates, numGlasList, ritm) {
-  return templates.map((template, s) => {
-    const arr = template.split('');
+/* ---------- SecondTemplateAnaliz ---------- */
+
+function secondPass(templates, numGlasList, glasnList, ritm) {
+  const nextTemplates = [];
+  const nextGlasn = [];
+
+  for (let s = 0; s < templates.length; s += 1) {
+    const tpl = templates[s];
     const ng = numGlasList[s] || '';
+    const gl = glasnList[s] || '';
 
-    for (let k = 0; k < arr.length; k += 1) {
-      if (arr[k] === ':') {
-        if (ritm[k] === 3) arr[k] = 'О';
-        else if (ritm[k] === 1) arr[k] = '.';
-      }
-      const cur = ritm[k];
-      const next = ritm[k + 1];
-      const prev = ritm[k - 1];
+    let outTpl = '';
+    let outGl = '';
 
-      if (cur === 1 && next === 1 && ng[k] === '1' && ng[k + 1] === '2' && ng[k + 2] === '1') {
-        arr[k] = '.';
+    for (let k = 0; k < tpl.length; k += 1) {
+      let mark = tpl[k];
+      let letter = gl[k] || '';
+      const col = k + 1;
+
+      if (mark === ':' && ritm[col] === 3) mark = 'О';
+      if (mark === ':' && ritm[col] === 1) mark = '.';
+
+      if (
+        ritm[col] === 1 &&
+        ritm[col + 1] === 1 &&
+        ng[k] === '1' &&
+        ng[k + 1] === '2' &&
+        ng[k + 2] === '1'
+      ) {
+        mark = '.';
+        letter = letter.toLowerCase();
       }
-      if (cur === 1 && prev === 1 && ng[k] === '2' && ng[k + 1] === '1') {
-        arr[k] = '.';
+
+      if (
+        ritm[col] === 1 &&
+        ritm[col - 1] === 1 &&
+        ng[k] === '2' &&
+        ng[k + 1] === '1'
+      ) {
+        mark = '.';
+        letter = letter.toLowerCase();
       }
+
+      outTpl += mark;
+      outGl += letter;
     }
-    return arr.join('');
-  });
+
+    nextTemplates.push(outTpl);
+    nextGlasn.push(outGl);
+  }
+
+  return { templates: nextTemplates, glasn: nextGlasn };
+}
+
+function buildRhythm(lines) {
+  let templates = lines.map((l) => l.template);
+  let glasn = lines.map((l) => l.vowels.map((v) => v.char).join(''));
+  const numGlasList = lines.map((l) => l.numGlas);
+
+  let profile = columnProfile(templates);
+  let pass = secondPass(templates, numGlasList, glasn, profile.ritm);
+  templates = pass.templates;
+  glasn = pass.glasn;
+
+  profile = columnProfile(templates);
+  pass = secondPass(templates, numGlasList, glasn, profile.ritm);
+  templates = pass.templates;
+  glasn = pass.glasn;
+
+  return {
+    ritm: profile.ritm,
+    errorColumns: profile.errorColumns,
+    width: profile.width,
+    columns: profile.columns,
+    templates,
+    glasn,
+  };
 }
 
 /* ---------- ритм: стопы, балл, троичный код, свёртка ---------- */
 
-function rhythmStats(ritm) {
+function rhythmStats(ritm, width) {
   let strong = 0;
   let weak = 0;
   let light = 0;
   let foot = 0;
   let strongFoot = 0;
+  let triCod = '';
 
-  for (let k = 0; k < ritm.length; k += 1) {
-    if (ritm[k] === 3) strong += 1;
-    if (ritm[k] === 2) weak += 1;
-    if (ritm[k] === 1) {
+  for (let col = 1; col <= width; col += 1) {
+    const value = ritm[col];
+    const prev = ritm[col - 1];
+
+    if (value === 3) strong += 1;
+    if (value === 2) weak += 1;
+    if (value === 1) {
       light += 1;
-      if (ritm[k - 1] === 2) foot += 1;
-      if (ritm[k - 1] === 3) strongFoot += 1;
+      if (prev === 2) foot += 1;
+      if (prev === 3) strongFoot += 1;
     }
+
+    triCod += value === 1 ? '0' : value === 2 ? '1' : '2';
   }
 
   const countStop = foot + strongFoot;
   let ball = 0;
   if (countStop > 1) ball = 1;
-  if (countStop > ritm.length * 0.3) ball = 2;
+  if (countStop > width * 0.3) ball = 2;
   if (strongFoot > 1 || strong > 1) ball = 3;
-
-  const triCod = ritm.map((v) => (v === 1 ? '0' : v === 2 ? '1' : '2')).join('');
 
   return { ball, countStop, foot, strongFoot, strong, weak, light, triCod };
 }
 
-function contrastLayers(ritm) {
-  if (!ritm.length) return { plus: '', minus: '' };
-  const padded = [2, ...ritm, 2];
+function contrastLayers(ritm, width, ball) {
+  if (!width) return { plus: '', minus: '' };
 
-  for (let k = 1; k < padded.length - 1; k += 1) {
-    if (padded[k] !== 2) continue;
-    if (padded[k + 1] === 3) { padded[k] = 1; continue; }
-    if (padded[k - 1] === 3) { padded[k] = 1; continue; }
-    if (padded[k - 1] === 1 && padded[k + 1] === 1) padded[k] = 3;
+  const source = [];
+  for (let col = 1; col <= width; col += 1) source.push(ritm[col]);
+
+  let plus = source.slice();
+
+  if (ball > 1) {
+    const padded = [2, ...source, 2];
+    for (let k = 1; k < padded.length - 1; k += 1) {
+      if (padded[k] !== 2) continue;
+      if (padded[k + 1] === 3) { padded[k] = 1; continue; }
+      if (padded[k - 1] === 3) { padded[k] = 1; continue; }
+      if (padded[k - 1] === 1 && padded[k + 1] === 1) padded[k] = 3;
+    }
+    plus = padded.slice(1, -1);
   }
 
-  const plus = padded.slice(1, -1).join('');
-  const minus = ritm.map((v) => (v === 2 ? 1 : v)).join('');
-  return { plus, minus };
+  return {
+    plus: plus.join(''),
+    minus: source.map((v) => (v === 2 ? 1 : v)).join(''),
+  };
 }
 
 /* ---------- греческие названия ---------- */
 
-function greekName(ritm) {
-  if (!ritm.length) return null;
-  const actual = ritm.join('');
+function greekName(ritm, width) {
+  if (!width) return null;
+
+  let actual = '';
+  for (let col = 1; col <= width; col += 1) actual += String(ritm[col]);
 
   let best = null;
   for (const ideal of IDEALS) {
@@ -329,7 +419,7 @@ function rhymeOfStanza(lines) {
     letters,
     scheme: letters.join(''),
     code,
-    text: SCHEME_TEXT[code] || (code === 0 && lines.length !== 4 ? 'по строфам' : 'нерегулярная'),
+    text: SCHEME_TEXT[code] || (lines.length !== 4 ? 'по строфам' : 'нерегулярная'),
     unrhymed,
   };
 }
@@ -338,7 +428,9 @@ function rhymeOfStanza(lines) {
 
 function tonicAnalysis(lines) {
   const voiced = lines.filter((l) => l.syllables > 0);
-  if (!voiced.length) return { ok: false, stresses: 0, pattern: [], errors: ['Нет строк'] };
+  if (!voiced.length) {
+    return { ok: false, stresses: 0, stressPositions: 0, excluded: 0, pattern: [], errors: ['Нет строк'] };
+  }
 
   const stressCounts = voiced.map((l) => l.vowels.filter((v) => v.stressed).length);
   const freq = new Map();
@@ -352,7 +444,14 @@ function tonicAnalysis(lines) {
 
   const filtered = voiced.filter((l, i) => stressCounts[i] === modal);
   if (!filtered.length || modal < 1) {
-    return { ok: false, stresses: modal, pattern: [], errors: ['Не удалось найти опорное число ударений'] };
+    return {
+      ok: false,
+      stresses: modal,
+      stressPositions: 0,
+      excluded: voiced.length,
+      pattern: [],
+      errors: ['Не удалось найти опорное число ударений'],
+    };
   }
 
   const width = modal * 12;
@@ -426,7 +525,7 @@ function tonicAnalysis(lines) {
 /* ---------- главный анализ ---------- */
 
 export function analyze(text, options = {}) {
-  const { autoSplit = true } = options;
+  const { autoSplit = true, scope = 'poem' } = options;
   const src = String(text || '');
   const rawLines = src.split('\n');
 
@@ -453,7 +552,6 @@ export function analyze(text, options = {}) {
     for (let i = 0; i < voiced.length; i += 4) stanzas.push(voiced.slice(i, i + 4));
   }
 
-  /* размер = числа слогов по строкам */
   const pad = (n) => (n < 10 ? ` ${n}` : String(n));
   stanzas.forEach((stanza) => {
     stanza.pattern = stanza.map((l) => pad(l.syllables)).join(',');
@@ -476,36 +574,36 @@ export function analyze(text, options = {}) {
     s.inDominant = s.pattern === dominantPattern;
   });
 
-  const profileLines = stanzas.filter((s) => s.inDominant).flat();
-  const baseLines = profileLines.length ? profileLines : voiced;
+  /* ВАЖНО: итоговая схема в оригинале строится по всему стиху
+     (FragmentNumber = 0 — это GroupStrof.unshift(stih)). */
+  const groupLines = stanzas.filter((s) => s.inDominant).flat();
+  const baseLines = scope === 'group' && groupLines.length ? groupLines : voiced;
 
-  /* профиль + разрешение слабых, два прохода */
-  let templates = baseLines.map((l) => l.template);
-  const baseNumGlas = baseLines.map((l) => l.numGlas);
-  let profile = columnProfile(templates);
-  templates = resolveTemplates(templates, baseNumGlas, profile.ritm);
-  profile = columnProfile(templates);
-  templates = resolveTemplates(templates, baseNumGlas, profile.ritm);
+  const base = buildRhythm(baseLines);
+  const ritm = base.ritm;
+  const width = base.width;
+  const errorSet = new Set(base.errorColumns);
 
-  const ritm = profile.ritm;
-  const errorSet = new Set(profile.errorColumns);
-
-  /* применяем разрешённый профиль ко всем строкам для отображения */
-  const allResolved = resolveTemplates(
+  const allPass = secondPass(
     lines.map((l) => l.template),
     lines.map((l) => l.numGlas),
+    lines.map((l) => l.vowels.map((v) => v.char).join('')),
     ritm
   );
 
   lines.forEach((line, s) => {
-    const resolved = allResolved[s] || '';
+    const resolved = allPass.templates[s] || '';
+    const letters = allPass.glasn[s] || '';
+
     line.vowels.forEach((vowel, k) => {
       const state = resolved[k] || '.';
       vowel.state = state;
       vowel.stressed = state === 'О';
-      vowel.column = ritm[k] || 1;
+      vowel.column = ritm[k + 1] || 1;
       vowel.error = errorSet.has(k) && vowel.stressed;
-      vowel.display = vowel.stressed ? vowel.char.toUpperCase() : vowel.char.toLowerCase();
+      vowel.display = vowel.stressed
+        ? (letters[k] || vowel.char).toUpperCase()
+        : (letters[k] || vowel.char).toLowerCase();
     });
 
     line.resolved = resolved;
@@ -524,7 +622,6 @@ export function analyze(text, options = {}) {
       ];
   });
 
-  /* рифма по строфам */
   let unrhymed = 0;
   const schemeCodes = [];
   stanzas.forEach((stanza) => {
@@ -552,7 +649,6 @@ export function analyze(text, options = {}) {
     })
     .join('');
 
-  /* доля гласных по типам столбцов */
   let countSlog = 0;
   let countStrong = 0;
   let countWeak = 0;
@@ -560,13 +656,13 @@ export function analyze(text, options = {}) {
   let countRitmError = 0;
   let errorStanzas = 0;
 
-  baseLines.forEach((line) => {
+  voiced.forEach((line) => {
     line.vowels.forEach((v) => {
       countSlog += 1;
+      if (v.error) { countRitmError += 1; return; }
       if (v.column === 3) countStrong += 1;
       else if (v.column === 2) countWeak += 1;
       else countLight += 1;
-      if (v.error) countRitmError += 1;
     });
   });
 
@@ -575,9 +671,9 @@ export function analyze(text, options = {}) {
   });
 
   const procentMix = countSlog ? Math.round((countWeak / countSlog) * 100) : 0;
-  const stats = rhythmStats(ritm);
-  const contrast = contrastLayers(ritm);
-  const greek = greekName(ritm);
+  const stats = rhythmStats(ritm, width);
+  const contrast = contrastLayers(ritm, width, stats.ball);
+  const greek = greekName(ritm, width);
 
   const unmarkedWords = [...new Set(lines.flatMap((l) => l.unmarked))];
   const accentsSet = unmarkedWords.length === 0 && voiced.length > 0;
@@ -597,11 +693,15 @@ export function analyze(text, options = {}) {
   const tonic = tonicAnalysis(lines);
 
   return {
+    build: PROSODY_BUILD,
+    scope,
+    columns: base.columns,
+    profileLineCount: baseLines.length,
     lines,
     stanzas,
-    width: ritm.length,
-    ritm,
-    errorColumns: profile.errorColumns,
+    width,
+    ritm: Array.from({ length: width }, (_, i) => ritm[i + 1]),
+    errorColumns: base.errorColumns,
     triCod: stats.triCod,
     contrastPlus: contrast.plus,
     contrastMinus: contrast.minus,
@@ -617,6 +717,7 @@ export function analyze(text, options = {}) {
       strong: countStrong,
       weak: countWeak,
       light: countLight,
+      error: countRitmError,
     },
     procentMix,
     ritmBall: stats.ball,
